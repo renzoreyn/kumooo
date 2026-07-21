@@ -56,9 +56,9 @@ node scripts/seed-official.mjs
 
 ## Identity
 
-Built by [Ren](https://renzoreyn.dev).
-GitHub: [github.com/renzoreyn/kumooo](https://github.com/renzoreyn/kumooo)
-Email: [contact@renzoreyn.dev](mailto:contact@renzoreyn.dev)
+- Built by [Ren](https://renzoreyn.dev)
+- GitHub: [github.com/renzoreyn/kumooo](https://github.com/renzoreyn/kumooo)
+- Email: [contact@renzoreyn.dev](mailto:contact@renzoreyn.dev)
 
 ## License
 
