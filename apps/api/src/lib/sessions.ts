@@ -19,6 +19,7 @@ export async function createSession(
     expiresAt,
     ip: meta?.ip,
     userAgent: meta?.userAgent,
+    createdAt: new Date(),
   });
   return token;
 }
@@ -54,9 +55,12 @@ export async function resolveSession(db: Db, token: string | undefined | null) {
 
 export function sessionCookie(token: string, secure: boolean): string {
   const maxAge = SESSION_DAYS * 24 * 60 * 60;
-  return `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure ? "; Secure" : ""}`;
+  // SameSite=None when Secure: dashboard (Pages) and API (Workers) are different sites.
+  const sameSite = secure ? "None" : "Lax";
+  return `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=${maxAge}${secure ? "; Secure" : ""}`;
 }
 
 export function clearSessionCookie(secure: boolean): string {
-  return `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure ? "; Secure" : ""}`;
+  const sameSite = secure ? "None" : "Lax";
+  return `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=0${secure ? "; Secure" : ""}`;
 }

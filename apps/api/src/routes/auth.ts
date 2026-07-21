@@ -33,18 +33,22 @@ authRoutes.post("/signup", async (c) => {
   const orgSlug = uniqueOrgSlug(slugify(body.name));
 
   const db = c.get("db");
+  const now = new Date();
   await db.insert(users).values({
     id: userId,
     email,
     name: body.name,
     passwordHash,
+    createdAt: now,
+    updatedAt: now,
   });
   await db.insert(organizations).values({
     id: orgId,
     name: `${body.name}'s workspace`,
     slug: orgSlug,
+    createdAt: now,
   });
-  await db.insert(orgMembers).values({ orgId, userId, role: "owner" });
+  await db.insert(orgMembers).values({ orgId, userId, role: "owner", createdAt: now });
 
   const token = await createSession(db, userId, {
     ip: c.req.header("CF-Connecting-IP") ?? undefined,

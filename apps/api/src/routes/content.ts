@@ -95,6 +95,8 @@ contentRoutes.post("/sites/:siteId/content", async (c) => {
     scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : null,
     authorId: user.id,
     featuredImage: body.featuredImage,
+    createdAt: now,
+    updatedAt: now,
   });
 
   if (body.tags.length) await syncTags(c.get("db"), siteId, id, body.tags);
@@ -147,6 +149,7 @@ contentRoutes.patch("/sites/:siteId/content/:id", async (c) => {
     contentId: id,
     snapshot: JSON.stringify(row),
     createdBy: user.id,
+    createdAt: new Date(),
   });
 
   // Keep last 50 revisions.
@@ -156,6 +159,7 @@ contentRoutes.patch("/sites/:siteId/content/:id", async (c) => {
     .from(revisions)
     .where(eq(revisions.contentId, id))
     .orderBy(desc(revisions.createdAt))
+    .limit(1000)
     .offset(50);
   for (const r of old) {
     await c.get("db").delete(revisions).where(eq(revisions.id, r.id));

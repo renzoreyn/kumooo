@@ -50,8 +50,9 @@ async function resolveSiteCached(
   if (cached) return cached;
 
   let site = await resolveSite(db, host, env.PUBLIC_SITE_SUFFIX);
-  if (!site && env.ENVIRONMENT === "development") {
-    site = await resolveFirstSite(db, `http://${host}`);
+  // workers.dev has no customer hostname yet; serve the first site so deploys are testable.
+  if (!site && (env.ENVIRONMENT === "development" || host.includes("workers.dev"))) {
+    site = await resolveFirstSite(db, `https://${host}`);
   }
   if (site) {
     ctx.waitUntil(env.KV.put(kvKey, JSON.stringify(site), { expirationTtl: SITE_LOOKUP_TTL_S }));

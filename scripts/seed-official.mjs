@@ -200,7 +200,9 @@ const docs = await ensureSite(
 
 const docsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "content", "docs");
 const files = (await readdir(docsDir)).filter((f) => f.endsWith(".md")).sort();
-for (const file of files) {
+// Prefer index.md over README.md (both would map to slug "index").
+const docsFiles = files.includes("index.md") ? files.filter((f) => f !== "README.md") : files;
+for (const file of docsFiles) {
   const markdown = await readFile(join(docsDir, file), "utf8");
   const slug = file === "README.md" ? "index" : file.replace(/\.md$/, "");
   const title = markdown.match(/^#\s+(.+)$/m)?.[1] ?? slug;

@@ -7,18 +7,18 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "kumooo",
-      "database_id": "00000000-0000-0000-0000-000000000001"
+      "database_name": "kumooo-app",
+      "database_id": "b60e91e3-4486-4d4f-8f4e-00ad11c8a7b1"
     }
   ],
   "kv_namespaces": [
-    { "binding": "KV", "id": "00000000000000000000000000000001" }
+    { "binding": "KV", "id": "906e80b64c31408d87e670e9d8971cc1" }
   ],
   "r2_buckets": [
     { "binding": "MEDIA", "bucket_name": "kumooo-media" }
   ],
   "vars": {
-    "ENVIRONMENT": "development",
+    "ENVIRONMENT": "production",
     "PUBLIC_SITE_SUFFIX": "kumooo.dev"
   }
 }
