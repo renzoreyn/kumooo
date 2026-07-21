@@ -156,6 +156,63 @@ section.block { padding: 3.25rem 0; border-top: 1px solid var(--line); }
   padding: 2rem 1.5rem; text-align: center;
 }
 .cta-box h2 { margin: 0 0 .4rem; letter-spacing: -.03em; font-size: 1.7rem; }
+.page-hero { padding: 4rem 0 2rem; max-width: 40rem; }
+.page-hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  line-height: 1.08; letter-spacing: -0.04em; margin: 0 0 .85rem;
+}
+.feature-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: center;
+  padding: 2.5rem 0; border-top: 1px solid var(--line);
+}
+.feature-row.reverse { direction: rtl; }
+.feature-row.reverse > * { direction: ltr; }
+@media (max-width: 800px) {
+  .feature-row, .feature-row.reverse { grid-template-columns: 1fr; direction: ltr; }
+}
+.feature-copy h2 { margin: 0 0 .6rem; letter-spacing: -.03em; font-size: 1.55rem; }
+.feature-copy p { margin: 0; color: var(--muted); }
+.feature-copy ul { margin: .85rem 0 0; padding: 0; list-style: none; }
+.feature-copy li {
+  position: relative; padding: .35rem 0 .35rem 1.2rem; color: var(--muted); font-size: .95rem;
+}
+.feature-copy li::before {
+  content: ""; position: absolute; left: 0; top: .7rem;
+  width: .45rem; height: .45rem; border-radius: 99px; background: var(--accent);
+}
+.feature-visual {
+  background: linear-gradient(160deg, #1a1e29, #0f1219);
+  border: 1px solid var(--line); border-radius: 16px; padding: 1.1rem; min-height: 10rem;
+}
+.price-grid {
+  display: grid; grid-template-columns: 1.1fr .9fr; gap: 1rem; margin-top: 1.5rem;
+}
+@media (max-width: 800px) { .price-grid { grid-template-columns: 1fr; } }
+.price-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 1.5rem;
+}
+.price-card.featured {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 10%, var(--card)), var(--card));
+}
+.price-card .amount {
+  font-size: 2.6rem; font-weight: 700; letter-spacing: -.04em; margin: .4rem 0 .2rem;
+}
+.price-card .amount span { font-size: 1rem; color: var(--muted); font-weight: 500; }
+.price-card ul { list-style: none; padding: 0; margin: 1.1rem 0 1.4rem; }
+.price-card li {
+  padding: .4rem 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem;
+}
+.price-card li:first-child { border-top: 0; }
+.compare {
+  width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .92rem;
+}
+.compare th, .compare td {
+  text-align: left; padding: .75rem .9rem; border-bottom: 1px solid var(--line);
+}
+.compare th { color: var(--muted); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+.compare td:nth-child(2), .compare td:nth-child(3) { color: var(--muted); }
+.compare .yes { color: var(--accent); font-weight: 600; }
 .muted { color: var(--muted); }
 .prose { max-width: 44rem; }
 .prose h1, .prose h2 { letter-spacing: -0.03em; }
@@ -353,6 +410,227 @@ function marketingHome(site: ThemeSiteContext): Html {
   );
 }
 
+function marketingFeatures(site: ThemeSiteContext): Html {
+  return shell(
+    site,
+    html`<div class="wrap">
+<section class="page-hero" data-motion-hero>
+  <div class="kicker">Features</div>
+  <h1>Everything a publishing platform needs. Nothing you have to babysit.</h1>
+  <p class="lead">Content, themes, media, domains, and edge caching. Built on Cloudflare so the boring infrastructure is someone else's problem.</p>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+    <a class="btn primary" href="https://docs.kumooo.dev">Read the docs</a>
+    <a class="btn" href="/pricing">See pricing</a>
+  </div>
+</section>
+
+<section class="feature-row" data-reveal-on-scroll>
+  <div class="feature-copy">
+    <div class="kicker">Edge rendering</div>
+    <h2>Fast by default</h2>
+    <p>Pages render in a Worker a few milliseconds from your readers, then get cached hard. You don't tune this. It's just how Kumooo works.</p>
+    <ul>
+      <li>SSR HTML at the edge</li>
+      <li>Cache version bumps on publish</li>
+      <li>Zero required client JS for default themes</li>
+    </ul>
+  </div>
+  <div class="feature-visual">
+    <div class="dash-label">Cache hit</div>
+    <div class="dash-bar" style="width:72%"></div>
+    <div class="dash-line"></div>
+    <div class="dash-line short"></div>
+    <p class="muted" style="margin:.8rem 0 0;font-size:.85rem;font-family:IBM Plex Mono,monospace">x-kumooo-cache: hit · 41ms</p>
+  </div>
+</section>
+
+<section class="feature-row reverse" data-reveal-on-scroll>
+  <div class="feature-copy">
+    <div class="kicker">CMS</div>
+    <h2>A real editor, not a paste bin</h2>
+    <p>Posts, pages, drafts, revisions, tags, custom fields. Markdown in. HTML out. The dashboard does the boring parts so you can ship.</p>
+    <ul>
+      <li>Draft → publish without ceremony</li>
+      <li>Revision history on every save</li>
+      <li>Media in your own R2 bucket</li>
+    </ul>
+  </div>
+  <div class="feature-visual">
+    <div class="dash-label">Editor</div>
+    <div class="dash-bar"></div>
+    <div class="dash-line"></div>
+    <div class="dash-line"></div>
+    <div class="dash-line short"></div>
+    <div class="dash-tiles"><div class="dash-tile"></div><div class="dash-tile"></div></div>
+  </div>
+</section>
+
+<section class="feature-row" data-reveal-on-scroll>
+  <div class="feature-copy">
+    <div class="kicker">Themes</div>
+    <h2>Themes with teeth</h2>
+    <p>Ship plain HTML with zero JavaScript. Or hydrate React with Framer Motion, Lucide, and Radix when you want to show off. Same platform.</p>
+    <ul>
+      <li>SSR theme contract</li>
+      <li>Optional client islands</li>
+      <li>This marketing site is a Kumooo theme</li>
+    </ul>
+  </div>
+  <div class="feature-visual">
+    <div class="dash-label">theme-marketing</div>
+    <p style="margin:.6rem 0 0;font-family:IBM Plex Mono,monospace;font-size:.82rem;color:#c8c5bb">home · features · pricing · about</p>
+    <div class="dash-tiles" style="margin-top:1rem"><div class="dash-tile"></div><div class="dash-tile"></div></div>
+  </div>
+</section>
+
+<section class="block" data-reveal-on-scroll>
+  <div class="kicker">And the rest</div>
+  <div class="grid">
+    ${feature(ic.cloud, "Your Cloudflare", "D1 for content. R2 for media. KV for sessions and cache versions. Connect once.")}
+    ${feature(ic.shield, "Boring security", "PBKDF2 passwords, HttpOnly sessions, escaped templates. The unsexy stuff done right.")}
+    ${feature(ic.refresh, "Revisions", "Every save keeps history. Roll back when you inevitably mess up.")}
+    ${feature(ic.search, "SEO handled", "Titles, meta, sitemap, RSS. Not a plugin graveyard.")}
+    ${feature(ic.zap, "Custom domains", "Point a CNAME. SSL shows up when Cloudflare for SaaS is wired.")}
+    ${feature(ic.feather, "Org + sites", "Workspaces, roles, multiple sites. Grow without migrating platforms.")}
+  </div>
+</section>
+
+<section class="block" data-reveal-on-scroll>
+  <div class="cta-box">
+    <h2>Try it on your account tonight.</h2>
+    <p class="muted" style="margin:0 0 1rem">Open source. Self-hosted. No Kumooo tax.</p>
+    <a class="btn primary" href="https://docs.kumooo.dev/getting-started">npx create-kumooo</a>
+  </div>
+</section>
+</div>`,
+    { fullBleed: true },
+  );
+}
+
+function marketingPricing(site: ThemeSiteContext): Html {
+  return shell(
+    site,
+    html`<div class="wrap">
+<section class="page-hero" data-motion-hero>
+  <div class="kicker">Pricing</div>
+  <h1>Open source. Self-hosted. You pay Cloudflare, not us.</h1>
+  <p class="lead">Kumooo runs on your Cloudflare account. The free tier is enough to start. There is no Kumooo tax on top.</p>
+</section>
+
+<section data-reveal-on-scroll>
+  <div class="price-grid">
+    <div class="price-card featured" data-motion-card>
+      <div class="kicker">Self-host</div>
+      <div class="amount">$0 <span>/ Kumooo</span></div>
+      <p class="muted" style="margin:0">You pay Cloudflare for what you use. That's the whole model.</p>
+      <ul>
+        <li>API + renderer Workers</li>
+        <li>D1 content, R2 media, KV sessions</li>
+        <li>Unlimited sites on your account</li>
+        <li>Themes, revisions, custom domains</li>
+        <li>This marketing site dogfoods the same stack</li>
+      </ul>
+      <a class="btn primary" href="https://docs.kumooo.dev/getting-started">Start with create-kumooo</a>
+    </div>
+    <div class="price-card" data-motion-card>
+      <div class="kicker">Hosted later?</div>
+      <div class="amount" style="font-size:1.6rem">Maybe</div>
+      <p class="muted" style="margin:0 0 1rem">Not today. Self-hosting is the product. If we ever offer hosted, it'll be optional, not the pitch.</p>
+      <a class="btn" href="https://github.com/renzoreyn/kumooo">Watch the repo</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" data-reveal-on-scroll>
+  <div class="kicker">What you actually get</div>
+  <h2 style="letter-spacing:-.03em;margin:0 0 1rem;font-size:1.6rem">Included with self-host</h2>
+  <table class="compare">
+    <thead>
+      <tr><th>Capability</th><th>Self-host</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Sites &amp; content</td><td class="yes">Yes</td><td>Posts, pages, drafts, revisions</td></tr>
+      <tr><td>Media library</td><td class="yes">Yes</td><td>Your R2 bucket</td></tr>
+      <tr><td>Custom domains</td><td class="yes">Yes</td><td>Needs Cloudflare for SaaS when you go multi-tenant</td></tr>
+      <tr><td>Interactive themes</td><td class="yes">Yes</td><td>Framer Motion, Lucide, Radix welcome</td></tr>
+      <tr><td>Dashboard</td><td class="yes">Yes</td><td>Auth, editor, media, settings</td></tr>
+      <tr><td>Kumooo SaaS fee</td><td class="yes">$0</td><td>Cloudflare usage only</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="block" data-reveal-on-scroll>
+  <div class="kicker">Honest costs</div>
+  <div class="grid">
+    <div class="card" data-motion-card>
+      <h3>Workers</h3>
+      <p>API and renderer. Free tier covers early traffic. You scale on Cloudflare's meter, not ours.</p>
+    </div>
+    <div class="card" data-motion-card>
+      <h3>D1 + KV</h3>
+      <p>Content and sessions. Cheap at small scale. You see the bill in your Cloudflare dashboard.</p>
+    </div>
+    <div class="card" data-motion-card>
+      <h3>R2</h3>
+      <p>Media storage. No egress fees to the usual suspects. Upload once, serve from the edge.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" data-reveal-on-scroll>
+  <div class="cta-box">
+    <h2>Ship a site before you open a spreadsheet.</h2>
+    <p class="muted" style="margin:0 0 1rem">Read the docs, run create-kumooo, deploy.</p>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+      <a class="btn primary" href="https://docs.kumooo.dev">Docs</a>
+      <a class="btn" href="/features">Features</a>
+    </div>
+  </div>
+</section>
+</div>`,
+    { fullBleed: true },
+  );
+}
+
+function marketingAbout(site: ThemeSiteContext): Html {
+  return shell(
+    site,
+    html`<div class="wrap">
+<section class="page-hero" data-motion-hero>
+  <div class="kicker">About</div>
+  <h1>Built by Ren. Dogfooded on Cloudflare.</h1>
+  <p class="lead">Kumooo exists because publishing shouldn't require babysitting servers, PHP plugins, or a VPS you forgot existed.</p>
+</section>
+
+<section class="block" data-reveal-on-scroll>
+  <div class="grid">
+    <div class="card" data-motion-card>
+      <h3>Who</h3>
+      <p>Made by <a href="https://renzoreyn.dev">Ren</a>. Code lives on <a href="https://github.com/renzoreyn/kumooo">GitHub</a>.</p>
+    </div>
+    <div class="card" data-motion-card>
+      <h3>Why</h3>
+      <p>WordPress gets used for a whole lot of nonsense. Fine. Kumooo gives you that freedom on the edge.</p>
+    </div>
+    <div class="card" data-motion-card>
+      <h3>How we ship</h3>
+      <p>This site and the docs are real Kumooo sites. If the product is broken, we feel it first.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" data-reveal-on-scroll>
+  <div class="cta-box">
+    <h2>Talk via GitHub.</h2>
+    <p class="muted" style="margin:0 0 1rem">Issues and PRs beat cold emails.</p>
+    <a class="btn primary" href="https://github.com/renzoreyn/kumooo">github.com/renzoreyn/kumooo</a>
+  </div>
+</section>
+</div>`,
+    { fullBleed: true },
+  );
+}
+
 export const marketingTheme: Theme = {
   name: "marketing",
   label: "Kumooo marketing (interactive)",
@@ -361,6 +639,9 @@ export const marketingTheme: Theme = {
     shell(site, html`<article class="prose" style="padding:3rem 0"><h1>${post.title}</h1>${raw(post.html)}</article>`),
   page: (site, { page }) => {
     if (page.slug === "index" || page.slug === "home") return marketingHome(site);
+    if (page.slug === "features") return marketingFeatures(site);
+    if (page.slug === "pricing") return marketingPricing(site);
+    if (page.slug === "about") return marketingAbout(site);
     return shell(
       site,
       html`<article class="prose" style="padding:3rem 0">
