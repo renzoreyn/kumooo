@@ -1,0 +1,25 @@
+{
+  "name": "@kumooo/theme-marketing",
+  "version": "0.1.0",
+  "description": "Official kumooo.dev marketing theme",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "echo \"ok\"",
+    "build": "echo \"ok\""
+  },
+  "dependencies": {
+    "@kumooo/core": "workspace:*",
+    "@kumooo/theme-kit": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

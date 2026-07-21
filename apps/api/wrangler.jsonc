@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kumooo-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-12-05",
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kumooo",
+      "database_id": "00000000-0000-0000-0000-000000000001",
+      "migrations_dir": "../../packages/db/migrations"
+    }
+  ],
+  "kv_namespaces": [
+    { "binding": "KV", "id": "00000000000000000000000000000001" }
+  ],
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "kumooo-media" }
+  ],
+  "vars": {
+    "ENVIRONMENT": "development",
+    "PUBLIC_SITE_SUFFIX": "kumooo.dev",
+    "DASHBOARD_ORIGIN": "http://localhost:5173"
+  }
+}

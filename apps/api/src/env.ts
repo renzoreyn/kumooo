@@ -1,0 +1,20 @@
+export interface Env {
+  DB: D1Database;
+  KV: KVNamespace;
+  MEDIA: R2Bucket;
+  ENVIRONMENT: string;
+  PUBLIC_SITE_SUFFIX: string;
+  DASHBOARD_ORIGIN: string;
+  TURNSTILE_SECRET_KEY?: string;
+  CF_API_TOKEN?: string;
+  CF_ZONE_ID?: string;
+}
+
+export type AppVariables = {
+  requestId: string;
+  db: import("@kumooo/db").Db;
+  user: { id: string; email: string; name: string } | null;
+  sessionToken: string | null;
+};
+
+export type AppEnv = { Bindings: Env; Variables: AppVariables };

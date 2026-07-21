@@ -1,0 +1,23 @@
+{
+  "name": "create-kumooo",
+  "version": "0.1.0",
+  "description": "npx create-kumooo",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "create-kumooo": "./dist/index.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "echo \"ok\""
+  },
+  "dependencies": {
+    "@kumooo/cli": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

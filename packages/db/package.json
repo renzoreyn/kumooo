@@ -1,0 +1,25 @@
+{
+  "name": "@kumooo/db",
+  "version": "0.1.0",
+  "description": "Drizzle schema and D1 migrations for Kumooo",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "echo \"no db unit tests yet\"",
+    "build": "echo \"db ships as source\""
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.38.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "typescript": "^5.7.2"
+  }
+}

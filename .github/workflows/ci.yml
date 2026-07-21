@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm --filter @kumooo/cli build
+      - run: pnpm --filter create-kumooo build
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: No em dashes in user-facing text
+        run: |
+          if grep -rnP '\x{2014}' --include="*.md" --include="*.html" --include="*.ts" --include="*.tsx" \
+             --exclude-dir=node_modules --exclude-dir=dist .; then
+            echo "Em dashes are banned. See WRITING.md."
+            exit 1
+          fi
