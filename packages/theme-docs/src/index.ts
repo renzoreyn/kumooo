@@ -195,13 +195,21 @@ a:hover { text-decoration: underline; }
   margin: 0 0 .75rem; font-size: .75rem; text-transform: uppercase;
   letter-spacing: .08em; color: var(--muted);
 }
-.fd-toc a {
+.fd-toc a,
+.toc-pop a,
+[data-toc] a {
   display: block; color: var(--muted); font-size: .85rem; margin-bottom: .35rem;
   border-left: 2px solid transparent; padding-left: .55rem;
 }
-.fd-toc a.l3 { padding-left: 1.1rem; }
-.fd-toc a.active { color: var(--fg); border-left-color: var(--accent); }
-.fd-toc a:hover { color: var(--fg); text-decoration: none; }
+.fd-toc a.l3,
+.toc-pop a.l3,
+[data-toc] a.l3 { padding-left: 1.1rem; }
+.fd-toc a.active,
+.toc-pop a.active,
+[data-toc] a.active { color: var(--fg); border-left-color: var(--accent); }
+.fd-toc a:hover,
+.toc-pop a:hover,
+[data-toc] a:hover { color: var(--fg); text-decoration: none; }
 .prose h1 { font-size: 2rem; letter-spacing: -0.03em; margin: 0 0 1rem; }
 .prose h2 { margin-top: 2.2rem; letter-spacing: -0.02em; scroll-margin-top: 4.5rem; }
 .prose h3 { scroll-margin-top: 4.5rem; }
