@@ -26,7 +26,7 @@ export function renderMarkdown(source: string, opts?: { allowRawHtml?: boolean }
         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
         .replace(/\*([^*]+)\*/g, "<em>$1</em>")
         .replace(
-          /\[([^\]]+)\]\((https?:[^)\s]+)\)/g,
+          /\[([^\]]+)\]\(((?:https?:|\/)[^)\s]+)\)/g,
           '<a href="$2" rel="noopener noreferrer">$1</a>',
         );
     } else {
@@ -35,7 +35,7 @@ export function renderMarkdown(source: string, opts?: { allowRawHtml?: boolean }
         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
         .replace(/\*([^*]+)\*/g, "<em>$1</em>")
         .replace(
-          /\[([^\]]+)\]\((https?:[^)\s]+)\)/g,
+          /\[([^\]]+)\]\(((?:https?:|\/)[^)\s]+)\)/g,
           '<a href="$2" rel="noopener noreferrer">$1</a>',
         );
     }

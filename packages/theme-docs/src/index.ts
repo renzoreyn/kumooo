@@ -239,6 +239,46 @@ a:hover { text-decoration: underline; }
   border-radius: 10px; padding: .65rem .8rem; background: var(--card);
 }
 @media (max-width: 1100px) { .toc-pop { display: block; } }
+.docs-hero { margin-bottom: 1.75rem; }
+.docs-hero h1 { font-size: 2.2rem; letter-spacing: -0.04em; margin: 0 0 .6rem; }
+.docs-hero p { margin: 0; color: var(--muted); max-width: 38rem; font-size: 1.02rem; }
+.docs-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.1rem; }
+.docs-actions a {
+  display: inline-flex; align-items: center; gap: .35rem;
+  border: 1px solid var(--line); border-radius: 999px; padding: .45rem .9rem;
+  color: var(--fg); background: var(--card); font-size: .9rem; font-weight: 600;
+}
+.docs-actions a:hover { border-color: var(--accent); text-decoration: none; }
+.docs-actions a.primary { background: var(--accent); color: #042f2e; border-color: var(--accent); }
+.docs-section { margin-top: 2.2rem; }
+.docs-section h2 {
+  margin: 0 0 .85rem; font-size: .78rem; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--muted);
+}
+.docs-cards {
+  display: grid; gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.docs-card {
+  display: block; border: 1px solid var(--line); border-radius: 14px;
+  padding: 1rem 1.1rem; background: var(--card); color: var(--fg);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.docs-card:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-1px); }
+.docs-card strong { display: block; margin-bottom: .25rem; font-size: .98rem; }
+.docs-card span { display: block; color: var(--muted); font-size: .86rem; line-height: 1.45; }
+.prose p { margin: 0 0 1rem; }
+.prose ul, .prose ol { margin: 0 0 1rem; padding-left: 1.25rem; }
+.prose li { margin: .25rem 0; }
+.prose a { font-weight: 500; }
+.prose blockquote {
+  margin: 1.2rem 0; padding: .85rem 1rem; border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent); border-radius: 0 10px 10px 0;
+  color: var(--fg);
+}
+.prose table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.4rem; font-size: .92rem; }
+.prose th, .prose td { border: 1px solid var(--line); padding: .55rem .7rem; text-align: left; }
+.prose th { background: var(--sidebar); }
 `;
 
 const clientIsland = `
@@ -452,31 +492,71 @@ ${site.head}
 </html>`;
 }
 
+function docsHomeBody(): Html {
+  const groups = navGroups().map((g) => ({
+    group: g.group,
+    items: g.items.filter((n) => n.slug !== "index"),
+  }));
+  return html`<article class="prose">
+    <div class="docs-hero">
+      <h1>Kumooo docs</h1>
+      <p>Clear docs. No fluff. Built for people who ship sites on Cloudflare.</p>
+      <div class="docs-actions">
+        <a class="primary" href="/getting-started">Get started</a>
+        <a href="/architecture">Architecture</a>
+        <a href="/api-reference">API reference</a>
+        <a href="https://github.com/renzoreyn/kumooo">GitHub</a>
+      </div>
+    </div>
+    ${joinHtml(
+      groups.map(
+        (g) => html`<section class="docs-section" id="${g.group.toLowerCase().replace(/\s+/g, "-")}">
+          <h2>${g.group}</h2>
+          <div class="docs-cards">
+            ${joinHtml(
+              g.items.map(
+                (n) => html`<a class="docs-card" href="${urlFor(n.slug)}">
+                  <strong>${n.title}</strong>
+                  <span>${CARD_BLURBS[n.slug] ?? "Open the guide."}</span>
+                </a>`,
+              ),
+            )}
+          </div>
+        </section>`,
+      ),
+    )}
+  </article>`;
+}
+
+function docsHomeOpts() {
+  return {
+    currentSlug: "index",
+    title: "Introduction",
+    toc: navGroups().map((g) => ({
+      id: g.group.toLowerCase().replace(/\s+/g, "-"),
+      text: g.group,
+      level: 2,
+    })),
+    showPager: true as const,
+  };
+}
+
+const CARD_BLURBS: Record<string, string> = {
+  "getting-started": "From zero to a published page in about ten minutes.",
+  installation: "What create-kumooo sets up and how to run it locally.",
+  architecture: "API, renderer, D1, R2, KV. Two workers, one database.",
+  cli: "Every kumooo command: create, migrate, dev, deploy.",
+  themes: "SSR HTML themes, client islands, and the theme contract.",
+  authentication: "Sessions, cookies, roles, and org access.",
+  writing: "How Kumooo copy should sound. Short. Specific. No fluff.",
+  "api-reference": "The REST surface the dashboard and CLI talk to.",
+};
+
 export const docsTheme: Theme = {
   name: "docs",
   label: "Kumooo docs (Fumadocs-inspired)",
   home(site) {
-    return docsShell(
-      site,
-      html`<article class="prose">
-        <h1>${site.title || "Kumooo docs"}</h1>
-        <p class="muted">${site.description || "Clear docs. No fluff. Built for people who ship sites."}</p>
-        <h2 id="start-here">Start here</h2>
-        <ul>
-          ${joinHtml(
-            ORDERED.filter((n) => n.slug !== "index").map(
-              (n) => html`<li><a href="${urlFor(n.slug)}">${n.title}</a></li>`,
-            ),
-          )}
-        </ul>
-      </article>`,
-      {
-        currentSlug: "index",
-        title: "Introduction",
-        toc: [{ id: "start-here", text: "Start here", level: 2 }],
-        showPager: true,
-      },
-    );
+    return docsShell(site, docsHomeBody(), docsHomeOpts());
   },
   post(site, { post }) {
     const toc = extractToc(post.markdown);
@@ -487,6 +567,7 @@ export const docsTheme: Theme = {
     );
   },
   page(site, { page }) {
+    if (page.slug === "index") return docsShell(site, docsHomeBody(), docsHomeOpts());
     const toc = extractToc(page.markdown);
     return docsShell(
       site,
