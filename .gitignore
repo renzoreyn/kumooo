@@ -17,3 +17,4 @@ signup.json
 login.json
 patch.json
 .superpowers/
+.worktrees/
