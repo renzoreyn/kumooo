@@ -124,6 +124,24 @@ export function renderMarkdown(source: string, opts?: { allowRawHtml?: boolean }
       continue;
     }
 
+    // GFM tables: header row, separator, then body rows.
+    if (isTableRow(line) && i + 1 < lines.length && isTableSeparator(lines[i + 1] ?? "")) {
+      closeList();
+      const headerCells = splitTableRow(line);
+      i += 2; // skip header + separator
+      const bodyRows: string[][] = [];
+      while (i < lines.length && isTableRow(lines[i] ?? "")) {
+        bodyRows.push(splitTableRow(lines[i]!));
+        i++;
+      }
+      const thead = `<thead><tr>${headerCells.map((c) => `<th>${inline(c)}</th>`).join("")}</tr></thead>`;
+      const tbody = `<tbody>${bodyRows
+        .map((row) => `<tr>${row.map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`)
+        .join("")}</tbody>`;
+      out.push(`<div class="table-wrap"><table>${thead}${tbody}</table></div>`);
+      continue;
+    }
+
     closeList();
     out.push(`<p>${inline(line)}</p>`);
     i++;
@@ -135,6 +153,25 @@ export function renderMarkdown(source: string, opts?: { allowRawHtml?: boolean }
   }
 
   return raw(out.join("\n"));
+}
+
+function isTableRow(line: string): boolean {
+  const t = line.trim();
+  return t.startsWith("|") && t.includes("|", 1);
+}
+
+function isTableSeparator(line: string): boolean {
+  const t = line.trim();
+  if (!t.includes("-")) return false;
+  // e.g. |---|---| or | --- | :---: |
+  return /^\|?[\s:|-]+\|?$/.test(t) && /:-*|-+:?/.test(t);
+}
+
+function splitTableRow(line: string): string[] {
+  let t = line.trim();
+  if (t.startsWith("|")) t = t.slice(1);
+  if (t.endsWith("|")) t = t.slice(0, -1);
+  return t.split("|").map((c) => c.trim());
 }
 
 /** Pull headings for a docs TOC. */

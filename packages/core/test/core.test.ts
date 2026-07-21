@@ -35,6 +35,20 @@ describe("markdown", () => {
     expect(out).toContain("<h1");
     expect(out).toContain("<strong>bold</strong>");
   });
+
+  it("renders GFM tables", () => {
+    const md = `| Method | Path |
+|---|---|
+| POST | /v1/auth/login |
+| GET | /v1/auth/me |`;
+    const out = renderMarkdown(md).value;
+    expect(out).toContain("<table>");
+    expect(out).toContain("<th>Method</th>");
+    expect(out).toContain("<td>POST</td>");
+    expect(out).toContain("/v1/auth/login");
+    expect(out).toContain("table-wrap");
+    expect(out).not.toContain("|---|");
+  });
 });
 
 describe("crypto", () => {

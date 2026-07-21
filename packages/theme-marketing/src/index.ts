@@ -47,6 +47,7 @@ a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .i { width: 1.1rem; height: 1.1rem; display: inline-block; vertical-align: -0.15em; }
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
+@media (max-width: 640px) { .wrap { padding: 0 1rem; } }
 .site-header {
   position: sticky; top: 0; z-index: 20;
   backdrop-filter: blur(14px);
@@ -54,15 +55,42 @@ a:hover { text-decoration: underline; }
   border-bottom: 1px solid var(--line);
 }
 .site-header .inner {
-  display: flex; align-items: center; gap: 1.5rem; height: 3.75rem;
+  display: flex; align-items: center; gap: 1rem; height: 3.75rem;
 }
 .logo {
   font-weight: 700; letter-spacing: -0.04em; color: var(--fg); font-size: 1.2rem;
 }
 .logo span { color: var(--accent); }
-.nav { margin-left: auto; display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
-.nav a { color: var(--muted); font-size: 0.92rem; }
+.nav { margin-left: auto; display: flex; gap: 1.25rem; align-items: center; }
+.nav a { color: var(--muted); font-size: 0.92rem; white-space: nowrap; }
 .nav a:hover { color: var(--fg); text-decoration: none; }
+.nav-toggle {
+  display: none; margin-left: auto;
+  width: 2.4rem; height: 2.4rem; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--card); color: var(--fg);
+  font: inherit; cursor: pointer;
+}
+.nav-drawer {
+  display: none; position: fixed; inset: 0; z-index: 40;
+  background: rgba(8,10,14,.72);
+}
+.nav-drawer[hidden] { display: none !important; }
+.nav-drawer-panel {
+  margin-left: auto; width: min(18rem, 86vw); height: 100%;
+  background: var(--bg); border-left: 1px solid var(--line);
+  padding: 1rem; display: flex; flex-direction: column; gap: .35rem;
+}
+.nav-drawer-panel a {
+  display: block; padding: .7rem .85rem; border-radius: 10px;
+  color: var(--fg); background: var(--card); border: 1px solid var(--line);
+}
+.nav-drawer-panel a:hover { border-color: var(--accent); text-decoration: none; }
+.nav-drawer-panel .btn { justify-content: center; margin-top: .5rem; }
+@media (max-width: 800px) {
+  .nav { display: none; }
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+  .nav-drawer:not([hidden]) { display: block; }
+}
 .btn {
   display: inline-flex; align-items: center; gap: 0.45rem;
   padding: 0.55rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: 0.92rem;
@@ -213,13 +241,26 @@ section.block { padding: 3.25rem 0; border-top: 1px solid var(--line); }
 .compare th { color: var(--muted); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
 .compare td:nth-child(2), .compare td:nth-child(3) { color: var(--muted); }
 .compare .yes { color: var(--accent); font-weight: 600; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1rem 0; }
 .muted { color: var(--muted); }
 .prose { max-width: 44rem; }
 .prose h1, .prose h2 { letter-spacing: -0.03em; }
-.prose h1 { font-size: 2.2rem; margin: 0 0 1rem; }
+.prose h1 { font-size: clamp(1.7rem, 6vw, 2.2rem); margin: 0 0 1rem; }
 .prose h2 { margin-top: 2rem; }
 .prose pre {
   background: var(--card); border: 1px solid var(--line); padding: 1rem; border-radius: 10px; overflow-x: auto;
+}
+.prose table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.prose th, .prose td { border: 1px solid var(--line); padding: .55rem .7rem; text-align: left; }
+.prose th { background: var(--panel); }
+@media (max-width: 640px) {
+  .page-hero { padding: 2.5rem 0 1.25rem; }
+  .btn { padding: .5rem .9rem; }
+  .hero h1 { font-size: clamp(2rem, 9vw, 2.8rem); }
+  .install { width: 100%; justify-content: space-between; }
+  .feature-copy ul { padding: 0; }
+  .cta-box { padding: 1.4rem 1rem; }
+  .cta-box h2 { font-size: 1.35rem; }
 }
 footer.site {
   border-top: 1px solid var(--line); padding: 2.5rem 0 3rem; margin-top: 2rem;
@@ -272,6 +313,12 @@ const io = new IntersectionObserver((entries) => {
   for (const e of entries) if (e.isIntersecting) e.target.classList.add("is-visible");
 }, { threshold: 0.12 });
 for (const n of document.querySelectorAll("[data-reveal-on-scroll]")) io.observe(n);
+
+const drawer = document.querySelector("[data-nav-drawer]");
+document.querySelector("[data-nav-open]")?.addEventListener("click", () => { if (drawer) drawer.hidden = false; });
+document.querySelector("[data-nav-close]")?.addEventListener("click", () => { if (drawer) drawer.hidden = true; });
+drawer?.addEventListener("click", (e) => { if (e.target === drawer) drawer.hidden = true; });
+window.addEventListener("keydown", (e) => { if (e.key === "Escape" && drawer) drawer.hidden = true; });
 `;
 
 function shell(site: ThemeSiteContext, body: Html, opts?: { fullBleed?: boolean }): Html {
@@ -297,11 +344,19 @@ ${site.head}
 <body>
 <header class="site-header"><div class="wrap inner">
   <a class="logo" href="/">kumooo<span>.</span></a>
-  <nav class="nav">
+  <nav class="nav" aria-label="Primary">
     ${joinHtml(nav.map((n) => html`<a href="${n.url}">${n.title}</a>`))}
     <a class="btn primary" href="https://github.com/renzoreyn/kumooo">${raw(ic.github)} GitHub</a>
   </nav>
+  <button type="button" class="nav-toggle" data-nav-open aria-label="Open menu">☰</button>
 </div></header>
+<div class="nav-drawer" data-nav-drawer hidden>
+  <div class="nav-drawer-panel">
+    <button type="button" class="btn" data-nav-close style="align-self:flex-end">Close</button>
+    ${joinHtml(nav.map((n) => html`<a href="${n.url}">${n.title}</a>`))}
+    <a class="btn primary" href="https://github.com/renzoreyn/kumooo">${raw(ic.github)} GitHub</a>
+  </div>
+</div>
 ${opts?.fullBleed ? body : html`<main class="wrap">${body}</main>`}
 <footer class="site"><div class="wrap">
   <p class="fine">Made by <a href="https://renzoreyn.dev">Ren</a>. <a href="https://github.com/renzoreyn/kumooo">GitHub</a> · <a href="https://docs.kumooo.dev">Docs</a></p>
@@ -544,6 +599,7 @@ function marketingPricing(site: ThemeSiteContext): Html {
 <section class="block" data-reveal-on-scroll>
   <div class="kicker">What you actually get</div>
   <h2 style="letter-spacing:-.03em;margin:0 0 1rem;font-size:1.6rem">Included with self-host</h2>
+  <div class="table-wrap">
   <table class="compare">
     <thead>
       <tr><th>Capability</th><th>Self-host</th><th>Notes</th></tr>
@@ -557,6 +613,7 @@ function marketingPricing(site: ThemeSiteContext): Html {
       <tr><td>Kumooo SaaS fee</td><td class="yes">$0</td><td>Cloudflare usage only</td></tr>
     </tbody>
   </table>
+  </div>
 </section>
 
 <section class="block" data-reveal-on-scroll>
