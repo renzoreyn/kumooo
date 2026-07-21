@@ -33,6 +33,7 @@ This release includes:
 
 - Working `*.kumooo.dev` tenant routing
 - Responsive dashboard application shell
+- Complete site, page, and post CRUD
 - Multiple-site overview and creation
 - Site overview using real operational data
 - Posts and pages management
@@ -41,6 +42,7 @@ This release includes:
 - Media library
 - Theme selection and navigation editing
 - Site and content SEO controls
+- Template-based OpenGraph image maker
 - Guided custom-domain setup
 - Real publish/release activity
 - General site settings
@@ -117,8 +119,13 @@ The all-sites page supports:
 - Open dashboard
 - Visit live site when routing health is confirmed
 - Creation wizard for name, slug, description, and starter theme
+- Editing site name, description, language, timezone, and theme
+- Reversible site archival and restoration
+- Permanent deletion behind a typed-slug confirmation that clearly lists affected content, media, domains, and release history
 
 The UI uses the URL returned by the API. It must not construct a hostname independently or display it as live before DNS and renderer routing pass health checks.
+
+Site CRUD is complete only when users can create, list/read, update, archive, restore, and permanently delete a site. Permanent deletion is an explicit destructive operation, not the normal way to hide an inactive site.
 
 ### Overview
 
@@ -144,9 +151,11 @@ Posts and pages have separate routes backed by a shared content-table component.
 - Bulk selection groundwork
 - Clear draft, scheduled, published, and archived statuses
 - Title, slug, author, status, and updated time
-- Create, edit, preview, publish, and archive actions
+- Create, read, edit, preview, publish, schedule, archive, restore, and permanently delete actions
 
 Bulk actions are enabled only when their API behavior is implemented.
+
+Page and post CRUD share the same lifecycle rules. Archive is reversible. Permanent deletion is available from the archived state, requires confirmation, and removes the content only after the user has been told which public URL and revisions will be lost.
 
 ### Markdown editor
 
@@ -261,6 +270,29 @@ The SEO health score checks actual platform output:
 - Mobile viewport
 
 Each check explains the issue and links to the control that fixes it.
+
+### OpenGraph Maker
+
+The SEO area includes a template-based visual OpenGraph image maker. It is intentionally narrower than a freeform design canvas.
+
+The maker supports:
+
+- A live 1200 by 630 pixel preview
+- Background color, gradient, or media-library image
+- Site logo or mark
+- Title and subtitle layers
+- Site name and optional URL
+- Curated typography choices
+- Text color, alignment, spacing, and constrained layout variants
+- Safe-area guides for social-card cropping
+- Site-level saved presets
+- Per-page and per-post overrides
+- Preview cards for common OpenGraph and X/Twitter presentation
+- Reset to the active site preset
+
+Templates store structured configuration rather than arbitrary HTML. Content templates may bind title, excerpt, site name, featured image, and canonical hostname. The same configuration drives both the editor preview and final image generation.
+
+Final images are rendered deterministically at 1200 by 630 pixels, stored in R2, and written into the content or site SEO metadata. Regeneration creates a new immutable media asset so cached social previews do not change underneath an existing URL. The UI reports generation and upload failures and preserves the editable template.
 
 ### Domains
 
@@ -380,13 +412,16 @@ Inline page styling is replaced with shared tokens and component classes. Server
 
 - Aggregated site overview endpoint
 - Site activity event storage and endpoint
+- Site archive, restore, and guarded permanent-delete endpoints
 - Reliable scheduling behavior
 - Optimistic content-concurrency checks
+- Explicit content archive, restore, and guarded permanent-delete behavior
 - Revision restore endpoint
 - Media metadata update endpoint
 - Domain verification and status refresh
 - Signed preview-token issuance and verification
 - Routing-health endpoint
+- OpenGraph template persistence, deterministic image rendering, and R2 asset generation
 
 Site events are append-only and record actor, site, event type, resource, structured metadata, and timestamp.
 
@@ -424,6 +459,8 @@ Site events are append-only and record actor, site, event type, resource, struct
 - Domain state transitions
 - Activity event creation
 - Revision conflict and restore logic
+- Site and content lifecycle transitions
+- OpenGraph template validation and rendering inputs
 
 ### API integration tests
 
@@ -436,6 +473,8 @@ Site events are append-only and record actor, site, event type, resource, struct
 - Preview authorization and expiry
 - Domain verification
 - Media metadata and deletion
+- Site and content archive, restore, and permanent deletion
+- OpenGraph preset persistence, per-content overrides, generation, and R2 metadata
 
 ### Browser tests
 
@@ -451,6 +490,8 @@ The critical production journey is:
 8. Open the public post
 9. Edit and restore a revision
 10. Configure site settings and a guided domain
+11. Create an OpenGraph preset and apply a generated image to the post
+12. Archive and restore the post and a disposable site
 
 ### Production verification
 
@@ -472,9 +513,11 @@ The critical production journey is:
 6. Preview, scheduling, revisions, and restores
 7. Media library
 8. Themes, navigation, and SEO
-9. Guided domains
-10. Deployments/releases and settings
-11. Accessibility, browser tests, production rollout, and smoke verification
+9. OpenGraph maker and generated assets
+10. Guided domains
+11. Deployments/releases and settings
+12. Site and content lifecycle completion
+13. Accessibility, browser tests, production rollout, and smoke verification
 
 ## Completion criteria
 
@@ -483,9 +526,11 @@ The launchable core is complete when:
 - A newly created `{slug}.kumooo.dev` site resolves publicly.
 - The dashboard never shows fabricated operational or analytics data.
 - A user can create, autosave, preview, publish, schedule, revise, and restore content.
+- A user can complete site, page, and post CRUD, including guarded permanent deletion.
 - Preview output matches the selected production theme.
 - Media can be uploaded, managed, and inserted into content.
 - A user can select a theme, edit navigation, configure SEO, and manage general settings.
+- A user can create a reusable OpenGraph template, generate a real 1200 by 630 image, and override it per page or post.
 - A user can follow domain instructions and see verified DNS, SSL, and routing states.
 - Release activity accurately reflects content and settings changes.
 - The complete critical journey passes in production on desktop and mobile.
