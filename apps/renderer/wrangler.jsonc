@@ -6,7 +6,8 @@
   "observability": { "enabled": true },
   "routes": [
     { "pattern": "kumooo.dev", "custom_domain": true },
-    { "pattern": "docs.kumooo.dev", "custom_domain": true }
+    { "pattern": "docs.kumooo.dev", "custom_domain": true },
+    { "pattern": "*.kumooo.dev/*", "zone_name": "kumooo.dev" }
   ],
   "d1_databases": [
     {
