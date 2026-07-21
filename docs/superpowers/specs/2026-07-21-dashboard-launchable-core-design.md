@@ -59,7 +59,7 @@ This release does not include:
 - AI writing tools
 - A general-purpose page builder
 - Git-based theme builds and deployment logs
-- Site duplication, transfer, or archival
+- Site duplication or ownership transfer
 
 Deferred areas must not appear as functional controls. A restrained roadmap or “Coming later” area may mention them without fabricated data.
 
