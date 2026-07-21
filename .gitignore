@@ -11,3 +11,8 @@ coverage/
 backups/
 *.sql.gz
 .vite/
+cookies.txt
+*.json.bak
+signup.json
+login.json
+patch.json
