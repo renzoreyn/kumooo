@@ -8,6 +8,46 @@ import {
   type ThemeSiteContext,
 } from "@kumooo/theme-kit";
 
+type NavItem = { slug: string; title: string; group: string; order: number };
+
+const NAV_MAP: NavItem[] = [
+  { slug: "index", title: "Introduction", group: "Getting started", order: 1 },
+  { slug: "getting-started", title: "Getting started", group: "Getting started", order: 2 },
+  { slug: "installation", title: "Installation", group: "Getting started", order: 3 },
+  { slug: "architecture", title: "Architecture", group: "Guides", order: 10 },
+  { slug: "cli", title: "CLI", group: "Guides", order: 11 },
+  { slug: "themes", title: "Themes", group: "Guides", order: 12 },
+  { slug: "authentication", title: "Authentication", group: "Guides", order: 13 },
+  { slug: "writing", title: "Writing", group: "Guides", order: 14 },
+  { slug: "api-reference", title: "API reference", group: "Reference", order: 20 },
+];
+
+const ORDERED = [...NAV_MAP].sort((a, b) => a.order - b.order);
+
+function urlFor(slug: string): string {
+  return slug === "index" ? "/" : `/${slug}`;
+}
+
+function navGroups(): { group: string; items: NavItem[] }[] {
+  const groups: { group: string; items: NavItem[] }[] = [];
+  for (const item of ORDERED) {
+    const last = groups[groups.length - 1];
+    if (!last || last.group !== item.group) groups.push({ group: item.group, items: [item] });
+    else last.items.push(item);
+  }
+  return groups;
+}
+
+function findNav(slug: string): NavItem | undefined {
+  return NAV_MAP.find((n) => n.slug === slug);
+}
+
+function prevNext(slug: string): { prev?: NavItem; next?: NavItem } {
+  const i = ORDERED.findIndex((n) => n.slug === slug);
+  if (i < 0) return {};
+  return { prev: ORDERED[i - 1], next: ORDERED[i + 1] };
+}
+
 const css = `
 :root {
   --bg: #ffffff;
@@ -17,11 +57,21 @@ const css = `
   --accent: #0d9488;
   --sidebar: #f8fafc;
   --card: #ffffff;
-  --max: 90rem;
-  color-scheme: light dark;
+  --header-h: 3.5rem;
+  color-scheme: light;
+}
+.fd-root[data-theme="dark"] {
+  --bg: #0b1220;
+  --fg: #e2e8f0;
+  --muted: #94a3b8;
+  --line: #1e293b;
+  --accent: #2dd4bf;
+  --sidebar: #0f172a;
+  --card: #111827;
+  color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  .fd-root[data-theme="system"] {
     --bg: #0b1220;
     --fg: #e2e8f0;
     --muted: #94a3b8;
@@ -29,9 +79,11 @@ const css = `
     --accent: #2dd4bf;
     --sidebar: #0f172a;
     --card: #111827;
+    color-scheme: dark;
   }
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font: 15px/1.7 "Inter", "Segoe UI", sans-serif;
@@ -40,86 +92,308 @@ body {
 }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
-.layout {
-  display: grid;
-  grid-template-columns: 16.5rem 1fr 14rem;
-  min-height: 100vh;
+.fd-header {
+  position: sticky; top: 0; z-index: 40; height: var(--header-h);
+  display: flex; align-items: center; gap: .75rem;
+  padding: 0 1rem; border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
 }
-@media (max-width: 1100px) { .layout { grid-template-columns: 15rem 1fr; } .toc { display: none; } }
-@media (max-width: 800px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
-.sidebar {
+.fd-brand {
+  font-weight: 700; letter-spacing: -0.03em; color: var(--fg); font-size: 1rem;
+  display: inline-flex; align-items: center; gap: .35rem; margin-right: .5rem;
+}
+.fd-brand span { color: var(--accent); }
+.fd-header-actions { margin-left: auto; display: flex; align-items: center; gap: .5rem; }
+.fd-icon-btn, .fd-search-btn {
+  border: 1px solid var(--line); background: var(--card); color: var(--muted);
+  border-radius: 10px; padding: .4rem .7rem; font: inherit; font-size: .85rem; cursor: pointer;
+}
+.fd-icon-btn:hover, .fd-search-btn:hover { color: var(--fg); border-color: var(--accent); }
+.fd-search-btn { min-width: 11rem; text-align: left; }
+.fd-search-btn kbd {
+  float: right; font-size: .7rem; border: 1px solid var(--line);
+  border-radius: 4px; padding: 0 .3rem; color: var(--muted);
+}
+.fd-header a.link { color: var(--muted); font-size: .88rem; padding: .35rem .5rem; }
+.fd-header a.link:hover { color: var(--fg); text-decoration: none; }
+.fd-menu { display: none; }
+@media (max-width: 800px) {
+  .fd-menu { display: inline-flex; }
+  .fd-search-btn { min-width: 0; }
+  .fd-search-btn span.label { display: none; }
+}
+.fd-layout {
+  display: grid;
+  grid-template-columns: 16rem minmax(0, 1fr) 14rem;
+  min-height: calc(100vh - var(--header-h));
+}
+@media (max-width: 1100px) {
+  .fd-layout { grid-template-columns: 15rem minmax(0, 1fr); }
+  .fd-toc { display: none; }
+}
+@media (max-width: 800px) {
+  .fd-layout { grid-template-columns: 1fr; }
+  .fd-sidebar { display: none; }
+}
+.fd-sidebar {
   border-right: 1px solid var(--line);
   background: var(--sidebar);
-  padding: 1.25rem 1rem 2rem;
-  position: sticky; top: 0; height: 100vh; overflow: auto;
+  padding: 1rem .85rem 2rem;
+  position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); overflow: auto;
 }
-.brand {
-  font-weight: 700; letter-spacing: -0.03em; color: var(--fg);
-  display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem;
-  font-size: 1.05rem;
+.fd-side-label {
+  font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--muted); font-weight: 700; margin: .9rem .55rem .35rem;
 }
-.brand span { color: var(--accent); }
-.side-nav a {
-  display: block; padding: 0.35rem 0.55rem; border-radius: 8px;
-  color: var(--muted); font-size: 0.9rem; margin-bottom: 0.15rem;
+.fd-side-nav a {
+  display: block; padding: .4rem .6rem; border-radius: .5rem;
+  color: var(--muted); font-size: .9rem; margin-bottom: .1rem;
+  transition: background .15s ease, color .15s ease;
 }
-.side-nav a:hover, .side-nav a.active {
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  color: var(--fg); text-decoration: none;
+.fd-side-nav a:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--fg); text-decoration: none; }
+.fd-side-nav a.active {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--fg); font-weight: 600;
 }
-.side-label {
-  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--muted); font-weight: 700; margin: 1rem 0.55rem 0.4rem;
+.fd-main { padding: 1.25rem 1.75rem 3.5rem; max-width: 52rem; }
+.fd-breadcrumbs {
+  display: flex; flex-wrap: wrap; gap: .35rem; align-items: center;
+  font-size: .8rem; color: var(--muted); margin-bottom: .85rem;
 }
-.main { padding: 1.5rem 2rem 4rem; max-width: 52rem; }
-.toc {
-  border-left: 1px solid var(--line); padding: 1.5rem 1rem;
-  position: sticky; top: 0; height: 100vh; overflow: auto;
+.fd-breadcrumbs a { color: var(--muted); }
+.fd-breadcrumbs a:hover { color: var(--accent); }
+.fd-breadcrumbs .sep { opacity: .5; }
+.fd-toc {
+  border-left: 1px solid var(--line); padding: 1.25rem 1rem;
+  position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); overflow: auto;
 }
-.toc h4 { margin: 0 0 0.75rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
-.toc a { display: block; color: var(--muted); font-size: 0.85rem; margin-bottom: 0.35rem; }
-.toc a.l3 { padding-left: 0.75rem; }
+.fd-toc h4 {
+  margin: 0 0 .75rem; font-size: .75rem; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--muted);
+}
+.fd-toc a {
+  display: block; color: var(--muted); font-size: .85rem; margin-bottom: .35rem;
+  border-left: 2px solid transparent; padding-left: .55rem;
+}
+.fd-toc a.l3 { padding-left: 1.1rem; }
+.fd-toc a.active { color: var(--fg); border-left-color: var(--accent); }
+.fd-toc a:hover { color: var(--fg); text-decoration: none; }
 .prose h1 { font-size: 2rem; letter-spacing: -0.03em; margin: 0 0 1rem; }
-.prose h2 { margin-top: 2.2rem; letter-spacing: -0.02em; scroll-margin-top: 1rem; }
-.prose h3 { scroll-margin-top: 1rem; }
+.prose h2 { margin-top: 2.2rem; letter-spacing: -0.02em; scroll-margin-top: 4.5rem; }
+.prose h3 { scroll-margin-top: 4.5rem; }
 .prose pre {
+  position: relative;
   background: var(--card); border: 1px solid var(--line);
-  padding: 0.9rem 1rem; border-radius: 10px; overflow-x: auto;
+  padding: .9rem 1rem; border-radius: 10px; overflow-x: auto;
 }
-.prose code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
-.topbar {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap;
+.prose code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
+.fd-copy-code {
+  position: absolute; top: .45rem; right: .45rem;
+  border: 1px solid var(--line); background: var(--bg); color: var(--muted);
+  border-radius: 6px; font-size: .72rem; padding: .2rem .45rem; cursor: pointer;
 }
-.search {
-  flex: 1; max-width: 22rem;
-  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-  padding: 0.55rem 0.8rem; color: var(--muted); font-size: 0.9rem;
+.fd-pager {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
+  margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
 }
+.fd-pager a {
+  display: block; border: 1px solid var(--line); border-radius: 12px;
+  padding: .85rem 1rem; color: var(--fg); background: var(--card);
+}
+.fd-pager a:hover { border-color: var(--accent); text-decoration: none; }
+.fd-pager .label { display: block; font-size: .75rem; color: var(--muted); margin-bottom: .2rem; }
+.fd-pager .next { text-align: right; }
+.fd-drawer {
+  position: fixed; inset: 0; z-index: 50; background: rgba(15,23,42,.45);
+}
+.fd-drawer[hidden] { display: none; }
+.fd-drawer-panel {
+  width: min(18rem, 88vw); height: 100%; background: var(--sidebar);
+  border-right: 1px solid var(--line); padding: 1rem; overflow: auto;
+}
+.fd-search {
+  position: fixed; inset: 0; z-index: 60; background: rgba(15,23,42,.5);
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 12vh;
+}
+.fd-search[hidden] { display: none; }
+.fd-search-box {
+  width: min(36rem, 92vw); background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.35);
+}
+.fd-search-box input {
+  width: 100%; border: 0; border-bottom: 1px solid var(--line);
+  background: transparent; color: var(--fg); font: inherit; padding: .9rem 1rem; outline: none;
+}
+.fd-search-results { max-height: 18rem; overflow: auto; }
+.fd-search-results a {
+  display: block; padding: .7rem 1rem; color: var(--fg); border-bottom: 1px solid var(--line);
+}
+.fd-search-results a:hover, .fd-search-results a.active {
+  background: color-mix(in srgb, var(--accent) 12%, transparent); text-decoration: none;
+}
+.fd-search-results .meta { display: block; font-size: .75rem; color: var(--muted); }
 .muted { color: var(--muted); }
+.toc-pop {
+  display: none; margin-bottom: 1rem; border: 1px solid var(--line);
+  border-radius: 10px; padding: .65rem .8rem; background: var(--card);
+}
+@media (max-width: 1100px) { .toc-pop { display: block; } }
 `;
 
 const clientIsland = `
-import { animate } from "https://esm.sh/framer-motion@11.15.0/dom";
-const main = document.querySelector("[data-docs-main]");
-if (main) animate(main, { opacity: [0, 1], y: [8, 0] }, { duration: 0.35, easing: "ease-out" });
+const root = document.querySelector(".fd-root");
+const stored = localStorage.getItem("kumooo-docs-theme") || "system";
+if (root) root.setAttribute("data-theme", stored);
+
+const themeBtn = document.querySelector("[data-theme-toggle]");
+themeBtn?.addEventListener("click", () => {
+  const cur = root?.getAttribute("data-theme") || "system";
+  const next = cur === "system" ? "light" : cur === "light" ? "dark" : "system";
+  root?.setAttribute("data-theme", next);
+  localStorage.setItem("kumooo-docs-theme", next);
+});
+
+const drawer = document.querySelector("[data-drawer]");
+document.querySelector("[data-drawer-open]")?.addEventListener("click", () => { if (drawer) drawer.hidden = false; });
+document.querySelector("[data-drawer-close]")?.addEventListener("click", () => { if (drawer) drawer.hidden = true; });
+drawer?.addEventListener("click", (e) => { if (e.target === drawer) drawer.hidden = true; });
+
+const search = document.querySelector("[data-search]");
+const searchInput = document.querySelector("[data-search-input]");
+const searchResults = document.querySelector("[data-search-results]");
+const index = window.__KUMOOO_SEARCH__ || { pages: [], currentHeadings: [] };
+
+function openSearch() {
+  if (!search) return;
+  search.hidden = false;
+  searchInput?.focus();
+  renderSearch(searchInput?.value || "");
+}
+function closeSearch() { if (search) search.hidden = true; }
+document.querySelectorAll("[data-search-open]").forEach((el) => el.addEventListener("click", openSearch));
+document.querySelector("[data-search-close]")?.addEventListener("click", closeSearch);
+search?.addEventListener("click", (e) => { if (e.target === search) closeSearch(); });
+window.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openSearch(); }
+  if (e.key === "Escape") { closeSearch(); if (drawer) drawer.hidden = true; }
+});
+
+function renderSearch(q) {
+  if (!searchResults) return;
+  const query = q.trim().toLowerCase();
+  const items = [
+    ...index.pages.map((p) => ({ title: p.title, url: p.url, meta: p.group })),
+    ...index.currentHeadings.map((h) => ({ title: h.text, url: h.url, meta: "On this page" })),
+  ].filter((i) => !query || i.title.toLowerCase().includes(query));
+  searchResults.innerHTML = items.slice(0, 12).map((i, idx) =>
+    \`<a href="\${i.url}" class="\${idx === 0 ? "active" : ""}"><span>\${i.title}</span><span class="meta">\${i.meta || ""}</span></a>\`
+  ).join("") || \`<p class="muted" style="padding:1rem">No matches.</p>\`;
+}
+searchInput?.addEventListener("input", () => renderSearch(searchInput.value));
+
+const headings = [...document.querySelectorAll(".prose h2[id], .prose h3[id]")];
+const tocLinks = [...document.querySelectorAll("[data-toc] a[href^='#']")];
+if (headings.length && tocLinks.length) {
+  const spy = new IntersectionObserver((entries) => {
+    const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+    if (!visible) return;
+    const id = visible.target.getAttribute("id");
+    for (const a of tocLinks) a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+  }, { rootMargin: "-20% 0px -65% 0px", threshold: 0 });
+  for (const h of headings) spy.observe(h);
+}
+
+for (const pre of document.querySelectorAll(".prose pre")) {
+  if (pre.querySelector("[data-copy-code]")) continue;
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "fd-copy-code";
+  btn.setAttribute("data-copy-code", "");
+  btn.textContent = "Copy";
+  pre.style.position = "relative";
+  pre.appendChild(btn);
+  btn.addEventListener("click", async () => {
+    const text = pre.innerText.replace(/\\n?Copy$/, "").trim();
+    try { await navigator.clipboard.writeText(text); } catch {}
+    btn.textContent = "Copied";
+    setTimeout(() => { btn.textContent = "Copy"; }, 1000);
+  });
+}
 `;
+
+function sidebarNav(currentSlug: string): Html {
+  return joinHtml(
+    navGroups().map(
+      (g) => html`
+        <div class="fd-side-label">${g.group}</div>
+        <nav class="fd-side-nav">
+          ${joinHtml(
+            g.items.map(
+              (n) =>
+                html`<a class="${n.slug === currentSlug ? "active" : ""}" href="${urlFor(n.slug)}">${n.title}</a>`,
+            ),
+          )}
+        </nav>`,
+    ),
+  );
+}
+
+function tocHtml(toc: { id: string; text: string; level: number }[]): Html {
+  if (!toc.length) return html`<p class="muted" style="font-size:.85rem">No sections.</p>`;
+  return joinHtml(
+    toc.map(
+      (t) =>
+        html`<a class="${t.level === 3 ? "l3" : ""}" href="#${t.id}">${t.text}</a>`,
+    ),
+  );
+}
+
+function pager(slug: string): Html {
+  const { prev, next } = prevNext(slug);
+  return html`<nav class="fd-pager">
+    ${
+      prev
+        ? html`<a href="${urlFor(prev.slug)}"><span class="label">Previous</span>${prev.title}</a>`
+        : html`<div></div>`
+    }
+    ${
+      next
+        ? html`<a class="next" href="${urlFor(next.slug)}"><span class="label">Next</span>${next.title}</a>`
+        : html`<div></div>`
+    }
+  </nav>`;
+}
+
+function breadcrumbs(slug: string, title: string): Html {
+  const item = findNav(slug);
+  const group = item?.group ?? "Docs";
+  return html`<nav class="fd-breadcrumbs" aria-label="Breadcrumb">
+    <a href="/">Docs</a><span class="sep">/</span>
+    <span>${group}</span><span class="sep">/</span>
+    <span>${title}</span>
+  </nav>`;
+}
 
 function docsShell(
   site: ThemeSiteContext,
   body: Html,
-  toc: { id: string; text: string; level: number }[] = [],
+  opts: {
+    currentSlug: string;
+    title: string;
+    toc?: { id: string; text: string; level: number }[];
+    showPager?: boolean;
+  },
 ): Html {
-  const nav = site.nav.length
-    ? site.nav
-    : [
-        { title: "Getting started", url: "/getting-started" },
-        { title: "Installation", url: "/installation" },
-        { title: "Architecture", url: "/architecture" },
-        { title: "CLI", url: "/cli" },
-        { title: "Themes", url: "/themes" },
-        { title: "API", url: "/api-reference" },
-      ];
+  const toc = opts.toc ?? [];
+  const searchBoot = {
+    pages: ORDERED.map((n) => ({
+      title: n.title,
+      url: urlFor(n.slug),
+      group: n.group,
+    })),
+    currentHeadings: toc.map((t) => ({ text: t.text, url: `#${t.id}` })),
+  };
 
   return html`<!doctype html>
 <html lang="${site.language}">
@@ -127,45 +401,52 @@ function docsShell(
 <meta charset="utf-8">
 ${site.head}
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>${raw(css)}</style>
 </head>
 <body>
-<div class="layout">
-  <aside class="sidebar">
-    <a class="brand" href="/">kumooo <span>docs</span></a>
-    <div class="side-label">Guide</div>
-    <nav class="side-nav">
-      ${joinHtml(nav.map((n) => html`<a href="${n.url}">${n.title}</a>`))}
-    </nav>
-    <div class="side-label">Links</div>
-    <nav class="side-nav">
-      <a href="https://kumooo.dev">Marketing</a>
-      <a href="https://github.com/renzoreyn/kumooo">GitHub</a>
-      <a href="mailto:contact@renzoreyn.dev">Contact Ren</a>
-    </nav>
-  </aside>
-  <main class="main" data-docs-main>
-    <div class="topbar">
-      <div class="search" role="search">Search is coming. For now, use your browser find.</div>
-      <a href="https://kumooo.dev">kumooo.dev</a>
+<div class="fd-root" data-theme="system">
+  <header class="fd-header">
+    <button type="button" class="fd-icon-btn fd-menu" data-drawer-open aria-label="Open menu">Menu</button>
+    <a class="fd-brand" href="/">kumooo <span>docs</span></a>
+    <button type="button" class="fd-search-btn" data-search-open><span class="label">Search docs…</span> <kbd>⌘K</kbd></button>
+    <div class="fd-header-actions">
+      <button type="button" class="fd-icon-btn" data-theme-toggle aria-label="Toggle theme">Theme</button>
+      <a class="link" href="https://kumooo.dev">App</a>
+      <a class="link" href="https://github.com/renzoreyn/kumooo">GitHub</a>
     </div>
-    ${body}
-  </main>
-  <aside class="toc">
-    <h4>On this page</h4>
-    ${
-      toc.length
-        ? joinHtml(
-            toc.map(
-              (t) =>
-                html`<a class="${t.level === 3 ? "l3" : ""}" href="#${t.id}">${t.text}</a>`,
-            ),
-          )
-        : html`<p class="muted" style="font-size:.85rem">No sections.</p>`
-    }
-  </aside>
+  </header>
+  <div class="fd-layout">
+    <aside class="fd-sidebar">${sidebarNav(opts.currentSlug)}</aside>
+    <main class="fd-main" data-docs-main>
+      ${breadcrumbs(opts.currentSlug, opts.title)}
+      <div class="toc-pop" data-toc>
+        <h4 style="margin:0 0 .5rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">On this page</h4>
+        ${tocHtml(toc)}
+      </div>
+      ${body}
+      ${opts.showPager === false ? html`` : pager(opts.currentSlug)}
+    </main>
+    <aside class="fd-toc" data-toc>
+      <h4>On this page</h4>
+      ${tocHtml(toc)}
+    </aside>
+  </div>
+  <div class="fd-drawer" data-drawer hidden>
+    <div class="fd-drawer-panel">
+      <button type="button" class="fd-icon-btn" data-drawer-close style="margin-bottom:1rem">Close</button>
+      ${sidebarNav(opts.currentSlug)}
+    </div>
+  </div>
+  <div class="fd-search" data-search hidden>
+    <div class="fd-search-box">
+      <input data-search-input placeholder="Search docs…" aria-label="Search docs" />
+      <div class="fd-search-results" data-search-results></div>
+      <button type="button" class="fd-icon-btn" data-search-close style="margin:.6rem">Close</button>
+    </div>
+  </div>
 </div>
+<script>window.__KUMOOO_SEARCH__ = ${raw(JSON.stringify(searchBoot))};</script>
 <script type="module">${raw(clientIsland)}</script>
 </body>
 </html>`;
@@ -174,21 +455,27 @@ ${site.head}
 export const docsTheme: Theme = {
   name: "docs",
   label: "Kumooo docs (Fumadocs-inspired)",
-  home(site, { posts }) {
-    const links =
-      site.nav.length > 0
-        ? site.nav
-        : posts.map((p) => ({ title: p.title, url: p.url }));
+  home(site) {
     return docsShell(
       site,
       html`<article class="prose">
-        <h1>${site.title}</h1>
+        <h1>${site.title || "Kumooo docs"}</h1>
         <p class="muted">${site.description || "Clear docs. No fluff. Built for people who ship sites."}</p>
         <h2 id="start-here">Start here</h2>
         <ul>
-          ${joinHtml(links.map((l) => html`<li><a href="${l.url}">${l.title}</a></li>`))}
+          ${joinHtml(
+            ORDERED.filter((n) => n.slug !== "index").map(
+              (n) => html`<li><a href="${urlFor(n.slug)}">${n.title}</a></li>`,
+            ),
+          )}
         </ul>
       </article>`,
+      {
+        currentSlug: "index",
+        title: "Introduction",
+        toc: [{ id: "start-here", text: "Start here", level: 2 }],
+        showPager: true,
+      },
     );
   },
   post(site, { post }) {
@@ -196,7 +483,7 @@ export const docsTheme: Theme = {
     return docsShell(
       site,
       html`<article class="prose"><h1>${post.title}</h1>${raw(post.html)}</article>`,
-      toc,
+      { currentSlug: post.slug, title: post.title, toc },
     );
   },
   page(site, { page }) {
@@ -204,19 +491,21 @@ export const docsTheme: Theme = {
     return docsShell(
       site,
       html`<article class="prose"><h1>${page.title}</h1>${raw(page.html)}</article>`,
-      toc,
+      { currentSlug: page.slug, title: page.title, toc },
     );
   },
   archive(site, d) {
     return docsShell(
       site,
-      html`<h1>${d.title}</h1>${joinHtml(d.posts.map((p) => html`<p><a href="${p.url}">${p.title}</a></p>`))}`,
+      html`<article class="prose"><h1>${d.title}</h1>${joinHtml(d.posts.map((p) => html`<p><a href="${p.url}">${p.title}</a></p>`))}</article>`,
+      { currentSlug: "", title: d.title, showPager: false },
     );
   },
   notFound(site) {
     return docsShell(
       site,
-      html`<h1>Nothing here</h1><p class="muted">That page doesn't exist. Check the sidebar.</p>`,
+      html`<article class="prose"><h1>Nothing here</h1><p class="muted">That page doesn't exist. Check the sidebar.</p></article>`,
+      { currentSlug: "", title: "Not found", showPager: false },
     );
   },
 };

@@ -106,9 +106,7 @@ const marketingPages = [
   {
     slug: "features",
     title: "Features",
-    bodyMarkdown: `# Features
-
-## Fast by default
+    bodyMarkdown: `## Fast by default
 
 Pages render in a Worker a few milliseconds from your readers, then get cached hard.
 You don't tune this. It's just how Kumooo works.
@@ -141,38 +139,38 @@ Take that however you want.
   {
     slug: "pricing",
     title: "Pricing",
-    bodyMarkdown: `# Pricing
+    bodyMarkdown: `Kumooo is open source and self-hosted on **your** Cloudflare account.
 
-Kumooo is open source and self-hosted on **your** Cloudflare account.
+## What you pay
 
 You pay Cloudflare for what you use. The free tier is enough to start.
 There is no Kumooo tax on top.
 
-Want a hosted option later? Maybe. Not today.
+## What you get
+
+Workers for the API and renderer. D1 for content. R2 for media. KV for sessions and cache versions.
+
+## Hosted later?
+
+Want a hosted option later? Maybe. Not today. Self-hosting is the product.
 `,
   },
   {
     slug: "about",
     title: "About",
-    bodyMarkdown: `# About
+    bodyMarkdown: `Kumooo is built by [Ren](https://renzoreyn.dev).
 
-Kumooo is built by [Ren](https://renzoreyn.dev).
+## Why it exists
 
-The goal is simple: publishing shouldn't require babysitting servers.
+Publishing shouldn't require babysitting servers. WordPress gets used for a whole lot of nonsense. Fine. Kumooo gives you that freedom without PHP, plugin roulette, or a VPS you forgot existed.
 
-Questions, bugs, or weird ideas: [contact@renzoreyn.dev](mailto:contact@renzoreyn.dev)
+## Where to find us
 
-GitHub: [github.com/renzoreyn/kumooo](https://github.com/renzoreyn/kumooo)
-`,
-  },
-  {
-    slug: "contact",
-    title: "Contact",
-    bodyMarkdown: `# Contact
+- Site: [renzoreyn.dev](https://renzoreyn.dev)
+- Code: [github.com/renzoreyn/kumooo](https://github.com/renzoreyn/kumooo)
+- Docs: [docs.kumooo.dev](https://docs.kumooo.dev)
 
-Email Ren at [contact@renzoreyn.dev](mailto:contact@renzoreyn.dev).
-
-Or open an issue on [GitHub](https://github.com/renzoreyn/kumooo).
+Open an issue when something breaks. PRs welcome when they make the boring parts better.
 `,
   },
 ];
@@ -198,6 +196,18 @@ const docs = await ensureSite(
   ],
 );
 
+const DOC_TITLES = {
+  index: "Introduction",
+  "getting-started": "Getting started",
+  installation: "Installation",
+  architecture: "Architecture",
+  cli: "CLI",
+  themes: "Themes",
+  authentication: "Authentication",
+  writing: "Writing",
+  "api-reference": "API reference",
+};
+
 const docsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "content", "docs");
 const files = (await readdir(docsDir)).filter((f) => f.endsWith(".md")).sort();
 // Prefer index.md over README.md (both would map to slug "index").
@@ -205,7 +215,7 @@ const docsFiles = files.includes("index.md") ? files.filter((f) => f !== "README
 for (const file of docsFiles) {
   const markdown = await readFile(join(docsDir, file), "utf8");
   const slug = file === "README.md" ? "index" : file.replace(/\.md$/, "");
-  const title = markdown.match(/^#\s+(.+)$/m)?.[1] ?? slug;
+  const title = DOC_TITLES[slug] ?? markdown.match(/^#\s+(.+)$/m)?.[1] ?? slug;
   await upsertPage(docs.id, { slug, title, bodyMarkdown: markdown });
 }
 

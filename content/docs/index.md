@@ -1,5 +1,3 @@
-# Kumooo docs
-
 Clear docs. No fluff.
 
 ## Start here
@@ -11,4 +9,5 @@ Clear docs. No fluff.
 - [Themes](/themes)
 - [API reference](/api-reference)
 
-Questions? Email [contact@renzoreyn.dev](mailto:contact@renzoreyn.dev).
+Questions? Open an issue on [GitHub](https://github.com/renzoreyn/kumooo).
+

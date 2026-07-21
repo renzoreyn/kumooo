@@ -1,5 +1,3 @@
-# Installation
-
 ## The short version
 
 ```bash
@@ -40,3 +38,4 @@ Fill real D1 / KV / R2 IDs into `apps/api/wrangler.jsonc` and `apps/renderer/wra
 
 Two workers, one D1 database, one KV namespace, one R2 bucket.
 Delete them and it's gone.
+

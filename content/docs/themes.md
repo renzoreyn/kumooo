@@ -1,5 +1,3 @@
-# Themes
-
 A theme is a TypeScript module with five functions that return HTML.
 
 No template language. No mandatory client framework.
@@ -37,4 +35,5 @@ Official themes may be animated. That's the showcase.
 ## Registering
 
 Import and `registerTheme(...)` in the renderer.
-Set `site.theme` to the theme name (`default`, `marketing`, `docs`, â€¦).
+Set `site.theme` to the theme name (`default`, `marketing`, `docs`, â€?.
+

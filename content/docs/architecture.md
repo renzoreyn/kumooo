@@ -1,5 +1,3 @@
-# Architecture
-
 Kumooo is two Cloudflare Workers sharing one D1 database.
 
 ## Why two workers?
@@ -34,3 +32,4 @@ Themes are packages implementing `home`, `post`, `page`, `archive`, `notFound`.
 
 Marketing (`kumooo.dev`) and docs (`docs.kumooo.dev`) are real Kumooo sites.
 We dogfood the product. On purpose.
+

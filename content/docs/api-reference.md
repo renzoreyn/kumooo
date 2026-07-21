@@ -1,5 +1,3 @@
-# API reference
-
 Base URL: your API worker (local: `http://127.0.0.1:8787`).
 
 Errors look like:
@@ -46,3 +44,4 @@ Errors look like:
 | DELETE | `/v1/sites/:siteId/media/:id` | delete |
 | GET/POST | `/v1/sites/:siteId/domains` | list / add |
 | DELETE | `/v1/sites/:siteId/domains/:id` | remove |
+

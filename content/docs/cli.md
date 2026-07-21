@@ -1,5 +1,3 @@
-# CLI
-
 ```bash
 kumooo <command>
 ```
@@ -33,3 +31,4 @@ Apply SQL migrations from `packages/db/migrations`.
 
 Checks Node, layout, and wrangler configs.
 Findings come with a fix.
+
