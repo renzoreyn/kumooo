@@ -36,8 +36,8 @@ body.theme-haru {
   font: 17px/1.7 var(--body);
   color: var(--fg);
   background:
-    radial-gradient(ellipse 70% 40% at 10% -10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent),
-    radial-gradient(ellipse 50% 30% at 100% 0%, color-mix(in srgb, #c4e0a8 35%, transparent), transparent),
+    radial-gradient(ellipse 55% 40% at 8% -8%, color-mix(in srgb, #f2a6c0 28%, transparent), transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 0%, color-mix(in srgb, var(--accent) 20%, transparent), transparent),
     var(--bg);
   min-height: 100vh;
   padding-bottom: 4rem;
@@ -47,31 +47,54 @@ a { color: var(--accent); }
   max-width: 44rem; margin: 0 auto; padding: 1.5rem 1.25rem 0;
   display: flex; justify-content: space-between; gap: 1rem; align-items: center; flex-wrap: wrap;
 }
-.logo { font-family: var(--display); font-weight: 700; font-size: 1.2rem; color: var(--fg); text-decoration: none; letter-spacing: -0.02em; }
+.logo { font-family: var(--display); font-weight: 700; font-size: 1.25rem; color: var(--fg); text-decoration: none; letter-spacing: -0.02em; }
 .logo-img img { display: block; height: 2rem; width: auto; }
 .site-nav { display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap; }
 .site-nav a { color: var(--muted); text-decoration: none; font-size: 0.92rem; }
 .site-nav a:hover { color: var(--accent); }
 main { max-width: 44rem; margin: 0 auto; padding: 2.5rem 1.25rem 3rem; }
+.haru-hero {
+  position: relative;
+  padding: 0.5rem 0 0.25rem;
+  margin-bottom: 0.5rem;
+}
+.haru-hero::before {
+  content: "";
+  position: absolute; left: -0.35rem; top: 0.35rem;
+  width: 0.55rem; height: 0.55rem; border-radius: 50%;
+  background: #f2a6c0;
+  box-shadow: 1.6rem 0.4rem 0 -0.08rem color-mix(in srgb, var(--accent) 55%, #f2a6c0);
+}
 .haru-hero h1 {
   font-family: var(--display); font-weight: 700;
-  font-size: clamp(2.4rem, 6vw, 3.4rem); line-height: 1.1;
+  font-size: clamp(2.5rem, 6.5vw, 3.6rem); line-height: 1.08;
   margin: 0 0 0.85rem; letter-spacing: -0.03em;
 }
 .haru-hero .lede { color: var(--muted); font-size: 1.15rem; max-width: 34rem; margin: 0 0 2.5rem; }
 .haru-list { display: grid; gap: 0; }
 .haru-row {
   display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem;
-  padding: 1.35rem 0; border-top: 1px solid var(--line);
+  padding: 1.45rem 0; border-top: 1px solid var(--line);
+  transition: background .2s ease;
 }
 .haru-row:last-child { border-bottom: 1px solid var(--line); }
-.haru-date { color: var(--muted); font-size: 0.82rem; padding-top: 0.35rem; }
-.haru-row h2 { font-family: var(--display); font-size: 1.35rem; margin: 0 0 0.35rem; line-height: 1.3; }
+.haru-row:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+@media (max-width: 520px) {
+  .haru-row { grid-template-columns: 1fr; gap: 0.35rem; }
+  .haru-date { padding-top: 0; }
+}
+.haru-date {
+  color: var(--muted); font-size: 0.78rem; padding-top: 0.4rem;
+  font-variant-numeric: tabular-nums; letter-spacing: 0.02em;
+}
+.haru-row h2 { font-family: var(--display); font-size: 1.4rem; margin: 0 0 0.35rem; line-height: 1.3; }
 .haru-row h2 a { color: var(--fg); text-decoration: none; }
 .haru-row h2 a:hover { color: var(--accent); }
 .muted { color: var(--muted); }
 .prose h1 { font-family: var(--display); font-size: clamp(2rem, 4vw, 2.6rem); margin: 0 0 1.25rem; }
-.prose pre { background: var(--card); border: 1px solid var(--line); padding: 1rem; overflow-x: auto; border-radius: 8px; }
+.prose pre { background: var(--card); border: 1px solid var(--line); padding: 1rem; overflow-x: auto; border-radius: 10px; }
+.prose p { margin: 0 0 1.05rem; }
+.prose a { text-underline-offset: 0.18em; }
 `;
 
 export const haruTheme = buildSeasonTheme({

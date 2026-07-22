@@ -37,7 +37,7 @@ body.theme-aki {
   font: 18px/1.8 var(--body);
   color: var(--fg);
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, var(--bg)), var(--bg) 28%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, var(--bg)), var(--bg) 32%),
     var(--bg);
   min-height: 100vh;
   padding-bottom: 4rem;
@@ -56,23 +56,34 @@ a { color: var(--accent); text-underline-offset: 0.18em; }
 main { max-width: calc(var(--measure) + 2.5rem); margin: 0 auto; padding: 0 1.25rem 3rem; }
 .aki-hero h1 {
   font-family: var(--display); font-weight: 700;
-  font-size: clamp(2.1rem, 5vw, 2.85rem); line-height: 1.25;
+  font-size: clamp(2.15rem, 5.2vw, 3rem); line-height: 1.22;
   margin: 0 0 1rem;
 }
-.aki-hero .lede { color: var(--muted); margin: 0 0 2.75rem; font-size: 1.1rem; }
+.aki-hero .lede { color: var(--muted); margin: 0 0 2.75rem; font-size: 1.12rem; max-width: 34rem; }
 .aki-chapter {
-  padding: 1.75rem 0;
+  padding: 1.85rem 0 1.85rem 1.1rem;
   border-top: 1px solid var(--line);
+  border-left: 2px solid transparent;
+  margin-left: -1.1rem;
+  transition: border-color .2s ease, background .2s ease;
 }
 .aki-chapter:first-of-type { border-top: 0; padding-top: 0; }
+.aki-chapter:hover {
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
 .aki-chapter h2 {
-  font-family: var(--display); font-size: 1.45rem; margin: 0 0 0.5rem; line-height: 1.35;
+  font-family: var(--display); font-size: 1.5rem; margin: 0 0 0.5rem; line-height: 1.35;
 }
 .aki-chapter h2 a { color: var(--fg); text-decoration: none; }
 .aki-chapter h2 a:hover { color: var(--accent); }
 .muted { color: var(--muted); }
 .prose h1 { font-family: var(--display); font-size: clamp(1.9rem, 4vw, 2.5rem); margin: 0 0 1.4rem; line-height: 1.3; }
-.prose p { margin: 0 0 1.1rem; }
+.prose p { margin: 0 0 1.15rem; }
+.prose p:first-of-type::first-letter {
+  font-family: var(--display); font-size: 3.2em; float: left; line-height: 0.85;
+  padding: 0.08em 0.12em 0 0; color: var(--accent); font-weight: 700;
+}
 .prose pre { background: var(--card); border: 1px solid var(--line); padding: 1rem; overflow-x: auto; border-radius: 4px; }
 `;
 

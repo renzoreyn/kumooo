@@ -37,15 +37,17 @@ body.theme-natsu {
   margin: 0;
   font: 16px/1.65 var(--body);
   color: var(--fg);
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse 50% 40% at 100% 0%, color-mix(in srgb, var(--bar) 22%, transparent), transparent 55%),
+    var(--bg);
   min-height: 100vh;
   padding-bottom: 4rem;
 }
 body.theme-natsu::before {
   content: "";
   display: block;
-  height: 6px;
-  background: linear-gradient(90deg, var(--accent), var(--bar));
+  height: 8px;
+  background: linear-gradient(90deg, var(--accent), var(--bar), #ff6b35);
 }
 a { color: var(--accent); }
 .natsu-frame { max-width: 68rem; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
@@ -53,38 +55,53 @@ a { color: var(--accent); }
   display: flex; justify-content: space-between; gap: 1rem; align-items: center; flex-wrap: wrap;
   margin-bottom: 2rem;
 }
-.logo { font-family: var(--display); font-weight: 700; font-size: 1.35rem; color: var(--fg); text-decoration: none; letter-spacing: -0.04em; }
+.logo { font-family: var(--display); font-weight: 700; font-size: 1.4rem; color: var(--fg); text-decoration: none; letter-spacing: -0.04em; }
 .logo-img img { display: block; height: 2rem; width: auto; }
 .site-nav { display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap; }
 .site-nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; }
 .site-nav a:hover { color: var(--accent); }
-main.natsu-main { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem 3rem; }
+body.theme-natsu main { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem 3rem; }
+.natsu-main { width: 100%; }
 .natsu-hero {
   display: grid; gap: 1rem; margin-bottom: 2.5rem;
-  padding: 2rem 0 0.5rem;
+  padding: 1.5rem 0 0.5rem;
 }
 .natsu-hero h1 {
   font-family: var(--display); font-weight: 800;
-  font-size: clamp(2.8rem, 8vw, 4.5rem); line-height: 0.95;
-  margin: 0; letter-spacing: -0.05em; max-width: 14ch;
+  font-size: clamp(2.6rem, 9vw, 4.8rem); line-height: 0.92;
+  margin: 0; letter-spacing: -0.05em; max-width: 12ch;
 }
 .natsu-hero .lede { color: var(--muted); font-size: 1.1rem; max-width: 36rem; margin: 0; }
 .natsu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
   gap: 1rem;
 }
 .natsu-card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 1rem;
+  border-radius: 1.1rem;
   padding: 1.35rem 1.25rem 1.5rem;
-  display: grid; gap: 0.5rem;
-  min-height: 10rem;
+  display: grid; gap: 0.55rem; align-content: start;
+  min-height: 10.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-.natsu-card h2 { font-family: var(--display); font-size: 1.35rem; margin: 0; line-height: 1.2; letter-spacing: -0.03em; }
+.natsu-card::before {
+  content: "";
+  position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--accent), var(--bar));
+}
+.natsu-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.natsu-card h2 { font-family: var(--display); font-size: 1.4rem; margin: 0; line-height: 1.15; letter-spacing: -0.03em; padding-left: 0.35rem; }
 .natsu-card h2 a { color: var(--fg); text-decoration: none; }
 .natsu-card h2 a:hover { color: var(--accent); }
+.natsu-card p { padding-left: 0.35rem; }
 .muted { color: var(--muted); }
 .prose { max-width: 42rem; }
 .prose h1 { font-family: var(--display); font-size: clamp(2.2rem, 5vw, 3rem); margin: 0 0 1.25rem; letter-spacing: -0.04em; }

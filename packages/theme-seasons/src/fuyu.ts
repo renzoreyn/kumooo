@@ -35,38 +35,19 @@ body.theme-fuyu {
   margin: 0;
   font: 15px/1.65 var(--display);
   color: var(--fg);
-  background:
-    linear-gradient(180deg, #dbe7f3 0%, var(--bg) 18%),
-    var(--bg);
+  background: var(--bg);
   min-height: 100vh;
   padding-bottom: 4rem;
 }
-@media (prefers-color-scheme: dark) {
-  body.theme-fuyu {
-    background:
-      linear-gradient(180deg, #0e1620 0%, var(--bg) 22%),
-      var(--bg);
-  }
-}
-html[data-theme="light"] body.theme-fuyu {
-  background:
-    linear-gradient(180deg, #dbe7f3 0%, var(--bg) 18%),
-    var(--bg);
-}
-html[data-theme="dark"] body.theme-fuyu {
-  background:
-    linear-gradient(180deg, #0e1620 0%, var(--bg) 22%),
-    var(--bg);
-}
 a { color: var(--accent); }
-.fuyu-shell { max-width: 40rem; margin: 0 auto; padding: 1.25rem 1rem 0; }
+.fuyu-shell { max-width: 42rem; margin: 0 auto; padding: 1.25rem 1rem 0; }
 .fuyu-top {
   display: flex; justify-content: space-between; gap: 0.75rem; align-items: center; flex-wrap: wrap;
-  padding: 0.75rem 0.85rem;
+  padding: 0.7rem 0.85rem;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 10px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 .logo {
   font-family: var(--mono); font-weight: 600; font-size: 0.95rem;
@@ -78,31 +59,39 @@ a { color: var(--accent); }
   color: var(--muted); text-decoration: none; font-family: var(--mono); font-size: 0.78rem;
 }
 .site-nav a:hover { color: var(--accent); }
-main { max-width: 40rem; margin: 0 auto; padding: 0 1rem 3rem; }
-.fuyu-hero {
-  padding: 1.25rem 0 1.5rem;
+main { max-width: 42rem; margin: 0 auto; padding: 0 1rem 3rem; }
+.fuyu-status {
+  display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
+  font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+  padding: 0.45rem 0.7rem; margin-bottom: 1.25rem;
+  border: 1px dashed var(--line); border-radius: 8px;
+  background: color-mix(in srgb, var(--card) 80%, transparent);
 }
+.fuyu-status .ok { color: var(--accent); }
+.fuyu-hero { padding: 0.35rem 0 1.35rem; }
 .fuyu-hero .kicker {
   font-family: var(--mono); font-size: 0.72rem; color: var(--accent);
-  letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 0.6rem;
+  letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 0.55rem;
 }
 .fuyu-hero h1 {
-  font-size: clamp(1.6rem, 4vw, 2rem); margin: 0 0 0.5rem; letter-spacing: -0.02em;
+  font-size: clamp(1.55rem, 4vw, 2rem); margin: 0 0 0.5rem; letter-spacing: -0.02em;
+  font-family: var(--mono); font-weight: 600;
 }
 .fuyu-hero .lede { color: var(--muted); margin: 0; }
 .fuyu-list { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); }
 .fuyu-item {
   display: grid; grid-template-columns: 1fr auto; gap: 0.75rem; align-items: baseline;
-  padding: 0.9rem 1rem;
+  padding: 0.85rem 1rem;
   border-top: 1px solid var(--line);
   text-decoration: none; color: inherit;
+  transition: background .15s ease;
 }
 .fuyu-item:first-child { border-top: 0; }
-.fuyu-item:hover { background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
-.fuyu-item strong { font-weight: 600; }
-.fuyu-item .meta { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+.fuyu-item:hover { background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
+.fuyu-item strong { font-weight: 600; font-family: var(--mono); font-size: 0.92rem; }
+.fuyu-item .meta { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
 .muted { color: var(--muted); }
-.prose h1 { font-size: clamp(1.5rem, 3.5vw, 1.9rem); margin: 0 0 1rem; }
+.prose h1 { font-size: clamp(1.45rem, 3.5vw, 1.85rem); margin: 0 0 1rem; font-family: var(--mono); }
 .prose pre {
   background: var(--card); border: 1px solid var(--line); padding: 0.9rem;
   overflow-x: auto; border-radius: 8px; font-family: var(--mono); font-size: 0.85em;
@@ -137,7 +126,8 @@ export const fuyuTheme = buildSeasonTheme({
       totalPages > 1
         ? html`<p class="muted" style="margin-top:1.25rem">Page ${String(page)} of ${String(totalPages)}</p>`
         : raw("");
-    return html`<section class="fuyu-hero">
+    return html`<div class="fuyu-status"><span class="ok">ready</span><span>theme=fuyu</span><span>cache=edge</span></div>
+    <section class="fuyu-hero">
       <p class="kicker">log</p>
       <h1>${site.title}</h1>
       ${site.description ? html`<p class="lede">${site.description}</p>` : raw("")}

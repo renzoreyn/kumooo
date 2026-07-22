@@ -20,9 +20,8 @@ html[data-theme="dark"] { color-scheme: dark; }
   text-decoration: none;
   font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
   box-shadow: 0 8px 24px color-mix(in srgb, #000 28%, transparent);
-  backdrop-filter: blur(8px);
 }
-.km-badge:hover { filter: brightness(1.06); }
+.km-badge:hover { filter: none; opacity: 0.92; }
 .km-badge-mark {
   display: inline-grid; place-items: center;
   width: 1.35rem; height: 1.35rem; border-radius: 999px;

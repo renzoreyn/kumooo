@@ -53,8 +53,7 @@ a:hover { text-decoration: underline; }
 
 .site-header {
   position: sticky; top: 0; z-index: 30;
-  backdrop-filter: blur(16px);
-  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
   border-bottom: 1px solid var(--line);
 }
 .site-header .inner {
@@ -109,13 +108,10 @@ a:hover { text-decoration: underline; }
 
 .hero {
   position: relative;
-  padding: 4.5rem 0 2rem;
+  padding: 3.5rem 0 2rem;
   isolation: isolate;
-  /* Full viewport width so the glow is not cropped by .wrap */
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  overflow: visible;
+  width: 100%;
+  overflow: clip;
 }
 .hero-inner {
   position: relative;
@@ -123,40 +119,39 @@ a:hover { text-decoration: underline; }
   max-width: var(--max);
   margin: 0 auto;
   padding: 0 1.5rem;
+  min-width: 0;
 }
 @media (max-width: 640px) { .hero-inner { padding: 0 1rem; } }
 .hero-orb {
   position: absolute;
-  right: max(-6rem, -8vw); top: -12%;
-  width: min(48rem, 70vw); height: min(48rem, 70vw);
+  right: -20%; top: -18%;
+  width: min(40rem, 85vw); height: min(40rem, 85vw);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
-  animation: orb-drift 14s ease-in-out infinite alternate;
-  background: radial-gradient(circle at 40% 40%, rgba(110,231,183,.48), rgba(52,180,140,.14) 42%, transparent 68%);
-  filter: blur(12px);
+  /* Soft glow without filter:blur (that was killing mobile perf) */
+  background: radial-gradient(circle at 40% 40%, rgba(110,231,183,.35), rgba(52,180,140,.1) 45%, transparent 70%);
 }
 .hero-pixels {
   position: absolute;
-  right: max(-4rem, -5vw); top: -8%;
-  width: min(42rem, 62vw); height: min(42rem, 62vw);
+  right: -12%; top: -10%;
+  width: min(34rem, 72vw); height: min(34rem, 72vw);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
-  background-image: radial-gradient(rgba(110,231,183,.28) 1.15px, transparent 1.35px);
-  background-size: 6px 6px;
-  mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 42%, transparent 72%);
-  -webkit-mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 42%, transparent 72%);
-  opacity: 0.9;
-  animation: orb-drift 14s ease-in-out infinite alternate;
+  background-image: radial-gradient(rgba(110,231,183,.22) 1.1px, transparent 1.3px);
+  background-size: 7px 7px;
+  mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 40%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 40%, transparent 70%);
+  opacity: 0.75;
 }
-@keyframes orb-drift {
-  from { transform: translate(0, 0) scale(1); }
-  to { transform: translate(-3%, 4%) scale(1.06); }
+@media (max-width: 700px) {
+  .hero-orb { right: -35%; top: -8%; width: 22rem; height: 22rem; opacity: 0.7; }
+  .hero-pixels { display: none; }
 }
 .hero-brand {
   display: block;
-  font-size: clamp(3.5rem, 12vw, 6.5rem);
+  font-size: clamp(2.6rem, 11vw, 6.5rem);
   font-weight: 700;
   letter-spacing: -0.07em;
   line-height: 0.9;
@@ -165,55 +160,67 @@ a:hover { text-decoration: underline; }
 }
 .hero-brand span { color: var(--accent); }
 .hero h1 {
-  font-size: clamp(1.85rem, 4.5vw, 3rem);
-  line-height: 1.12; letter-spacing: -0.04em; margin: 0 0 1rem;
+  font-size: clamp(1.55rem, 5.5vw, 3rem);
+  line-height: 1.15; letter-spacing: -0.04em; margin: 0 0 1rem;
   font-weight: 700; max-width: 18ch;
 }
 .hero h1 em {
   font-style: normal; color: var(--accent);
 }
-.lead { color: var(--muted); font-size: 1.08rem; max-width: 34rem; margin: 0 0 1.5rem; }
-.hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.75rem; }
+.lead { color: var(--muted); font-size: 1.05rem; max-width: 34rem; margin: 0 0 1.5rem; }
+.hero-actions {
+  display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem;
+}
 .install {
-  display: inline-flex; align-items: center; gap: 0.75rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  width: 100%; max-width: 28rem;
   font-family: "IBM Plex Mono", ui-monospace, monospace;
   background: var(--card); border: 1px solid var(--line);
   border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem;
-  font-size: 0.88rem; color: var(--muted);
+  font-size: 0.85rem; color: var(--muted);
+  min-width: 0;
 }
+.install code, .install { overflow-wrap: anywhere; }
 .install button {
-  margin-left: auto; border: 0; background: transparent; color: var(--accent);
+  margin-left: auto; flex-shrink: 0; border: 0; background: transparent; color: var(--accent);
   font: inherit; cursor: pointer; font-weight: 600;
 }
 .install button.copied { color: var(--fg); }
+@media (max-width: 640px) {
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn { justify-content: center; width: 100%; }
+  .lead { font-size: 0.98rem; }
+}
 
 .product-mock {
   position: relative;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 16px;
   background: linear-gradient(180deg, #151518, #0c0c0e);
-  box-shadow:
-    0 30px 80px rgba(0,0,0,.55),
-    0 0 0 1px rgba(255,255,255,.03) inset;
+  box-shadow: 0 16px 40px rgba(0,0,0,.4);
   overflow: hidden;
-  min-height: 18rem;
+  min-height: 14rem;
+  width: 100%;
+  max-width: 100%;
 }
 .product-mock .mock-top {
   display: flex; align-items: center; gap: 0.4rem;
-  padding: 0.75rem 1rem; border-bottom: 1px solid var(--line);
+  padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--line);
   background: rgba(255,255,255,.02);
+  min-width: 0;
 }
 .product-mock .dot {
-  width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #3a3a3e;
+  width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #3a3a3e; flex-shrink: 0;
 }
 .product-mock .dot:nth-child(1) { background: #ff5f57; }
 .product-mock .dot:nth-child(2) { background: #febc2e; }
 .product-mock .dot:nth-child(3) { background: #28c840; }
 .product-mock .mock-url {
-  margin-left: 0.75rem; font: 0.72rem/1 "IBM Plex Mono", monospace; color: var(--muted);
+  margin-left: 0.5rem; font: 0.68rem/1.2 "IBM Plex Mono", monospace; color: var(--muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
 }
 .product-mock .mock-body {
-  display: grid; grid-template-columns: 11rem 1fr; min-height: 16rem;
+  display: grid; grid-template-columns: 10rem 1fr; min-height: 12rem;
 }
 .product-mock .mock-side {
   border-right: 1px solid var(--line); padding: 1rem 0.85rem;
@@ -224,9 +231,9 @@ a:hover { text-decoration: underline; }
   margin-bottom: 0.55rem;
 }
 .product-mock .mock-side .line.on { background: color-mix(in srgb, var(--accent) 55%, transparent); width: 70%; }
-.product-mock .mock-main { padding: 1.25rem 1.35rem; }
+.product-mock .mock-main { padding: 1.1rem 1.15rem; min-width: 0; }
 .product-mock .mock-main h3 {
-  margin: 0 0 0.75rem; font-size: 1.15rem; letter-spacing: -0.03em;
+  margin: 0 0 0.75rem; font-size: 1.05rem; letter-spacing: -0.03em;
 }
 .product-mock .mock-main .para {
   height: 0.5rem; border-radius: 4px; background: rgba(255,255,255,.07);
@@ -236,6 +243,7 @@ a:hover { text-decoration: underline; }
 @media (max-width: 700px) {
   .product-mock .mock-body { grid-template-columns: 1fr; }
   .product-mock .mock-side { display: none; }
+  .product-mock { min-height: 11rem; border-radius: 14px; }
 }
 
 .accent-lead {
@@ -421,56 +429,20 @@ footer.site .fine { color: var(--muted); font-size: 0.85rem; }
 .cf-deploy-actions { margin-top: 1rem; display: flex; justify-content: flex-end; }
 
 [data-reveal-on-scroll] {
-  opacity: 0; transform: translateY(18px);
-  transition: opacity .65s ease, transform .65s ease;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .45s ease, transform .45s ease;
 }
 [data-reveal-on-scroll].is-visible { opacity: 1; transform: none; }
-[data-reveal-on-scroll].is-visible .bento-card {
-  animation: card-in .55s ease backwards;
-}
-[data-reveal-on-scroll].is-visible .bento-card:nth-child(1) { animation-delay: .04s; }
-[data-reveal-on-scroll].is-visible .bento-card:nth-child(2) { animation-delay: .1s; }
-[data-reveal-on-scroll].is-visible .bento-card:nth-child(3) { animation-delay: .16s; }
-[data-reveal-on-scroll].is-visible .bento-card:nth-child(4) { animation-delay: .22s; }
-[data-reveal-on-scroll].is-visible .bento-card:nth-child(5) { animation-delay: .28s; }
-[data-reveal-on-scroll].is-visible .bento-card:nth-child(6) { animation-delay: .34s; }
-@keyframes card-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .hero-orb, .hero-pixels { animation: none; }
   [data-reveal-on-scroll] { opacity: 1; transform: none; transition: none; }
-  [data-reveal-on-scroll].is-visible .bento-card { animation: none; }
   .btn, .bento-card, .card { transition: none; }
 }
 `;
 
 const clientIsland = `
-import { animate, stagger } from "https://esm.sh/framer-motion@11.15.0/dom";
-
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-const heroBits = document.querySelectorAll("[data-hero-bit]");
-if (heroBits.length && !reduce) {
-  animate(heroBits, { opacity: [0, 1], y: [22, 0] }, { delay: stagger(0.08), duration: 0.55, easing: [0.22, 1, 0.36, 1] });
-} else {
-  for (const el of heroBits) el.style.opacity = "1";
-}
-
-const mock = document.querySelector("[data-hero-mock]");
-if (mock && !reduce) {
-  animate(mock, { opacity: [0, 1], y: [28, 0] }, { delay: 0.28, duration: 0.7, easing: [0.22, 1, 0.36, 1] });
-} else if (mock) {
-  mock.style.opacity = "1";
-}
-
-const cards = document.querySelectorAll("[data-motion-card]");
-if (cards.length && !reduce) {
-  animate(cards, { opacity: [0, 1], y: [14, 0] }, { delay: stagger(0.05), duration: 0.4, easing: "ease-out" });
-}
 
 for (const el of document.querySelectorAll("[data-copy]")) {
   el.addEventListener("click", async () => {
@@ -485,8 +457,11 @@ for (const el of document.querySelectorAll("[data-copy]")) {
 }
 
 const io = new IntersectionObserver((entries) => {
-  for (const e of entries) if (e.isIntersecting) e.target.classList.add("is-visible");
-}, { threshold: 0.12 });
+  for (const e of entries) if (e.isIntersecting) {
+    e.target.classList.add("is-visible");
+    io.unobserve(e.target);
+  }
+}, { threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
 for (const n of document.querySelectorAll("[data-reveal-on-scroll]")) {
   if (reduce) n.classList.add("is-visible");
   else io.observe(n);
@@ -618,7 +593,7 @@ function marketingHome(site: ThemeSiteContext): Html {
     <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
     <a class="btn" href="https://docs.kumooo.dev">Read the docs</a>
   </div>
-  <div class="product-mock" data-hero-mock style="opacity:0">
+  <div class="product-mock" data-hero-mock>
     <div class="mock-top">
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
       <span class="mock-url">docs.kumooo.dev/getting-started</span>
