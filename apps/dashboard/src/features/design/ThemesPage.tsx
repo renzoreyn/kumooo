@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { resolveThemeId } from "@kumooo/core";
 import { Check, Eye } from "lucide-react";
 import { Badge, Button, PageHeader } from "../../components/ui";
@@ -63,12 +63,22 @@ export function ThemesPage() {
     <>
       <PageHeader
         title="Themes"
-        description={site ? `Active: ${resolveThemeId(site.theme)}` : undefined}
+        description={
+          site
+            ? site.theme.startsWith("custom:")
+              ? `Active: custom theme (edit in Theme Studio)`
+              : `Active: ${resolveThemeId(site.theme)}`
+            : undefined
+        }
       />
+      <p className="muted" style={{ marginTop: 0 }}>
+        Season themes below. For HTML/CSS/JS of your own, use{" "}
+        <Link to={`/sites/${siteId}/design/studio`}>Theme Studio</Link>.
+      </p>
       {error ? <div className="error">{error}</div> : null}
       <div style={{ display: "grid", gap: "0.75rem" }}>
         {TENANT_THEMES.map((t) => {
-          const active = activeId === t.id;
+          const active = !site?.theme.startsWith("custom:") && activeId === t.id;
           return (
             <div key={t.id} className="card" style={{ display: "grid", gap: "0.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>

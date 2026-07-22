@@ -218,3 +218,20 @@ export const media = sqliteTable(
   },
   (t) => [index("media_site").on(t.siteId, t.createdAt)],
 );
+
+export const siteThemes = sqliteTable(
+  "site_themes",
+  {
+    id: text("id").primaryKey(),
+    siteId: text("site_id").notNull(),
+    version: integer("version").notNull(),
+    status: text("status", { enum: ["draft", "published", "archived"] }).notNull(),
+    label: text("label").notNull(),
+    createdAt: createdAt(),
+    publishedAt: integer("published_at", { mode: "timestamp_ms" }),
+  },
+  (t) => [
+    uniqueIndex("site_themes_site_version").on(t.siteId, t.version),
+    index("site_themes_site_status").on(t.siteId, t.status),
+  ],
+);

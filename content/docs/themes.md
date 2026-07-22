@@ -1,6 +1,4 @@
-A theme is a TypeScript module with five functions that return HTML.
-
-No template language. No mandatory client framework.
+A theme is either a first-party TypeScript package or a Theme Studio file tree.
 
 ## Free tenant themes
 
@@ -13,13 +11,45 @@ Tenants pick from four first-party season themes:
 | `aki` | Aki | Autumn. Warm cream, editorial serif, ochre accent. |
 | `fuyu` | Fuyu | Winter. Cool ink, crisp type, quiet chrome. |
 
-The legacy id `default` aliases to `haru` at render time, so older sites keep working without a database rewrite.
+The legacy id `default` aliases to `haru` at render time.
 
 Platform themes `marketing` and `docs` stay first-party only. They do not appear in the tenant gallery.
 
-Theme Studio (edit HTML/CSS/JS against our structure) is planned next. It is not a visual page builder.
+## Theme Studio
 
-## The contract
+Dashboard ? Design ? Theme Studio. You edit a fixed file tree, preview a draft, then publish.
+
+```
+theme.json
+styles.css
+templates/home.html
+templates/post.html
+templates/page.html
+templates/archive.html
+templates/notFound.html
+client.js                 # optional
+```
+
+Publishing sets `sites.theme` to `custom:{siteId}`. Switch back to a season theme anytime from Themes.
+
+### Dialect
+
+- `{{title}}` and `{{post.title}}` are HTML-escaped.
+- `{{{bodyHtml}}}` and `{{{head}}}` are trusted platform HTML only.
+- `{{{styles}}}` / `{{{clientScript}}}` are filled by the compiler from your CSS/JS.
+- Loops: `{{#posts}}…{{/posts}}`.
+- No JS expressions inside tags. No remote imports in `client.js`.
+
+### Limits
+
+- CSS ? 256 KB
+- Templates total ? 256 KB
+- `client.js` ? 128 KB
+- Last 10 published versions kept
+
+This is not a drag-and-drop page builder.
+
+## First-party TypeScript themes
 
 ```ts
 import type { Theme } from "@kumooo/theme-kit";
@@ -39,17 +69,4 @@ export const myTheme: Theme = {
 Escaping is on by default via the `html` tagged template.
 Use `raw()` for platform-rendered HTML only.
 
-## Interactive themes
-
-Want Framer Motion, Lucide, Radix?
-
-SSR the shell in your theme functions, then ship a small client island
-(ESM import or bundled script). Official `marketing` and `docs` themes do this.
-
-Default customer themes stay fast and JS-optional.
-Official themes may be animated. That's the showcase.
-
-## Registering
-
-Import and `registerTheme(...)` in the renderer.
-Set `site.theme` to a registered name (`haru`, `natsu`, `aki`, `fuyu`, or the `default` alias).
+Register with `registerTheme(...)` in the renderer.

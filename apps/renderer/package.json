@@ -18,6 +18,7 @@
     "@kumooo/theme-kit": "workspace:*",
     "@kumooo/theme-marketing": "workspace:*",
     "@kumooo/theme-seasons": "workspace:*",
+    "@kumooo/theme-studio": "workspace:*",
     "drizzle-orm": "^0.38.3"
   },
   "devDependencies": {

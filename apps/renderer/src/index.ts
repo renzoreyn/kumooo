@@ -34,6 +34,7 @@ import {
 } from "./data.js";
 import type { Env } from "./env.js";
 import { getTheme, registerTheme } from "./theme.js";
+import { resolveRenderableTheme } from "./custom-theme.js";
 
 const DASHBOARD_PAGES_ORIGIN = "https://kumooo-dashboard.pages.dev";
 
@@ -146,22 +147,29 @@ async function themeContext(db: Db, site: ResolvedSite, head: Html): Promise<The
   };
 }
 
-const htmlResponse = (body: Html, status = 200): Response =>
-  new Response(body.value, {
-    status,
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-      "X-Content-Type-Options": "nosniff",
-      "Referrer-Policy": "strict-origin-when-cross-origin",
-    },
-  });
+const htmlResponse = (body: Html, status = 200, opts?: { customTheme?: boolean }): Response => {
+  const headers: Record<string, string> = {
+    "Content-Type": "text/html; charset=utf-8",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+  };
+  if (opts?.customTheme) {
+    headers["Content-Security-Policy"] =
+      "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self'";
+  }
+  return new Response(body.value, { status, headers });
+};
 
-async function renderHome(db: Db, site: ResolvedSite, url: URL): Promise<Response> {
+async function themeFor(env: Env, site: ResolvedSite, themeName?: string) {
+  return resolveRenderableTheme(themeName ?? site.theme, env, site.id, getTheme);
+}
+
+async function renderHome(db: Db, env: Env, site: ResolvedSite, url: URL): Promise<Response> {
   const perPage = site.settings.postsPerPage;
   const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
   const { posts, total } = await listPublishedPosts(db, site.id, page, perPage);
   const totalPages = Math.max(1, Math.ceil(total / perPage));
-  if (page > totalPages && total > 0) return renderNotFound(db, site);
+  if (page > totalPages && total > 0) return renderNotFound(db, env, site);
 
   const head = buildHead(site, {
     bareTitle: true,
@@ -178,10 +186,18 @@ async function renderHome(db: Db, site: ResolvedSite, url: URL): Promise<Respons
     }),
   });
   const ctx = await themeContext(db, site, head);
-  return htmlResponse(getTheme(site.theme).home(ctx, { posts, page, totalPages, basePath: "/" }));
+  const { theme, custom } = await themeFor(env, site);
+  return htmlResponse(theme.home(ctx, { posts, page, totalPages, basePath: "/" }), 200, {
+    customTheme: custom,
+  });
 }
 
-async function renderContent(db: Db, site: ResolvedSite, slug: string): Promise<Response | null> {
+async function renderContent(
+  db: Db,
+  env: Env,
+  site: ResolvedSite,
+  slug: string,
+): Promise<Response | null> {
   const item = await getPublishedContent(db, site, slug);
   if (!item) return null;
   const seo = item.seo as {
@@ -216,16 +232,19 @@ async function renderContent(db: Db, site: ResolvedSite, slug: string): Promise<
     }),
   });
   const ctx = await themeContext(db, site, head);
-  const theme = getTheme(site.theme);
+  const { theme, custom } = await themeFor(env, site);
   return htmlResponse(
     item.type === "page" ? theme.page(ctx, { page: item }) : theme.post(ctx, { post: item }),
+    200,
+    { customTheme: custom },
   );
 }
 
-async function renderNotFound(db: Db, site: ResolvedSite): Promise<Response> {
+async function renderNotFound(db: Db, env: Env, site: ResolvedSite): Promise<Response> {
   const head = buildHead(site, { meta: { title: "Not found", noindex: true } });
   const ctx = await themeContext(db, site, head);
-  return htmlResponse(getTheme(site.theme).notFound(ctx), 404);
+  const { theme, custom } = await themeFor(env, site);
+  return htmlResponse(theme.notFound(ctx), 404, { customTheme: custom });
 }
 
 async function serveMedia(
@@ -256,6 +275,7 @@ async function serveMedia(
 
 async function renderPreview(
   db: Db,
+  env: Env,
   site: ResolvedSite,
   contentId: string,
   themeOverride?: string,
@@ -283,19 +303,14 @@ async function renderPreview(
     },
   });
   const ctx = await themeContext(db, site, head);
-  const theme = getTheme(themeOverride || site.theme);
+  const { theme, custom } = await themeFor(env, site, themeOverride || site.theme);
   const body =
     item.type === "page" ? theme.page(ctx, { page: item }) : theme.post(ctx, { post: item });
-  return new Response(body.value, {
-    status: 200,
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "private, no-store",
-      "X-Robots-Tag": "noindex",
-      "X-Content-Type-Options": "nosniff",
-      "Referrer-Policy": "strict-origin-when-cross-origin",
-    },
-  });
+  const res = htmlResponse(body, 200, { customTheme: custom });
+  const headers = new Headers(res.headers);
+  headers.set("Cache-Control", "private, no-store");
+  headers.set("X-Robots-Tag", "noindex");
+  return new Response(res.body, { status: 200, headers });
 }
 
 async function handle(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -331,7 +346,7 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
       if (payload.siteId !== site.id || !payload.contentId) {
         return new Response("Preview token does not match this site.", { status: 403 });
       }
-      return await renderPreview(db, site, payload.contentId, payload.theme);
+      return await renderPreview(db, env, site, payload.contentId, payload.theme);
     } catch (err) {
       return new Response(err instanceof Error ? err.message : "Invalid preview token.", {
         status: 401,
@@ -348,7 +363,7 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
   let response: Response | null = null;
 
   if (segments.length === 0) {
-    response = await renderHome(db, site, url);
+    response = await renderHome(db, env, site, url);
   } else if (url.pathname === "/robots.txt") {
     response = new Response(
       renderRobots({
@@ -411,21 +426,24 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
         meta: { title: result.name, canonicalUrl: `${site.origin}/${segments[0]}/${segments[1]}` },
       });
       const themeCtx = await themeContext(db, site, head);
+      const { theme, custom } = await themeFor(env, site);
       response = htmlResponse(
-        getTheme(site.theme).archive(themeCtx, {
+        theme.archive(themeCtx, {
           title: result.name,
           posts: result.posts,
           page: 1,
           totalPages: 1,
           basePath: `/${segments[0]}/${segments[1]}`,
         }),
+        200,
+        { customTheme: custom },
       );
     }
   } else if (segments.length === 1) {
-    response = await renderContent(db, site, segments[0]!);
+    response = await renderContent(db, env, site, segments[0]!);
   }
 
-  response ??= await renderNotFound(db, site);
+  response ??= await renderNotFound(db, env, site);
   if (response.ok || response.status === 404) {
     response = storeInCache(ctx, cacheKey, response);
   }

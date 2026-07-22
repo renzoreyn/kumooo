@@ -23,6 +23,9 @@ importers:
       '@kumooo/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@kumooo/theme-studio':
+        specifier: workspace:*
+        version: link:../../packages/theme-studio
       drizzle-orm:
         specifier: ^0.38.3
         version: 0.38.4(@cloudflare/workers-types@4.20260702.1)(@types/react@19.2.17)(react@19.2.7)
@@ -115,6 +118,9 @@ importers:
       '@kumooo/theme-seasons':
         specifier: workspace:*
         version: link:../../packages/theme-seasons
+      '@kumooo/theme-studio':
+        specifier: workspace:*
+        version: link:../../packages/theme-studio
       drizzle-orm:
         specifier: ^0.38.3
         version: 0.38.4(@cloudflare/workers-types@4.20260702.1)(@types/react@19.2.17)(react@19.2.7)

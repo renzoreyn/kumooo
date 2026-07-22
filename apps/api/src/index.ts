@@ -13,6 +13,7 @@ import { orgRoutes, siteRoutes } from "./routes/orgs.js";
 import { overviewRoutes } from "./routes/overview.js";
 import { previewRoutes } from "./routes/preview.js";
 import { ogRoutes } from "./routes/og.js";
+import { themeStudioRoutes } from "./routes/theme-studio.js";
 
 const app = new Hono<AppEnv>();
 
@@ -56,6 +57,7 @@ app.route("/v1", previewRoutes);
 app.route("/v1", mediaRoutes);
 app.route("/v1", domainRoutes);
 app.route("/v1", ogRoutes);
+app.route("/v1", themeStudioRoutes);
 
 app.notFound((c) =>
   c.json(

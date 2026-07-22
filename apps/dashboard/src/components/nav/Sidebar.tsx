@@ -1,6 +1,7 @@
 import { NavLink, useParams } from "react-router-dom";
 import {
   BarChart3,
+  Code2,
   FileText,
   FolderOpen,
   Globe,
@@ -23,6 +24,7 @@ const items = [
   { to: "media", label: "Media", icon: Image },
   { group: "Design" },
   { to: "design/themes", label: "Themes", icon: LayoutTemplate },
+  { to: "design/studio", label: "Theme Studio", icon: Code2 },
   { to: "design/navigation", label: "Navigation", icon: Navigation },
   { to: "seo", label: "SEO", icon: Search },
   { to: "deployments", label: "Deployments", icon: Rocket },
