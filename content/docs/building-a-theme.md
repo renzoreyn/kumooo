@@ -8,7 +8,7 @@ This guide is for the dashboard path. First-party TypeScript themes are covered 
 
 1. Create a site in the [dashboard](https://dash.kumooo.dev).
 2. Add at least one post or page. Preview needs something to render.
-3. Open **Design → Theme Studio**.
+3. Open **Design**, then **Theme Studio**.
 
 ## The file tree
 
@@ -104,7 +104,7 @@ That is enough for a real site. It is not enough for half of npm.
 
 ## Switch back to a season theme
 
-Open **Design → Themes**. Apply Haru, Natsu, Aki, or Fuyu. Your Studio drafts stay saved. Publish again later if you want the custom look back.
+Open **Design**, then **Themes**. Apply Haru, Natsu, Aki, or Fuyu. Your Studio drafts stay saved. Publish again later if you want the custom look back.
 
 ## Next
 
