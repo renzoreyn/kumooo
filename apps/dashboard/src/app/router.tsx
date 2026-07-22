@@ -7,6 +7,7 @@ import { SitePage } from "../pages/SitePage";
 import { EditorPage } from "../pages/EditorPage";
 import { MediaPage } from "../pages/MediaPage";
 import { PlaceholderPage } from "../features/common/PlaceholderPage";
+import { OverviewPage } from "../features/overview/OverviewPage";
 import type { ReactNode } from "react";
 
 function Private({ children }: { children: ReactNode }) {
@@ -37,15 +38,7 @@ export function AppRouter() {
           </Private>
         }
       >
-        <Route
-          index
-          element={
-            <PlaceholderPage
-              title="Overview"
-              body="Overview will show real health, counts, and activity from the new API in the next task."
-            />
-          }
-        />
+        <Route index element={<OverviewPage />} />
         <Route path="posts" element={<SitePage forcedType="post" />} />
         <Route path="pages" element={<SitePage forcedType="page" />} />
         <Route
