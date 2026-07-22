@@ -19,7 +19,7 @@ Tenant sites only expose a single free theme (`default`). Marketing still pitche
 
 ## Scope by phase
 
-### Phase 1 (this delivery) — Free seasons + CF Deploy CTA
+### Phase 1 (this delivery)  - Free seasons + CF Deploy CTA
 
 - Package `@kumooo/theme-seasons` exporting four `Theme`s.
 - Renderer: register all four; `getTheme("default")` resolves to `haru`.
@@ -30,7 +30,7 @@ Tenant sites only expose a single free theme (`default`). Marketing still pitche
   - **Host on your Cloudflare** → guided path using CLI / Workers project you control (see Approach below)
 - Keep Domains dashboard page; soften marketing copy only.
 
-### Phase 2 — Theme Studio (dashboard code themes)
+### Phase 2  - Theme Studio (dashboard code themes)
 
 - Per-site custom theme drafts stored as versioned file trees.
 - Editor in dashboard (Monaco or CodeMirror): edit provided structure.
@@ -38,7 +38,7 @@ Tenant sites only expose a single free theme (`default`). Marketing still pitche
 - Publish activates a theme id like `custom:<siteId>` or `site_<id>_vN` loaded by the renderer from R2/D1.
 - Security model: template sandbox (below). No `eval` of user TypeScript on the edge.
 
-### Phase 3 — Hardening (“the rest”)
+### Phase 3  - Hardening (“the rest”)
 
 - Scheduled publish worker (cron) that flips `scheduled` → `published` and bumps cache.
 - Cloudflare for SaaS / custom hostname API when tokens exist; keep DNS instruction + verify as fallback.
@@ -112,7 +112,7 @@ v1 does **not** require Cloudflare OAuth or automatic provision into the user’
 
 Replace marketing tab/feature copy that over-promises “Custom domains without the ticket queue” with CF Deploy framing. Pricing table: rename row to “Managed `*.kumooo.dev`” vs “Self-host on your CF.”
 
-## Phase 2 design — Theme Studio
+## Phase 2 design  - Theme Studio
 
 ### Author model
 
@@ -171,7 +171,7 @@ Renderer maps today’s `Theme` functions by compiling templates + CSS into the 
 - One published custom theme per site (versioned history keep last 10).
 - No npm imports in client.js; no Worker bindings from custom themes.
 
-## Phase 3 design — Hardening
+## Phase 3 design  - Hardening
 
 - **Scheduler:** Cloudflare cron on API or renderer Worker every minute; select due `scheduled` content; publish; `content.published` event; bump KV cache version.
 - **Custom hostnames:** when `CF_API_TOKEN` + zone config present, create custom hostname on domain add; Domains UI shows CF status. Else keep DNS table + verify.
