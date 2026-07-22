@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, type FormEvent } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Input, PageHeader, Select, Textarea } from "../../components/ui";
+import { ConfirmDialog, Dialog } from "../../components/ui/Dialog";
 import { useToast } from "../../components/ui/Toast";
 import { sitesApi } from "../../lib/api/sites";
 
 export function SettingsPage() {
   const { siteId = "" } = useParams();
+  const nav = useNavigate();
   const toast = useToast();
   const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
+  const [status, setStatus] = useState("active");
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("en");
   const [timezone, setTimezone] = useState("UTC");
@@ -15,21 +19,24 @@ export function SettingsPage() {
   const [postsPerPage, setPostsPerPage] = useState("10");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [confirmSlug, setConfirmSlug] = useState("");
+
+  async function load() {
+    const { site } = await sitesApi.get(siteId);
+    setName(site.name);
+    setSlug(site.slug);
+    setStatus(site.status ?? "active");
+    setTheme(site.theme);
+    setDescription(typeof site.settings.description === "string" ? site.settings.description : "");
+    setLanguage(typeof site.settings.language === "string" ? site.settings.language : "en");
+    setTimezone(typeof site.settings.timezone === "string" ? site.settings.timezone : "UTC");
+    setPostsPerPage(String(site.settings.postsPerPage ?? 10));
+  }
 
   useEffect(() => {
-    void (async () => {
-      try {
-        const { site } = await sitesApi.get(siteId);
-        setName(site.name);
-        setTheme(site.theme);
-        setDescription(typeof site.settings.description === "string" ? site.settings.description : "");
-        setLanguage(typeof site.settings.language === "string" ? site.settings.language : "en");
-        setTimezone(typeof site.settings.timezone === "string" ? site.settings.timezone : "UTC");
-        setPostsPerPage(String(site.settings.postsPerPage ?? 10));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Could not load settings.");
-      }
-    })();
+    void load().catch((err) => setError(err instanceof Error ? err.message : "Could not load settings."));
   }, [siteId]);
 
   async function save() {
@@ -55,6 +62,51 @@ export function SettingsPage() {
     }
   }
 
+  async function archive() {
+    setBusy(true);
+    try {
+      await sitesApi.archive(siteId);
+      toast.push("Site archived");
+      setArchiveOpen(false);
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Archive failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function restore() {
+    setBusy(true);
+    try {
+      await sitesApi.restore(siteId);
+      toast.push("Site restored");
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Restore failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function hardDelete(e: FormEvent) {
+    e.preventDefault();
+    if (confirmSlug !== slug) {
+      setError(`Type ${slug} to confirm delete.`);
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    try {
+      await sitesApi.remove(siteId, confirmSlug);
+      toast.push("Site deleted");
+      nav("/", { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed.");
+      setBusy(false);
+    }
+  }
+
   return (
     <>
       <PageHeader
@@ -67,7 +119,7 @@ export function SettingsPage() {
         }
       />
       {error ? <div className="error">{error}</div> : null}
-      <div className="card" style={{ display: "grid", gap: "0.75rem", maxWidth: 560 }}>
+      <div className="card" style={{ display: "grid", gap: "0.75rem", maxWidth: 560, marginBottom: "1rem" }}>
         <div className="field" style={{ marginBottom: 0 }}>
           <label className="label" htmlFor="settings-name">
             Name
@@ -119,6 +171,65 @@ export function SettingsPage() {
           />
         </div>
       </div>
+
+      <div className="card" style={{ display: "grid", gap: "0.75rem", maxWidth: 560 }}>
+        <strong>Danger zone</strong>
+        <p className="muted" style={{ margin: 0 }}>
+          Archive hides the site from public routing. Delete permanently removes content, media metadata, domains,
+          and events. Type the site slug to confirm delete.
+        </p>
+        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          {status === "archived" ? (
+            <Button type="button" disabled={busy} onClick={() => void restore()}>
+              Restore site
+            </Button>
+          ) : (
+            <Button type="button" disabled={busy} onClick={() => setArchiveOpen(true)}>
+              Archive site
+            </Button>
+          )}
+          <Button type="button" variant="danger" disabled={busy} onClick={() => setDeleteOpen(true)}>
+            Delete site
+          </Button>
+        </div>
+      </div>
+
+      <ConfirmDialog
+        open={archiveOpen}
+        title="Archive this site?"
+        body="Public URLs will stop serving until you restore."
+        confirmLabel="Archive"
+        onClose={() => setArchiveOpen(false)}
+        onConfirm={() => void archive()}
+      />
+
+      <Dialog open={deleteOpen} title="Delete site permanently?" onClose={() => setDeleteOpen(false)}>
+        <p className="muted">
+          This removes the site, its posts/pages, media rows, domains, and activity. Type <strong>{slug}</strong> to
+          confirm.
+        </p>
+        <form onSubmit={(e) => void hardDelete(e)}>
+          <div className="field">
+            <label className="label" htmlFor="confirm-slug">
+              Confirm slug
+            </label>
+            <Input
+              id="confirm-slug"
+              value={confirmSlug}
+              onChange={(e) => setConfirmSlug(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+            <Button type="button" onClick={() => setDeleteOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="danger" disabled={busy || confirmSlug !== slug}>
+              Delete forever
+            </Button>
+          </div>
+        </form>
+      </Dialog>
     </>
   );
 }

@@ -4,7 +4,6 @@ import { useAuth } from "./providers";
 import { AuthPage } from "../pages/AuthPage";
 import { AllSitesPage } from "../features/sites/AllSitesPage";
 import { MediaPage } from "../features/media/MediaPage";
-import { PlaceholderPage } from "../features/common/PlaceholderPage";
 import { OverviewPage } from "../features/overview/OverviewPage";
 import { ContentListPage } from "../features/content/ContentListPage";
 import { CollectionsPage } from "../features/content/CollectionsPage";
@@ -13,6 +12,8 @@ import { ThemesPage } from "../features/design/ThemesPage";
 import { NavigationPage } from "../features/design/NavigationPage";
 import { SeoPage } from "../features/seo/SeoPage";
 import { OgMakerPage } from "../features/seo/OgMakerPage";
+import { DomainsPage } from "../features/domains/DomainsPage";
+import { DeploymentsPage } from "../features/deployments/DeploymentsPage";
 import { SettingsPage } from "../features/settings/SettingsPage";
 import type { ReactNode } from "react";
 
@@ -53,16 +54,8 @@ export function AppRouter() {
         <Route path="design/navigation" element={<NavigationPage />} />
         <Route path="seo" element={<SeoPage />} />
         <Route path="seo/og" element={<OgMakerPage />} />
-        <Route
-          path="deployments"
-          element={
-            <PlaceholderPage title="Deployments" body="Release activity from real site events comes later." />
-          }
-        />
-        <Route
-          path="domains"
-          element={<PlaceholderPage title="Domains" body="Guided custom domains come after media and SEO." />}
-        />
+        <Route path="deployments" element={<DeploymentsPage />} />
+        <Route path="domains" element={<DomainsPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="new" element={<EditorPage />} />
         <Route path="content/:contentId" element={<EditorPage />} />
