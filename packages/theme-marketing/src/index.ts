@@ -416,7 +416,7 @@ function cfDeployDialog(): Html {
     <h2>Deploy on Cloudflare</h2>
     <p>Pick how you want to run Kumooo. No OAuth into your account. You choose the path.</p>
     <div class="cf-deploy-choices">
-      <a class="cf-deploy-choice" href="https://kumooo-dashboard.pages.dev/signup">
+      <a class="cf-deploy-choice" href="https://dash.kumooo.dev/signup">
         <strong>Host on Kumooo</strong>
         <span>We run the Worker. You get {slug}.kumooo.dev in minutes.</span>
       </a>
@@ -646,7 +646,7 @@ function marketingPricing(site: ThemeSiteContext): Html {
         <li>Four free season themes</li>
         <li>Same edge stack as self-host</li>
       </ul>
-      <a class="btn primary" href="https://kumooo-dashboard.pages.dev/signup">Open the dashboard</a>
+      <a class="btn primary" href="https://dash.kumooo.dev/signup">Open the dashboard</a>
     </div>
     <div class="price-card" data-motion-card>
       <div class="kicker">Your Cloudflare</div>
