@@ -6,6 +6,21 @@ export type RoutingHealth = {
   checkedAt: string;
 };
 
+async function publicDnsResolves(hostname: string): Promise<boolean> {
+  try {
+    const url = `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(hostname)}&type=A`;
+    const res = await fetch(url, {
+      headers: { Accept: "application/dns-json" },
+    });
+    if (!res.ok) return false;
+    const data = (await res.json()) as { Status?: number; Answer?: unknown[] };
+    // Status 0 = NOERROR with answers; 3 = NXDOMAIN
+    return data.Status === 0 && Array.isArray(data.Answer) && data.Answer.length > 0;
+  } catch {
+    return false;
+  }
+}
+
 export async function checkRoutingHealth(input: {
   slug: string;
   suffix: string;
@@ -25,6 +40,17 @@ export async function checkRoutingHealth(input: {
     };
   }
 
+  const dnsOk = await publicDnsResolves(tenantHostname);
+  if (!dnsOk) {
+    return {
+      tenantHostname,
+      dnsOk: false,
+      httpOk: false,
+      status: "dns_missing",
+      checkedAt,
+    };
+  }
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), input.timeoutMs ?? 4_000);
 
@@ -35,20 +61,19 @@ export async function checkRoutingHealth(input: {
       signal: controller.signal,
       headers: { "User-Agent": "kumooo-routing-health/1.0" },
     });
-    // Any HTTP response means DNS + Worker route reached something.
     return {
       tenantHostname,
       dnsOk: true,
       httpOk: res.status > 0,
-      status: "live",
+      status: res.status > 0 ? "live" : "unreachable",
       checkedAt,
     };
   } catch {
     return {
       tenantHostname,
-      dnsOk: false,
+      dnsOk: true,
       httpOk: false,
-      status: "dns_missing",
+      status: "unreachable",
       checkedAt,
     };
   } finally {

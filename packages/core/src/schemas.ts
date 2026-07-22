@@ -81,7 +81,9 @@ export const createContentSchema = z.object({
   featuredImage: z.string().optional(),
 });
 
-export const updateContentSchema = createContentSchema.partial();
+export const updateContentSchema = createContentSchema.partial().extend({
+  expectedUpdatedAt: z.string().datetime().optional(),
+});
 
 export const RESERVED_SLUGS = new Set([
   "www",

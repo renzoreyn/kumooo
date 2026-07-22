@@ -13,6 +13,7 @@ import type { AppEnv } from "../env.js";
 import { ApiError } from "../errors.js";
 import { requireSiteAccess } from "../lib/authz.js";
 import { bumpCacheVersion } from "../lib/cachever.js";
+import { recordSiteEvent } from "../lib/events.js";
 import { requireUser } from "../middleware/auth.js";
 
 export const contentRoutes = new Hono<AppEnv>();
@@ -100,7 +101,17 @@ contentRoutes.post("/sites/:siteId/content", async (c) => {
   });
 
   if (body.tags.length) await syncTags(c.get("db"), siteId, id, body.tags);
-  if (body.status === "published") await bumpCacheVersion(c.env.KV, siteId);
+  if (body.status === "published" || body.status === "scheduled") {
+    await bumpCacheVersion(c.env.KV, siteId);
+    await recordSiteEvent(c.get("db"), {
+      siteId,
+      actorId: user.id,
+      type: body.status === "published" ? "content.published" : "content.scheduled",
+      resourceType: "content",
+      resourceId: id,
+      metadata: { title: body.title, slug, status: body.status },
+    });
+  }
 
   const row = (await c.get("db").select().from(content).where(eq(content.id, id)))[0]!;
   return c.json({ content: serializeContent(row) }, 201);
@@ -140,6 +151,11 @@ contentRoutes.patch("/sites/:siteId/content/:id", async (c) => {
   }
 
   const body = updateContentSchema.parse(await c.req.json());
+  if (body.expectedUpdatedAt && body.expectedUpdatedAt !== row.updatedAt.toISOString()) {
+    throw new ApiError(409, "conflict", "This content changed elsewhere. Reload or keep your local draft.", {
+      current: serializeContent(row),
+    });
+  }
   if (body.status && body.status !== "draft" && role === "author") {
     throw ApiError.forbidden("Authors can draft. Editors publish.");
   }
@@ -152,7 +168,6 @@ contentRoutes.patch("/sites/:siteId/content/:id", async (c) => {
     createdAt: new Date(),
   });
 
-  // Keep last 50 revisions.
   const old = await c
     .get("db")
     .select({ id: revisions.id })
@@ -166,12 +181,9 @@ contentRoutes.patch("/sites/:siteId/content/:id", async (c) => {
   }
 
   const nextStatus = body.status ?? row.status;
-  const publishedAt =
-    nextStatus === "published"
-      ? (row.publishedAt ?? new Date())
-      : nextStatus === "draft"
-        ? null
-        : row.publishedAt;
+  let publishedAt = row.publishedAt;
+  if (nextStatus === "published") publishedAt = row.publishedAt ?? new Date();
+  else if (nextStatus === "draft" || nextStatus === "archived") publishedAt = null;
 
   await c
     .get("db")
@@ -191,13 +203,101 @@ contentRoutes.patch("/sites/:siteId/content/:id", async (c) => {
     .where(and(eq(content.id, id), eq(content.siteId, siteId)));
 
   if (body.tags) await syncTags(c.get("db"), siteId, id, body.tags);
-  if (nextStatus === "published" || row.status === "published") {
-    await bumpCacheVersion(c.env.KV, siteId);
+
+  const becamePublic =
+    nextStatus === "published" ||
+    nextStatus === "scheduled" ||
+    row.status === "published" ||
+    row.status === "scheduled";
+  if (becamePublic) await bumpCacheVersion(c.env.KV, siteId);
+
+  if (body.status && body.status !== row.status) {
+    await recordSiteEvent(c.get("db"), {
+      siteId,
+      actorId: user.id,
+      type:
+        body.status === "published"
+          ? "content.published"
+          : body.status === "archived"
+            ? "content.archived"
+            : body.status === "scheduled"
+              ? "content.scheduled"
+              : "content.updated",
+      resourceType: "content",
+      resourceId: id,
+      metadata: { from: row.status, to: body.status, title: body.title ?? row.title },
+    });
   }
 
-  const updated = (
-    await c.get("db").select().from(content).where(eq(content.id, id))
-  )[0]!;
+  const updated = (await c.get("db").select().from(content).where(eq(content.id, id)))[0]!;
+  return c.json({ content: serializeContent(updated) });
+});
+
+contentRoutes.post("/sites/:siteId/content/:id/restore", async (c) => {
+  const user = requireUser(c);
+  const siteId = c.req.param("siteId");
+  const { role } = await requireSiteAccess(c.get("db"), siteId, user.id, "author");
+  const id = c.req.param("id");
+  const body = (await c.req.json()) as { revisionId?: string };
+  if (!body.revisionId) throw ApiError.badRequest("revisionId is required.");
+
+  const row = (
+    await c
+      .get("db")
+      .select()
+      .from(content)
+      .where(and(eq(content.id, id), eq(content.siteId, siteId)))
+  )[0];
+  if (!row) throw ApiError.notFound("Content not found.");
+  if (role === "author" && row.authorId !== user.id) {
+    throw ApiError.forbidden("Authors can only restore their own content.");
+  }
+
+  const revision = (
+    await c
+      .get("db")
+      .select()
+      .from(revisions)
+      .where(and(eq(revisions.id, body.revisionId), eq(revisions.contentId, id)))
+  )[0];
+  if (!revision) throw ApiError.notFound("Revision not found.");
+
+  const snapshot = safeJson(revision.snapshot) as Partial<typeof content.$inferSelect>;
+  await c.get("db").insert(revisions).values({
+    id: newId("rev"),
+    contentId: id,
+    snapshot: JSON.stringify(row),
+    createdBy: user.id,
+    createdAt: new Date(),
+  });
+
+  await c
+    .get("db")
+    .update(content)
+    .set({
+      title: typeof snapshot.title === "string" ? snapshot.title : row.title,
+      excerpt: (snapshot.excerpt as string | null | undefined) ?? row.excerpt,
+      bodyMarkdown:
+        typeof snapshot.bodyMarkdown === "string" ? snapshot.bodyMarkdown : row.bodyMarkdown,
+      customFields:
+        typeof snapshot.customFields === "string" ? snapshot.customFields : row.customFields,
+      seo: typeof snapshot.seo === "string" ? snapshot.seo : row.seo,
+      featuredImage: (snapshot.featuredImage as string | null | undefined) ?? row.featuredImage,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(content.id, id), eq(content.siteId, siteId)));
+
+  if (row.status === "published") await bumpCacheVersion(c.env.KV, siteId);
+  await recordSiteEvent(c.get("db"), {
+    siteId,
+    actorId: user.id,
+    type: "content.restored",
+    resourceType: "content",
+    resourceId: id,
+    metadata: { revisionId: body.revisionId },
+  });
+
+  const updated = (await c.get("db").select().from(content).where(eq(content.id, id)))[0]!;
   return c.json({ content: serializeContent(updated) });
 });
 
@@ -217,8 +317,20 @@ contentRoutes.delete("/sites/:siteId/content/:id", async (c) => {
   if (role === "author" && (row.authorId !== user.id || row.status !== "draft")) {
     throw ApiError.forbidden("Authors can only delete their own drafts.");
   }
+  if (row.status !== "archived" && row.status !== "draft") {
+    throw ApiError.badRequest("Archive content before permanently deleting it.");
+  }
+  await c.get("db").delete(contentTags).where(eq(contentTags.contentId, id));
+  await c.get("db").delete(revisions).where(eq(revisions.contentId, id));
   await c.get("db").delete(content).where(and(eq(content.id, id), eq(content.siteId, siteId)));
-  if (row.status === "published") await bumpCacheVersion(c.env.KV, siteId);
+  await recordSiteEvent(c.get("db"), {
+    siteId,
+    actorId: user.id,
+    type: "content.deleted",
+    resourceType: "content",
+    resourceId: id,
+    metadata: { title: row.title, slug: row.slug },
+  });
   return c.json({ ok: true });
 });
 
@@ -242,6 +354,10 @@ function serializeContent(row: typeof content.$inferSelect) {
     ...row,
     customFields: safeJson(row.customFields),
     seo: safeJson(row.seo),
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
+    publishedAt: row.publishedAt ? row.publishedAt.toISOString() : null,
+    scheduledAt: row.scheduledAt ? row.scheduledAt.toISOString() : null,
   };
 }
 
