@@ -1,5 +1,5 @@
 import { html, joinHtml, raw } from "@kumooo/theme-kit";
-import { buildSeasonTheme, defaultNav, siteBrand } from "./shared.js";
+import { buildSeasonTheme, countChip, pager, seasonHeader, tagChips } from "./shared.js";
 
 const css = `
 :root {
@@ -10,8 +10,15 @@ const css = `
   --accent: #e85d04;
   --card: #ffffff;
   --bar: #ffba08;
+  --radius: 1.1rem;
   --display: "Syne", "Avenir Next", sans-serif;
   --body: "Manrope", "Segoe UI", sans-serif;
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --muted-foreground: var(--muted);
+  --border: var(--line);
+  --primary: var(--accent);
+  --primary-foreground: #fff8f0;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -32,39 +39,33 @@ html[data-theme="dark"] {
   --bg: #140f0c; --fg: #f7ebe1; --muted: #b89a88; --line: #3a2a22;
   --accent: #ff7b29; --card: #1f1713; --bar: #f4a261;
 }
-* { box-sizing: border-box; }
 body.theme-natsu {
   margin: 0;
   font: 16px/1.65 var(--body);
   color: var(--fg);
   background:
-    radial-gradient(ellipse 50% 40% at 100% 0%, color-mix(in srgb, var(--bar) 22%, transparent), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 0%, color-mix(in srgb, var(--bar) 18%, transparent), transparent 55%),
     var(--bg);
   min-height: 100vh;
   padding-bottom: 4rem;
 }
-body.theme-natsu::before {
-  content: "";
-  display: block;
-  height: 8px;
-  background: linear-gradient(90deg, var(--accent), var(--bar), #ff6b35);
-}
 a { color: var(--accent); }
-.natsu-frame { max-width: 68rem; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
-.natsu-top {
-  display: flex; justify-content: space-between; gap: 1rem; align-items: center; flex-wrap: wrap;
-  margin-bottom: 2rem;
+.natsu-header {
+  --km-measure: 68rem;
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, var(--accent), var(--bar), #ff6b35) 1;
 }
-.logo { font-family: var(--display); font-weight: 700; font-size: 1.4rem; color: var(--fg); text-decoration: none; letter-spacing: -0.04em; }
+.logo { font-family: var(--display); font-weight: 800; font-size: 1.4rem; color: var(--fg); text-decoration: none; letter-spacing: -0.04em; }
 .logo-img img { display: block; height: 2rem; width: auto; }
-.site-nav { display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap; }
-.site-nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; }
-.site-nav a:hover { color: var(--accent); }
-body.theme-natsu main { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem 3rem; }
-.natsu-main { width: 100%; }
+.site-nav a { font-weight: 700; }
+body.theme-natsu main { max-width: 68rem; margin: 0 auto; padding: 2.5rem 1.25rem 3rem; }
 .natsu-hero {
-  display: grid; gap: 1rem; margin-bottom: 2.5rem;
-  padding: 1.5rem 0 0.5rem;
+  display: grid; gap: 0.9rem; margin-bottom: 2.5rem;
+}
+.natsu-hero .kicker {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: var(--display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); margin: 0;
 }
 .natsu-hero h1 {
   font-family: var(--display); font-weight: 800;
@@ -79,8 +80,8 @@ body.theme-natsu main { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem 3re
 }
 .natsu-card {
   background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   padding: 1.35rem 1.25rem 1.5rem;
   display: grid; gap: 0.55rem; align-content: start;
   min-height: 10.5rem;
@@ -95,17 +96,17 @@ body.theme-natsu main { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem 3re
 }
 .natsu-card:hover {
   transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
   box-shadow: 0 14px 28px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 .natsu-card h2 { font-family: var(--display); font-size: 1.4rem; margin: 0; line-height: 1.15; letter-spacing: -0.03em; padding-left: 0.35rem; }
 .natsu-card h2 a { color: var(--fg); text-decoration: none; }
 .natsu-card h2 a:hover { color: var(--accent); }
-.natsu-card p { padding-left: 0.35rem; }
+.natsu-card p { padding-left: 0.35rem; margin: 0; }
+.natsu-card .km-chips { padding-left: 0.35rem; }
 .muted { color: var(--muted); }
-.prose { max-width: 42rem; }
 .prose h1 { font-family: var(--display); font-size: clamp(2.2rem, 5vw, 3rem); margin: 0 0 1.25rem; letter-spacing: -0.04em; }
-.prose pre { background: var(--card); border: 1px solid var(--line); padding: 1rem; overflow-x: auto; border-radius: 12px; }
+.prose pre { background: var(--card); border: 1px solid var(--border); padding: 1rem; overflow-x: auto; border-radius: var(--radius); }
 `;
 
 export const natsuTheme = buildSeasonTheme({
@@ -115,8 +116,7 @@ export const natsuTheme = buildSeasonTheme({
   fontHref:
     "https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Syne:wght@700;800&display=swap",
   css,
-  header: (site) =>
-    html`<div class="natsu-frame"><header class="natsu-top">${siteBrand(site)}${defaultNav(site)}</header></div>`,
+  header: (site) => seasonHeader(site, "natsu-header"),
   homeMain: (site, { posts, page, totalPages }) => {
     const list =
       posts.length === 0
@@ -126,19 +126,18 @@ export const natsuTheme = buildSeasonTheme({
               (p) => html`<article class="natsu-card">
                 <h2><a href="${p.url}">${p.title}</a></h2>
                 ${p.excerpt ? html`<p class="muted">${p.excerpt}</p>` : raw("")}
+                ${tagChips(p)}
               </article>`,
             ),
           )}</div>`;
-    const pager =
-      totalPages > 1
-        ? html`<p class="muted" style="margin-top:1.5rem">Page ${String(page)} of ${String(totalPages)}</p>`
-        : raw("");
     return html`<div class="natsu-main">
       <section class="natsu-hero">
+        <p class="kicker">Showcase</p>
         <h1>${site.title}</h1>
         ${site.description ? html`<p class="lede">${site.description}</p>` : raw("")}
+        ${countChip(posts.length)}
       </section>
-      ${list}${pager}
+      ${list}${pager(page, totalPages)}
     </div>`;
   },
   articleMain: (title, body, excerpt) =>

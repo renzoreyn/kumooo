@@ -9,21 +9,22 @@ html { color-scheme: light dark; }
 html[data-theme="light"] { color-scheme: light; }
 html[data-theme="dark"] { color-scheme: dark; }
 .km-scheme {
-  appearance: none; border: 1px solid var(--line); background: var(--card, var(--bg));
-  color: var(--muted); border-radius: 999px;
+  appearance: none; border: 1px solid var(--border, var(--line)); background: var(--card, var(--bg));
+  color: var(--muted-foreground, var(--muted)); border-radius: 999px;
   width: 2.15rem; height: 2.15rem; padding: 0;
   display: inline-grid; place-items: center;
   cursor: pointer;
+  flex: none;
 }
-.km-scheme:hover { color: var(--fg); }
+.km-scheme:hover { color: var(--foreground, var(--fg)); border-color: color-mix(in srgb, var(--foreground, var(--fg)) 20%, var(--border, var(--line))); }
 .km-scheme svg { display: block; }
 .km-badge {
   position: fixed; z-index: 40; right: 1rem; bottom: 1rem;
   display: inline-flex; align-items: center; gap: 0.4rem;
   padding: 0.45rem 0.7rem 0.45rem 0.55rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--fg) 92%, transparent);
-  color: var(--bg);
+  background: color-mix(in srgb, var(--foreground, var(--fg)) 92%, transparent);
+  color: var(--background, var(--bg));
   text-decoration: none;
   font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
   box-shadow: 0 8px 24px color-mix(in srgb, #000 28%, transparent);
@@ -32,9 +33,115 @@ html[data-theme="dark"] { color-scheme: dark; }
 .km-badge-mark {
   display: inline-grid; place-items: center;
   width: 1.35rem; height: 1.35rem; border-radius: 999px;
-  background: var(--accent); color: var(--bg);
+  background: var(--primary, var(--accent)); color: var(--primary-foreground, var(--bg));
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.7rem; font-weight: 700;
+}
+`;
+
+/**
+ * Shared modern shell primitives applied under every season theme:
+ * sticky bordered header, nav link pills, focus rings, chip badges and
+ * sane prose defaults. Seasonal CSS layers on top of this (loaded after,
+ * and with equal-or-higher specificity) to give each season its own
+ * art direction while sharing the same structural bones.
+ */
+export const BASE_UI_CSS = `
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+:focus-visible {
+  outline: 2px solid var(--primary, var(--accent, #3b82c4));
+  outline-offset: 2px;
+  border-radius: calc(var(--radius, 0.6rem) - 2px);
+}
+img, svg { max-width: 100%; }
+
+.km-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid var(--border, var(--line));
+  background: var(--background, var(--bg));
+}
+.km-header-inner {
+  max-width: var(--km-measure, 64rem);
+  margin: 0 auto;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.site-nav { display: flex; align-items: center; gap: 0.15rem; flex-wrap: wrap; }
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: calc(var(--radius, 0.6rem) - 0.15rem);
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--muted-foreground, var(--muted));
+  transition: background-color .15s ease, color .15s ease;
+}
+.site-nav a:hover {
+  color: var(--foreground, var(--fg));
+  background: color-mix(in srgb, var(--foreground, var(--fg)) 7%, transparent);
+}
+.km-scheme { margin-left: 0.2rem; }
+
+.km-chips { display: inline-flex; flex-wrap: wrap; gap: 0.35rem; }
+.km-chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.24rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border, var(--line));
+  background: var(--card, var(--bg));
+  color: var(--muted-foreground, var(--muted));
+  font-size: 0.74rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.km-chip-solid {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--primary, var(--accent)) 14%, transparent);
+  color: var(--primary, var(--accent));
+}
+.km-meta {
+  display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap;
+  color: var(--muted-foreground, var(--muted));
+  font-size: 0.82rem;
+}
+.km-pager {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  margin-top: 2.25rem; padding-top: 1.25rem;
+  border-top: 1px solid var(--border, var(--line));
+  color: var(--muted-foreground, var(--muted));
+  font-size: 0.85rem;
+}
+
+.prose { line-height: 1.75; }
+.prose :where(p, ul, ol, blockquote, table) { margin: 0 0 1.15rem; }
+.prose :where(h2, h3, h4) { line-height: 1.3; margin: 2rem 0 0.75rem; font-weight: 700; }
+.prose ul, .prose ol { padding-left: 1.35rem; }
+.prose blockquote {
+  margin: 0 0 1.15rem; padding: 0.1rem 0 0.1rem 1rem;
+  border-left: 2px solid var(--border, var(--line));
+  color: var(--muted-foreground, var(--muted));
+}
+.prose img { border-radius: calc(var(--radius, 0.6rem) - 0.1rem); }
+.prose code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
+.prose :not(pre) > code {
+  background: color-mix(in srgb, var(--foreground, var(--fg)) 8%, transparent);
+  padding: 0.15em 0.4em; border-radius: 0.3em;
+}
+.prose a { color: var(--primary, var(--accent)); text-underline-offset: 0.18em; }
+
+@media (max-width: 640px) {
+  .km-header-inner { padding: 0.7rem 1rem; }
+  .site-nav a { padding: 0.35rem 0.55rem; }
 }
 `;
 
@@ -96,6 +203,21 @@ export function siteBrand(site: ThemeSiteContext): Html {
   return html`<a class="logo" href="/">${site.title}</a>`;
 }
 
+/**
+ * Shared shadcn-adjacent sticky header shell: border-bottom, solid
+ * background, max-width container, logo left, nav + scheme toggle right.
+ * Pass a `className` to hang seasonal flourishes off (e.g. an accent
+ * underline) without forking the markup.
+ */
+export function stickyHeader(
+  site: ThemeSiteContext,
+  nav: Html,
+  opts?: { className?: string },
+): Html {
+  const cls = opts?.className ? `km-header ${opts.className}` : "km-header";
+  return html`<header class="${cls}"><div class="km-header-inner">${siteBrand(site)}${nav}</div></header>`;
+}
+
 export function documentShell(opts: {
   site: ThemeSiteContext;
   css: string;
@@ -111,7 +233,7 @@ export function documentShell(opts: {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 ${site.head}
-<style>${raw(COLOR_SCHEME_CSS)}${raw(css)}</style>
+<style>${raw(COLOR_SCHEME_CSS)}${raw(BASE_UI_CSS)}${raw(css)}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="${fontHref}">

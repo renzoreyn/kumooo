@@ -3,10 +3,11 @@ import {
   joinHtml,
   raw,
   type Html,
+  type PostListItem,
   type Theme,
   type ThemeSiteContext,
 } from "@kumooo/theme-kit";
-import { documentShell, schemeToggle, siteBrand } from "./chrome.js";
+import { documentShell, schemeToggle, siteBrand, stickyHeader } from "./chrome.js";
 
 export type SeasonParts = {
   name: string;
@@ -63,4 +64,39 @@ export function defaultNav(site: ThemeSiteContext): Html {
   )}${schemeToggle()}</nav>`;
 }
 
-export { siteBrand, schemeToggle };
+/** Shared shadcn-adjacent sticky header: logo left, nav + scheme toggle right. */
+export function seasonHeader(site: ThemeSiteContext, className?: string): Html {
+  return stickyHeader(site, defaultNav(site), { className });
+}
+
+/** Format a publish date consistently across seasons, or "" when absent. */
+export function formatDate(
+  date: Date | null,
+  opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" },
+): string {
+  return date ? date.toLocaleDateString(undefined, opts) : "";
+}
+
+/** Up to `max` tag chips for a post list item, rendered as pill badges. */
+export function tagChips(post: PostListItem, max = 2): Html {
+  const tags = post.tags ?? [];
+  if (tags.length === 0) return raw("");
+  return html`<span class="km-chips">${joinHtml(
+    tags.slice(0, max).map((t) => html`<span class="km-chip">${t.name}</span>`),
+    "",
+  )}</span>`;
+}
+
+/** A small pill showing the post count, for hero areas. */
+export function countChip(count: number, singular = "post", plural = `${singular}s`): Html {
+  const label = count === 1 ? singular : plural;
+  return html`<span class="km-chip km-chip-solid">${String(count)} ${label}</span>`;
+}
+
+/** Prev/next page indicator styled as a modern footer bar. */
+export function pager(page: number, totalPages: number): Html {
+  if (totalPages <= 1) return raw("");
+  return html`<div class="km-pager"><span>Page ${String(page)} of ${String(totalPages)}</span></div>`;
+}
+
+export { siteBrand, schemeToggle, stickyHeader };

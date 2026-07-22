@@ -134,9 +134,9 @@ Or Theme Studio for your own HTML and CSS.
 
 D1 for content. R2 for media. KV for sessions and cache versions.
 
-## Custom domains
+## Hosting
 
-Point a CNAME. Get automatic SSL when Cloudflare for SaaS is configured.
+Host on Kumooo for orgs and multiple sites, or self-host one site on your Cloudflare (WordPress-style). Not a clone of the whole multi-tenant cloud.
 
 ## No PHP required
 
@@ -146,20 +146,19 @@ Take that however you want.
   {
     slug: "pricing",
     title: "Pricing",
-    bodyMarkdown: `Kumooo is open source and self-hosted on **your** Cloudflare account.
+    bodyMarkdown: `Kumooo is open source.
+
+## Host on Kumooo
+
+Managed platform. Orgs, multiple sites, dashboard. You get {slug}.kumooo.dev.
+
+## Self-host one site
+
+WordPress-style. Your Cloudflare. One site. The dedicated install package is next. There is no Kumooo tax either way.
 
 ## What you pay
 
 You pay Cloudflare for what you use. The free tier is enough to start.
-There is no Kumooo tax on top.
-
-## What you get
-
-Workers for the API and renderer. D1 for content. R2 for media. KV for sessions and cache versions.
-
-## Hosted later?
-
-Want a hosted option later? Maybe. Not today. Self-hosting is the product.
 `,
   },
   {

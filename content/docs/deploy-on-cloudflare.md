@@ -1,10 +1,10 @@
 # Deploy on Cloudflare
 
-Kumooo is a Cloudflare product. Two paths. Same CMS.
+Kumooo is a Cloudflare product. Two paths. Different shapes.
 
 ## Path A: Host on Kumooo
 
-Fastest.
+Managed platform. Orgs, multiple sites, dashboard.
 
 1. Sign up at [dash.kumooo.dev](https://dash.kumooo.dev).
 2. Create a site. You get `{slug}.kumooo.dev` immediately.
@@ -13,25 +13,27 @@ Fastest.
 
 You do not run Wrangler for day-to-day publishing.
 
-## Path B: Your Cloudflare account
+## Path B: Self-host one site
 
-You own the Workers, D1, R2, and KV.
+WordPress-style. Your Cloudflare account. **One site**, not a clone of the whole Kumooo multi-tenant cloud.
 
-1. Follow [Installation](/installation) and the CLI.
-2. Deploy API + renderer with Wrangler on accounts you control.
-3. Point DNS however you like.
+The dedicated single-site install package is shipping next. Until then:
+
+1. Prefer Path A if you want to publish tonight.
+2. Watch [Installation](/installation) / CLI docs for the one-site path when it lands.
+3. Do not expect `create-kumooo` to stand up a full multi-org SaaS on your account. That is not the product promise.
 
 You pay Cloudflare for usage. There is no Kumooo tax on top.
 
 ## Which one?
 
 - Ship a blog tonight → Path A.
-- Agency / multi-tenant / compliance needs your account → Path B.
-- Not sure → start on Path A. Migrate later if you outgrow it.
+- Want your own Cloudflare bill for a single site → Path B (one-site package next).
+- Want to run your own multi-tenant Kumooo → not supported. Use Path A or talk to us.
 
 ## CF Deploy from marketing
 
-The marketing site CTA opens the same choice. "Deploy on Cloudflare" is not a CNAME tutorial. It is this fork.
+The marketing CTA opens this same fork. Managed vs one site. Not "fork the SaaS."
 
 ## Checklist after first deploy
 
@@ -45,5 +47,5 @@ The marketing site CTA opens the same choice. "Deploy on Cloudflare" is not a CN
 
 - [Getting started](/getting-started)
 - [Installation](/installation)
-- [Architecture](/architecture)
+- [Season themes](/season-themes)
 - [Custom domains](/custom-domains)

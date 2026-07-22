@@ -108,10 +108,13 @@ a:hover { text-decoration: underline; }
 
 .hero {
   position: relative;
-  padding: 3.5rem 0 2rem;
+  padding: 2.5rem 0 0;
   isolation: isolate;
   width: 100%;
   overflow: clip;
+  min-height: min(92vh, 54rem);
+  display: flex;
+  flex-direction: column;
 }
 .hero-inner {
   position: relative;
@@ -120,45 +123,61 @@ a:hover { text-decoration: underline; }
   margin: 0 auto;
   padding: 0 1.5rem;
   min-width: 0;
+  width: 100%;
+  display: grid;
+  gap: 2rem;
+  flex: 1;
+}
+@media (min-width: 960px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+    align-items: end;
+    gap: 2.5rem;
+    padding-bottom: 0;
+  }
 }
 @media (max-width: 640px) { .hero-inner { padding: 0 1rem; } }
+.hero-copy { min-width: 0; padding-bottom: 1rem; }
+@media (min-width: 960px) {
+  .hero-copy { padding-bottom: 3.5rem; align-self: center; }
+}
 .hero-pixels {
   position: absolute;
-  right: -12%; top: -10%;
-  width: min(34rem, 72vw); height: min(34rem, 72vw);
-  border-radius: 50%;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: radial-gradient(rgba(110,231,183,.22) 1.1px, transparent 1.3px);
-  background-size: 7px 7px;
-  mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 40%, transparent 70%);
-  -webkit-mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 40%, transparent 70%);
-  opacity: 0.75;
+  opacity: 0.45;
+  background-image:
+    radial-gradient(ellipse 50% 40% at 70% 20%, rgba(110,231,183,.16), transparent 55%),
+    radial-gradient(rgba(110,231,183,.12) 1px, transparent 1.2px);
+  background-size: auto, 8px 8px;
+  mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
 }
 @media (max-width: 700px) {
   .hero-pixels { display: none; }
 }
 .hero-brand {
   display: block;
-  font-size: clamp(2.6rem, 11vw, 6.5rem);
+  font-size: clamp(2.8rem, 10vw, 5.5rem);
   font-weight: 700;
   letter-spacing: -0.07em;
   line-height: 0.9;
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.1rem;
   color: var(--fg);
 }
 .hero-brand span { color: var(--accent); }
 .hero h1 {
-  font-size: clamp(1.55rem, 5.5vw, 3rem);
-  line-height: 1.15; letter-spacing: -0.04em; margin: 0 0 1rem;
-  font-weight: 700; max-width: 18ch;
+  font-size: clamp(1.45rem, 4.2vw, 2.35rem);
+  line-height: 1.18; letter-spacing: -0.04em; margin: 0 0 0.85rem;
+  font-weight: 700; max-width: 16ch;
 }
 .hero h1 em {
   font-style: normal; color: var(--accent);
 }
-.lead { color: var(--muted); font-size: 1.05rem; max-width: 34rem; margin: 0 0 1.5rem; }
+.lead { color: var(--muted); font-size: 1.05rem; max-width: 32rem; margin: 0 0 1.35rem; }
 .hero-actions {
-  display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem;
+  display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0;
 }
 .install {
   display: flex; align-items: center; gap: 0.75rem;
@@ -181,21 +200,40 @@ a:hover { text-decoration: underline; }
   .lead { font-size: 0.98rem; }
 }
 
+.hero-stage {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+}
+@media (min-width: 960px) {
+  .hero-stage {
+    margin-right: calc(-1 * max(0px, (100vw - var(--max)) / 2 + 1.5rem));
+  }
+}
 .product-mock {
   position: relative;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  background: linear-gradient(180deg, #151518, #0c0c0e);
-  box-shadow: 0 16px 40px rgba(0,0,0,.4);
+  border-radius: 18px 18px 0 0;
+  background: linear-gradient(180deg, #171a22, #0c0e14);
+  box-shadow:
+    0 0 0 1px rgba(110,231,183,.08),
+    0 24px 64px rgba(0,0,0,.55);
   overflow: hidden;
-  min-height: 14rem;
+  min-height: 18rem;
   width: 100%;
   max-width: 100%;
 }
+@media (min-width: 960px) {
+  .product-mock {
+    border-radius: 18px 0 0 0;
+    min-height: 26rem;
+  }
+}
 .product-mock .mock-top {
   display: flex; align-items: center; gap: 0.4rem;
-  padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--line);
-  background: rgba(255,255,255,.02);
+  padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
   min-width: 0;
 }
 .product-mock .dot {
@@ -209,30 +247,54 @@ a:hover { text-decoration: underline; }
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
 }
 .product-mock .mock-body {
-  display: grid; grid-template-columns: 10rem 1fr; min-height: 12rem;
+  display: grid; grid-template-columns: 11.5rem 1fr; min-height: 16rem;
+}
+@media (min-width: 960px) {
+  .product-mock .mock-body { min-height: 22rem; }
 }
 .product-mock .mock-side {
   border-right: 1px solid var(--line); padding: 1rem 0.85rem;
-  background: rgba(0,0,0,.25);
+  background: rgba(0,0,0,.28);
+  display: flex; flex-direction: column; gap: 0.35rem;
 }
-.product-mock .mock-side .line {
-  height: 0.45rem; border-radius: 4px; background: rgba(255,255,255,.08);
-  margin-bottom: 0.55rem;
+.product-mock .mock-side .nav-label {
+  font: 0.62rem/1 "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,.35); margin: 0.55rem 0 0.25rem;
 }
-.product-mock .mock-side .line.on { background: color-mix(in srgb, var(--accent) 55%, transparent); width: 70%; }
-.product-mock .mock-main { padding: 1.1rem 1.15rem; min-width: 0; }
+.product-mock .mock-side .nav-label:first-child { margin-top: 0; }
+.product-mock .mock-side .nav-item {
+  font-size: 0.78rem; color: rgba(255,255,255,.55);
+  padding: 0.35rem 0.5rem; border-radius: 8px;
+}
+.product-mock .mock-side .nav-item.on {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent); font-weight: 600;
+}
+.product-mock .mock-main { padding: 1.25rem 1.35rem; min-width: 0; }
+.product-mock .mock-main .crumb {
+  font: 0.72rem/1.2 "IBM Plex Mono", monospace; color: var(--muted); margin: 0 0 0.85rem;
+}
 .product-mock .mock-main h3 {
-  margin: 0 0 0.75rem; font-size: 1.05rem; letter-spacing: -0.03em;
+  margin: 0 0 0.85rem; font-size: 1.25rem; letter-spacing: -0.03em;
 }
 .product-mock .mock-main .para {
   height: 0.5rem; border-radius: 4px; background: rgba(255,255,255,.07);
   margin-bottom: 0.45rem;
 }
 .product-mock .mock-main .para.short { width: 62%; }
+.product-mock .mock-main .code-block {
+  margin-top: 1.1rem; padding: 0.85rem 1rem; border-radius: 12px;
+  border: 1px solid var(--line); background: rgba(0,0,0,.35);
+  font: 0.72rem/1.55 "IBM Plex Mono", monospace; color: #c8c5bb;
+}
+.product-mock .mock-main .code-block .g { color: #6ee7b7; }
+.product-mock .mock-main .code-block .y { color: #fbbf24; }
 @media (max-width: 700px) {
-  .product-mock .mock-body { grid-template-columns: 1fr; }
+  .product-mock .mock-body { grid-template-columns: 1fr; min-height: 12rem; }
   .product-mock .mock-side { display: none; }
-  .product-mock { min-height: 11rem; border-radius: 14px; }
+  .product-mock { min-height: 12rem; border-radius: 14px; }
+  .hero-stage { margin-top: 0.5rem; }
 }
 
 .accent-lead {
@@ -536,15 +598,15 @@ function cfDeployDialog(): Html {
   return html`<dialog class="cf-deploy-dialog" data-cf-deploy>
   <div class="cf-deploy-inner">
     <h2>Deploy on Cloudflare</h2>
-    <p>Pick how you want to run Kumooo. No OAuth into your account. You choose the path.</p>
+    <p>Two paths. Managed multi-site on Kumooo, or self-host a single site on your Cloudflare like WordPress on your own box.</p>
     <div class="cf-deploy-choices">
       <a class="cf-deploy-choice" href="https://dash.kumooo.dev/signup">
         <strong>Host on Kumooo</strong>
-        <span>We run the Worker. You get {slug}.kumooo.dev in minutes.</span>
+        <span>We run the platform. Orgs, multiple sites, {slug}.kumooo.dev. Sign up and publish.</span>
       </a>
-      <a class="cf-deploy-choice" href="https://docs.kumooo.dev/getting-started">
-        <strong>Host on your Cloudflare</strong>
-        <span>Own the Worker and your domain. Same stack. CLI + wrangler deploy.</span>
+      <a class="cf-deploy-choice" href="https://docs.kumooo.dev/deploy-on-cloudflare">
+        <strong>Self-host one site</strong>
+        <span>Your Cloudflare. One site. Not a clone of the whole Kumooo cloud. Single-site install path is next.</span>
       </a>
     </div>
     <div class="cf-deploy-actions">
@@ -573,6 +635,7 @@ function marketingHome(site: ThemeSiteContext): Html {
     html`<section class="hero">
   <div class="hero-pixels" aria-hidden="true"></div>
   <div class="hero-inner">
+  <div class="hero-copy">
   <div class="hero-brand" data-hero-bit>kumooo<span>.</span></div>
   <h1 data-hero-bit>Publish on <em>Cloudflare</em>. Keep your evenings.</h1>
   <p class="lead" data-hero-bit>Markdown in. HTML out at the edge. Themes, media, and a dashboard that does not need babysitting.</p>
@@ -581,29 +644,38 @@ function marketingHome(site: ThemeSiteContext): Html {
     <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
     <a class="btn" href="https://docs.kumooo.dev">Read the docs</a>
   </div>
-  <div class="product-mock" data-hero-mock>
+  </div>
+  <div class="hero-stage" data-hero-mock>
+  <div class="product-mock">
     <div class="mock-top">
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
       <span class="mock-url">docs.kumooo.dev/getting-started</span>
     </div>
     <div class="mock-body">
       <aside class="mock-side" aria-hidden="true">
-        <div class="line on"></div>
-        <div class="line" style="width:88%"></div>
-        <div class="line" style="width:72%"></div>
-        <div class="line" style="width:80%"></div>
-        <div class="line" style="width:64%"></div>
+        <div class="nav-label">Start</div>
+        <div class="nav-item">Introduction</div>
+        <div class="nav-item on">Getting started</div>
+        <div class="nav-item">Installation</div>
+        <div class="nav-label">Guides</div>
+        <div class="nav-item">Season themes</div>
+        <div class="nav-item">Theme Studio</div>
+        <div class="nav-item">Deploy</div>
       </aside>
       <div class="mock-main">
+        <p class="crumb">Docs / Getting started</p>
         <h3>Getting started</h3>
         <div class="para"></div>
         <div class="para"></div>
         <div class="para short"></div>
         <div class="para" style="margin-top:1rem"></div>
         <div class="para short"></div>
-        <div class="dash-tiles"><div class="dash-tile"></div><div class="dash-tile"></div></div>
+        <div class="code-block"><span class="g"># publish</span>
+<span class="y">POST</span> /v1/sites/:id/content
+x-kumooo-cache: miss → hit</div>
       </div>
     </div>
+  </div>
   </div>
   </div>
 </section>
@@ -638,8 +710,8 @@ x-kumooo-cache: miss → hit</pre>
     </article>
     <article class="bento-card">
       <p class="kicker">CF Deploy</p>
-      <h3>Your Cloudflare or ours</h3>
-      <p>Managed *.kumooo.dev, or self-host the same Workers on your account.</p>
+      <h3>Managed or one site</h3>
+      <p>Host on Kumooo for orgs and multiple sites, or self-host a single site on your Cloudflare.</p>
     </article>
     <article class="bento-card">
       <p class="kicker">Media</p>
@@ -682,12 +754,12 @@ x-kumooo-cache: miss → hit</pre>
     <ul>
       <li>Markdown posts and pages with revisions</li>
       <li>Season themes or your own Theme Studio tree</li>
-      <li>Deploy dialog: Kumooo hosting or your Cloudflare</li>
+      <li>Deploy dialog: managed Kumooo or self-host one site</li>
     </ul>
   </div>
 </section>
 
-${deployCta("Ship your first site tonight.", "Pick Kumooo hosting or your Cloudflare. Then go outside.")}
+${deployCta("Ship your first site tonight.", "Host on Kumooo, or self-host one site on your Cloudflare. Then go outside.")}
 </div>`,
     { fullBleed: true },
   );
@@ -774,7 +846,7 @@ function marketingFeatures(site: ThemeSiteContext): Html {
     ${feature(ic.shield, "Boring security", "PBKDF2 passwords, HttpOnly sessions, escaped templates.")}
     ${feature(ic.refresh, "Revisions", "Every save keeps history. Roll back when you mess up.")}
     ${feature(ic.search, "SEO handled", "Titles, meta, sitemap, RSS. Not a plugin graveyard.")}
-    ${feature(ic.zap, "CF Deploy", "Managed *.kumooo.dev, or self-host Workers on your Cloudflare.")}
+    ${feature(ic.zap, "CF Deploy", "Managed multi-site on Kumooo, or self-host one site on your Cloudflare.")}
     ${feature(ic.feather, "Org + sites", "Workspaces, roles, multiple sites. Grow without migrating.")}
   </div>
 </section>
@@ -791,8 +863,8 @@ function marketingPricing(site: ThemeSiteContext): Html {
     html`<div class="wrap">
 <section class="page-hero" data-hero-bit>
   <div class="kicker">Pricing</div>
-  <h1>Two Cloudflare paths. Zero Kumooo tax.</h1>
-  <p class="lead">Host on Kumooo for a managed *.kumooo.dev site, or self-host on your Cloudflare account. You pay Cloudflare for usage either way.</p>
+  <h1>Two paths. Zero Kumooo tax.</h1>
+  <p class="lead">Host on Kumooo for managed orgs and multiple sites, or self-host a single site on your Cloudflare. You pay Cloudflare for usage either way.</p>
   <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem">
     <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
     <a class="btn" href="https://docs.kumooo.dev/getting-started">Getting started</a>
@@ -804,26 +876,26 @@ function marketingPricing(site: ThemeSiteContext): Html {
     <div class="price-card featured" data-motion-card>
       <div class="kicker">Host on Kumooo</div>
       <div class="amount">$0 <span>/ Kumooo</span></div>
-      <p class="muted" style="margin:0">We run the Worker. You get {slug}.kumooo.dev. Cloudflare usage still applies on our side.</p>
+      <p class="muted" style="margin:0">We run the platform. Orgs, multiple sites, {slug}.kumooo.dev.</p>
       <ul>
-        <li>Managed *.kumooo.dev hostname</li>
+        <li>Managed multi-site SaaS</li>
         <li>Dashboard, editor, media, themes</li>
         <li>Four free season themes</li>
-        <li>Same edge stack as self-host</li>
+        <li>Custom domains when you need them</li>
       </ul>
       <a class="btn primary" href="https://dash.kumooo.dev/signup">Open the dashboard</a>
     </div>
     <div class="price-card" data-motion-card>
-      <div class="kicker">Your Cloudflare</div>
-      <div class="amount" style="font-size:1.6rem">Self-host</div>
-      <p class="muted" style="margin:0 0 1rem">Own the Worker and your domain. Run create-kumooo, bind D1/KV/R2, wrangler deploy.</p>
+      <div class="kicker">Self-host one site</div>
+      <div class="amount" style="font-size:1.6rem">One site</div>
+      <p class="muted" style="margin:0 0 1rem">WordPress-style. Your Cloudflare. One site. Not a clone of the whole Kumooo cloud.</p>
       <ul>
-        <li>API + renderer Workers on your account</li>
-        <li>Your D1, R2, KV</li>
-        <li>Attach your domain in Cloudflare</li>
+        <li>Single-site install (path shipping next)</li>
+        <li>Your D1, R2, KV for that site</li>
+        <li>Your domain in Cloudflare</li>
         <li>No Kumooo SaaS fee</li>
       </ul>
-      <a class="btn" href="https://docs.kumooo.dev/getting-started">Follow the install guide</a>
+      <a class="btn" href="https://docs.kumooo.dev/deploy-on-cloudflare">Read the deploy guide</a>
     </div>
   </div>
 </section>
@@ -834,13 +906,13 @@ function marketingPricing(site: ThemeSiteContext): Html {
   <div class="table-wrap">
   <table class="compare">
     <thead>
-      <tr><th>Capability</th><th>Kumooo hosted</th><th>Your Cloudflare</th></tr>
+      <tr><th>Capability</th><th>Kumooo hosted</th><th>Self-host one site</th></tr>
     </thead>
     <tbody>
-      <tr><td>Sites &amp; content</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+      <tr><td>Sites &amp; content</td><td class="yes">Many sites</td><td class="yes">One site</td></tr>
       <tr><td>Media library</td><td class="yes">Yes</td><td class="yes">Your R2</td></tr>
-      <tr><td>Managed *.kumooo.dev</td><td class="yes">Yes</td><td>Optional if you point DNS</td></tr>
-      <tr><td>Self-host on your CF</td><td>N/A</td><td class="yes">Yes</td></tr>
+      <tr><td>Managed *.kumooo.dev</td><td class="yes">Yes</td><td>Your domain</td></tr>
+      <tr><td>Multi-tenant orgs</td><td class="yes">Yes</td><td>No (by design)</td></tr>
       <tr><td>Interactive themes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
       <tr><td>Dashboard</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
       <tr><td>Kumooo SaaS fee</td><td class="yes">$0</td><td class="yes">$0</td></tr>

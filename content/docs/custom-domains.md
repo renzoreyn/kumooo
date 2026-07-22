@@ -25,8 +25,8 @@ SSL comes through Cloudflare once DNS is correct and proxied.
 
 Marketing calls this **CF Deploy**:
 
-- **Host on Kumooo**: stay on `*.kumooo.dev` or attach domains through the dashboard.
-- **Host on your Cloudflare**: you run the Workers project yourself. See [Deploy on Cloudflare](/deploy-on-cloudflare).
+- **Host on Kumooo**: managed orgs and multiple sites on `*.kumooo.dev`, or attach domains through the dashboard.
+- **Self-host one site**: WordPress-style. Your Cloudflare. One site. Not a clone of the multi-tenant cloud. See [Deploy on Cloudflare](/deploy-on-cloudflare).
 
 ## Next
 
