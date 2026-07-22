@@ -8,19 +8,44 @@ import {
   type ThemeSiteContext,
 } from "@kumooo/theme-kit";
 
-type NavItem = { slug: string; title: string; group: string; order: number };
+type NavItem = { slug: string; title: string; group: string; order: number; icon: string };
+
+const I = {
+  book: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+  rocket: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>`,
+  download: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+  layers: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
+  terminal: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>`,
+  palette: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`,
+  leaf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`,
+  key: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
+  globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  history: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>`,
+  pen: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
+  code: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  image: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>`,
+  cloud: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>`,
+  wand: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 4 3.5 3.5"/><path d="M20.5 2.5 22 4"/><path d="m2 22 8.5-8.5"/><path d="m12.5 7.5 4 4"/><path d="M4 20h.01"/><path d="M8 16h.01"/><path d="M16 8h.01"/></svg>`,
+  api: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,
+};
 
 const NAV_MAP: NavItem[] = [
-  { slug: "index", title: "Introduction", group: "Getting started", order: 1 },
-  { slug: "getting-started", title: "Getting started", group: "Getting started", order: 2 },
-  { slug: "installation", title: "Installation", group: "Getting started", order: 3 },
-  { slug: "architecture", title: "Architecture", group: "Guides", order: 10 },
-  { slug: "cli", title: "CLI", group: "Guides", order: 11 },
-  { slug: "themes", title: "Themes", group: "Guides", order: 12 },
-  { slug: "authentication", title: "Authentication", group: "Guides", order: 13 },
-  { slug: "publishing-your-first-post", title: "Your first post", group: "Tutorials", order: 14 },
-  { slug: "building-a-theme", title: "Building a theme", group: "Tutorials", order: 15 },
-  { slug: "api-reference", title: "API reference", group: "Reference", order: 20 },
+  { slug: "index", title: "Introduction", group: "Getting started", order: 1, icon: I.book },
+  { slug: "getting-started", title: "Getting started", group: "Getting started", order: 2, icon: I.rocket },
+  { slug: "installation", title: "Installation", group: "Getting started", order: 3, icon: I.download },
+  { slug: "architecture", title: "Architecture", group: "Guides", order: 10, icon: I.layers },
+  { slug: "cli", title: "CLI", group: "Guides", order: 11, icon: I.terminal },
+  { slug: "themes", title: "Themes", group: "Guides", order: 12, icon: I.palette },
+  { slug: "season-themes", title: "Season themes", group: "Guides", order: 13, icon: I.leaf },
+  { slug: "authentication", title: "Authentication", group: "Guides", order: 14, icon: I.key },
+  { slug: "custom-domains", title: "Custom domains", group: "Guides", order: 15, icon: I.globe },
+  { slug: "drafts-and-revisions", title: "Drafts & revisions", group: "Guides", order: 16, icon: I.history },
+  { slug: "publishing-your-first-post", title: "Your first post", group: "Tutorials", order: 20, icon: I.pen },
+  { slug: "building-a-theme", title: "Building a theme", group: "Tutorials", order: 21, icon: I.code },
+  { slug: "media-and-branding", title: "Media & branding", group: "Tutorials", order: 22, icon: I.image },
+  { slug: "theme-studio", title: "Theme Studio", group: "Tutorials", order: 23, icon: I.wand },
+  { slug: "deploy-on-cloudflare", title: "Deploy on Cloudflare", group: "Tutorials", order: 24, icon: I.cloud },
+  { slug: "api-reference", title: "API reference", group: "Reference", order: 30, icon: I.api },
 ];
 
 const ORDERED = [...NAV_MAP].sort((a, b) => a.order - b.order);
@@ -166,15 +191,21 @@ a:hover { text-decoration: underline; }
   color: var(--muted); font-weight: 700; margin: .9rem .55rem .35rem;
 }
 .fd-side-nav a {
-  display: block; padding: .4rem .6rem; border-radius: .5rem;
+  display: flex; align-items: center; gap: .55rem;
+  padding: .4rem .6rem; border-radius: .5rem;
   color: var(--muted); font-size: .9rem; margin-bottom: .1rem;
   transition: background .15s ease, color .15s ease;
 }
+.fd-side-nav a svg {
+  width: 1rem; height: 1rem; flex-shrink: 0; opacity: .75;
+}
 .fd-side-nav a:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--fg); text-decoration: none; }
+.fd-side-nav a:hover svg { opacity: 1; }
 .fd-side-nav a.active {
   background: color-mix(in srgb, var(--accent) 14%, transparent);
   color: var(--fg); font-weight: 600;
 }
+.fd-side-nav a.active svg { opacity: 1; color: var(--accent); }
 .fd-main {
   padding: 1.25rem 1.75rem 3.5rem; max-width: 48rem;
   background: var(--bg);
@@ -330,16 +361,31 @@ a:hover { text-decoration: underline; }
 }
 `;
 
-const themeIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+const iconSun = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`;
+const iconMoon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+const iconMonitor = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`;
 
 const clientIsland = `
 const root = document.querySelector(".fd-root");
 const htmlEl = document.documentElement;
 const stored = localStorage.getItem("kumooo-docs-theme") || "system";
+const ICONS = {
+  system: ${JSON.stringify(iconMonitor)},
+  light: ${JSON.stringify(iconSun)},
+  dark: ${JSON.stringify(iconMoon)},
+};
+const LABELS = { system: "Color scheme: system", light: "Color scheme: light", dark: "Color scheme: dark" };
 function applyTheme(mode) {
-  root?.setAttribute("data-theme", mode);
-  htmlEl.setAttribute("data-theme", mode);
-  localStorage.setItem("kumooo-docs-theme", mode);
+  const m = mode === "light" || mode === "dark" || mode === "system" ? mode : "system";
+  root?.setAttribute("data-theme", m);
+  htmlEl.setAttribute("data-theme", m);
+  localStorage.setItem("kumooo-docs-theme", m);
+  const themeBtn = document.querySelector("[data-theme-toggle]");
+  if (themeBtn) {
+    themeBtn.innerHTML = ICONS[m];
+    themeBtn.setAttribute("aria-label", LABELS[m]);
+    themeBtn.setAttribute("title", LABELS[m]);
+  }
 }
 applyTheme(stored);
 
@@ -427,7 +473,7 @@ function sidebarNav(currentSlug: string): Html {
           ${joinHtml(
             g.items.map(
               (n) =>
-                html`<a class="${n.slug === currentSlug ? "active" : ""}" href="${urlFor(n.slug)}">${n.title}</a>`,
+                html`<a class="${n.slug === currentSlug ? "active" : ""}" href="${urlFor(n.slug)}">${raw(n.icon)}<span>${n.title}</span></a>`,
             ),
           )}
         </nav>`,
@@ -516,7 +562,7 @@ ${site.head}
     <a class="fd-brand" href="/">k<span>.</span> docs</a>
     <button type="button" class="fd-search-btn" data-search-open><span class="label">Search docs…</span> <kbd>⌘K</kbd></button>
     <div class="fd-header-actions">
-      <button type="button" class="fd-icon-btn" data-theme-toggle aria-label="Toggle theme" title="Theme">${raw(themeIcon)}</button>
+      <button type="button" class="fd-icon-btn" data-theme-toggle aria-label="Color scheme: system" title="Color scheme: system">${raw(iconMonitor)}</button>
       <a class="link" href="https://kumooo.dev">Site</a>
       <a class="link" href="https://github.com/renzoreyn/kumooo">GitHub</a>
     </div>

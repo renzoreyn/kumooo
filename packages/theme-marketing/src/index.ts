@@ -122,16 +122,6 @@ a:hover { text-decoration: underline; }
   min-width: 0;
 }
 @media (max-width: 640px) { .hero-inner { padding: 0 1rem; } }
-.hero-orb {
-  position: absolute;
-  right: -20%; top: -18%;
-  width: min(40rem, 85vw); height: min(40rem, 85vw);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  /* Soft glow without filter:blur (that was killing mobile perf) */
-  background: radial-gradient(circle at 40% 40%, rgba(110,231,183,.35), rgba(52,180,140,.1) 45%, transparent 70%);
-}
 .hero-pixels {
   position: absolute;
   right: -12%; top: -10%;
@@ -146,7 +136,6 @@ a:hover { text-decoration: underline; }
   opacity: 0.75;
 }
 @media (max-width: 700px) {
-  .hero-orb { right: -35%; top: -8%; width: 22rem; height: 22rem; opacity: 0.7; }
   .hero-pixels { display: none; }
 }
 .hero-brand {
@@ -582,7 +571,6 @@ function marketingHome(site: ThemeSiteContext): Html {
   return shell(
     site,
     html`<section class="hero">
-  <div class="hero-orb" aria-hidden="true"></div>
   <div class="hero-pixels" aria-hidden="true"></div>
   <div class="hero-inner">
   <div class="hero-brand" data-hero-bit>kumooo<span>.</span></div>
@@ -641,7 +629,7 @@ x-kumooo-cache: miss → hit</pre>
     <article class="bento-card">
       <p class="kicker">Seasons</p>
       <h3>Four real themes</h3>
-      <p>Haru, Natsu, Aki, Fuyu. Different layouts, light and dark, not four recolors.</p>
+      <p>Different layouts, light and dark. Preview live: <a href="https://haru.kumooo.dev">haru</a>, <a href="https://natsu.kumooo.dev">natsu</a>, <a href="https://aki.kumooo.dev">aki</a>, <a href="https://fuyu.kumooo.dev">fuyu</a>.</p>
     </article>
     <article class="bento-card">
       <p class="kicker">Studio</p>
@@ -764,16 +752,17 @@ function marketingFeatures(site: ThemeSiteContext): Html {
   <div class="feature-copy">
     <div class="kicker">Themes</div>
     <h2>Themes with teeth</h2>
-    <p>Four free seasons. Theme Studio for your own HTML and CSS. Same platform either way.</p>
+    <p>Four free seasons. Preview them live before you pick. Theme Studio when you want your own HTML and CSS.</p>
     <ul>
-      <li>Haru, Natsu, Aki, Fuyu</li>
-      <li>Light and dark with a toggle</li>
-      <li>This marketing site is a Kumooo theme</li>
+      <li><a href="https://haru.kumooo.dev">haru.kumooo.dev</a>: spring journal</li>
+      <li><a href="https://natsu.kumooo.dev">natsu.kumooo.dev</a>: summer cards</li>
+      <li><a href="https://aki.kumooo.dev">aki.kumooo.dev</a>: autumn chapters</li>
+      <li><a href="https://fuyu.kumooo.dev">fuyu.kumooo.dev</a>: winter log</li>
     </ul>
   </div>
   <div class="feature-visual">
-    <div class="dash-label">theme-marketing</div>
-    <p style="margin:.6rem 0 0;font-family:IBM Plex Mono,monospace;font-size:.82rem;color:#c8c5bb">home · features · pricing · about</p>
+    <div class="dash-label">live previews</div>
+    <p style="margin:.6rem 0 0;font-family:IBM Plex Mono,monospace;font-size:.82rem;color:#c8c5bb">haru · natsu · aki · fuyu</p>
     <div class="dash-tiles" style="margin-top:1rem"><div class="dash-tile"></div><div class="dash-tile"></div></div>
   </div>
 </section>

@@ -36,6 +36,7 @@ import {
 import type { Env } from "./env.js";
 import { getTheme, registerTheme } from "./theme.js";
 import { resolveRenderableTheme } from "./custom-theme.js";
+import { DEFAULT_FAVICON_HREF } from "./favicon.js";
 import { unknownSitePage } from "./unknown-site.js";
 
 const DASHBOARD_PAGES_ORIGIN = "https://kumooo-dashboard.pages.dev";
@@ -143,9 +144,11 @@ async function themeContext(db: Db, site: ResolvedSite, head: Html): Promise<The
     mediaPublicUrl(db, site, site.settings.logoMediaId),
     mediaPublicUrl(db, site, site.settings.faviconMediaId),
   ]);
-  const headWithIcon = faviconUrl
-    ? joinHtml([head, html`<link rel="icon" href="${faviconUrl}">`], "\n")
-    : head;
+  const iconHref = faviconUrl || DEFAULT_FAVICON_HREF;
+  const headWithIcon = joinHtml(
+    [head, html`<link rel="icon" href="${iconHref}" type="image/svg+xml">`],
+    "\n",
+  );
   return {
     title: site.settings.title || site.name,
     description: site.settings.description,

@@ -31,10 +31,11 @@ We dogfood the product. On purpose.
 | `apps/dashboard` | Admin UI (React) |
 | `packages/core` | Domain logic, schemas, markdown, SEO |
 | `packages/db` | Drizzle schema + migrations |
-| `packages/theme-*` | Default, marketing, docs themes |
+| `packages/theme-*` | Marketing, docs, seasons, studio themes |
 | `packages/cli` | `kumooo` CLI |
 | `packages/create-kumooo` | `npx create-kumooo` |
 | `content/docs` | Docs source (seeded into the docs site) |
+| `content/seasons` | Live season demo sites (`haru` / `natsu` / `aki` / `fuyu`) |
 
 ## Development
 

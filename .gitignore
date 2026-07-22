@@ -18,3 +18,5 @@ login.json
 patch.json
 .superpowers/
 .worktrees/
+
+docs/superpowers/

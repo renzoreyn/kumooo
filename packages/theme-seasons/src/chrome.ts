@@ -1,15 +1,22 @@
 import { html, raw, type Html, type ThemeSiteContext } from "@kumooo/theme-kit";
 
+const ICON_SUN = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`;
+const ICON_MOON = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+const ICON_MONITOR = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`;
+
 export const COLOR_SCHEME_CSS = `
 html { color-scheme: light dark; }
 html[data-theme="light"] { color-scheme: light; }
 html[data-theme="dark"] { color-scheme: dark; }
 .km-scheme {
   appearance: none; border: 1px solid var(--line); background: var(--card, var(--bg));
-  color: var(--muted); border-radius: 999px; padding: 0.35rem 0.7rem;
-  font: inherit; font-size: 0.75rem; cursor: pointer;
+  color: var(--muted); border-radius: 999px;
+  width: 2.15rem; height: 2.15rem; padding: 0;
+  display: inline-grid; place-items: center;
+  cursor: pointer;
 }
 .km-scheme:hover { color: var(--fg); }
+.km-scheme svg { display: block; }
 .km-badge {
   position: fixed; z-index: 40; right: 1rem; bottom: 1rem;
   display: inline-flex; align-items: center; gap: 0.4rem;
@@ -34,6 +41,12 @@ html[data-theme="dark"] { color-scheme: dark; }
 export function colorSchemeBootScript(): string {
   return `(() => {
   const KEY = "kumooo-color-scheme";
+  const ICONS = {
+    system: ${JSON.stringify(ICON_MONITOR)},
+    light: ${JSON.stringify(ICON_SUN)},
+    dark: ${JSON.stringify(ICON_MOON)},
+  };
+  const LABELS = { system: "Color scheme: system", light: "Color scheme: light", dark: "Color scheme: dark" };
   const root = document.documentElement;
   const apply = (mode) => {
     const m = mode === "light" || mode === "dark" || mode === "system" ? mode : "system";
@@ -43,7 +56,11 @@ export function colorSchemeBootScript(): string {
       root.setAttribute("data-theme", m);
     }
     const btn = document.querySelector("[data-km-scheme]");
-    if (btn) btn.textContent = m === "system" ? "Auto" : m === "dark" ? "Dark" : "Light";
+    if (btn) {
+      btn.innerHTML = ICONS[m];
+      btn.setAttribute("aria-label", LABELS[m]);
+      btn.setAttribute("title", LABELS[m]);
+    }
     try { localStorage.setItem(KEY, m); } catch (_) {}
   };
   let mode = "system";
@@ -69,7 +86,7 @@ export function madeWithBadge(): Html {
 }
 
 export function schemeToggle(): Html {
-  return html`<button type="button" class="km-scheme" data-km-scheme>Auto</button>`;
+  return html`<button type="button" class="km-scheme" data-km-scheme aria-label="Color scheme: system" title="Color scheme: system">${raw(ICON_MONITOR)}</button>`;
 }
 
 export function siteBrand(site: ThemeSiteContext): Html {
