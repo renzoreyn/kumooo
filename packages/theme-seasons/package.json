@@ -1,0 +1,26 @@
+{
+  "name": "@kumooo/theme-seasons",
+  "version": "0.1.0",
+  "description": "Free season themes for Kumooo tenant sites (haru, natsu, aki, fuyu)",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --pool=threads",
+    "build": "echo \"ok\""
+  },
+  "dependencies": {
+    "@kumooo/core": "workspace:*",
+    "@kumooo/theme-kit": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

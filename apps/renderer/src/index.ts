@@ -13,9 +13,9 @@ import {
   type PageMeta,
 } from "@kumooo/core";
 import { createDb, media, type Db } from "@kumooo/db";
-import { defaultTheme } from "@kumooo/theme-default";
 import { docsTheme } from "@kumooo/theme-docs";
 import { marketingTheme } from "@kumooo/theme-marketing";
+import { akiTheme, fuyuTheme, haruTheme, natsuTheme } from "@kumooo/theme-seasons";
 import type { ThemeSiteContext } from "@kumooo/theme-kit";
 import { and, eq } from "drizzle-orm";
 import { cachedResponse, cacheKeyFor, getSiteVersion, storeInCache } from "./cache.js";
@@ -35,7 +35,10 @@ import {
 import type { Env } from "./env.js";
 import { getTheme, registerTheme } from "./theme.js";
 
-registerTheme(defaultTheme);
+registerTheme(haruTheme);
+registerTheme(natsuTheme);
+registerTheme(akiTheme);
+registerTheme(fuyuTheme);
 registerTheme(marketingTheme);
 registerTheme(docsTheme);
 

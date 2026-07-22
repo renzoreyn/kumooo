@@ -112,6 +112,9 @@ importers:
       '@kumooo/theme-marketing':
         specifier: workspace:*
         version: link:../../packages/theme-marketing
+      '@kumooo/theme-seasons':
+        specifier: workspace:*
+        version: link:../../packages/theme-seasons
       drizzle-orm:
         specifier: ^0.38.3
         version: 0.38.4(@cloudflare/workers-types@4.20260702.1)(@types/react@19.2.17)(react@19.2.7)
@@ -241,6 +244,22 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+
+  packages/theme-seasons:
+    dependencies:
+      '@kumooo/core':
+        specifier: workspace:*
+        version: link:../core
+      '@kumooo/theme-kit':
+        specifier: workspace:*
+        version: link:../theme-kit
+    devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.20.1)
 
 packages:
 
