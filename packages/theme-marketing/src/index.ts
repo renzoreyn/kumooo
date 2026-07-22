@@ -111,36 +111,45 @@ a:hover { text-decoration: underline; }
   position: relative;
   padding: 4.5rem 0 2rem;
   isolation: isolate;
-  overflow: hidden;
+  /* Full viewport width so the glow is not cropped by .wrap */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  overflow: visible;
 }
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+@media (max-width: 640px) { .hero-inner { padding: 0 1rem; } }
 .hero-orb {
   position: absolute;
-  right: -8%; top: -10%;
-  width: min(42rem, 90vw); height: min(42rem, 90vw);
+  right: max(-6rem, -8vw); top: -12%;
+  width: min(48rem, 70vw); height: min(48rem, 70vw);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
   animation: orb-drift 14s ease-in-out infinite alternate;
-  /* Soft glow layer */
   background: radial-gradient(circle at 40% 40%, rgba(110,231,183,.48), rgba(52,180,140,.14) 42%, transparent 68%);
   filter: blur(12px);
 }
 .hero-pixels {
   position: absolute;
-  right: -4%; top: -6%;
-  width: min(36rem, 80vw); height: min(36rem, 80vw);
+  right: max(-4rem, -5vw); top: -8%;
+  width: min(42rem, 62vw); height: min(42rem, 62vw);
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
-  /* Fumadocs-style pixel dots, clipped to orb only, never over text/buttons */
   background-image: radial-gradient(rgba(110,231,183,.28) 1.15px, transparent 1.35px);
   background-size: 6px 6px;
-  mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 38%, transparent 68%);
-  -webkit-mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 38%, transparent 68%);
-  opacity: 0.85;
+  mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 42%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 42%, transparent 72%);
+  opacity: 0.9;
   animation: orb-drift 14s ease-in-out infinite alternate;
 }
-.hero > *:not(.hero-orb):not(.hero-pixels) { position: relative; z-index: 1; }
 @keyframes orb-drift {
   from { transform: translate(0, 0) scale(1); }
   to { transform: translate(-3%, 4%) scale(1.06); }
@@ -597,10 +606,10 @@ function deployCta(title: string, lead: string): Html {
 function marketingHome(site: ThemeSiteContext): Html {
   return shell(
     site,
-    html`<div class="wrap">
-<section class="hero">
+    html`<section class="hero">
   <div class="hero-orb" aria-hidden="true"></div>
   <div class="hero-pixels" aria-hidden="true"></div>
+  <div class="hero-inner">
   <div class="hero-brand" data-hero-bit>kumooo<span>.</span></div>
   <h1 data-hero-bit>Publish on <em>Cloudflare</em>. Keep your evenings.</h1>
   <p class="lead" data-hero-bit>Markdown in. HTML out at the edge. Themes, media, and a dashboard that does not need babysitting.</p>
@@ -633,8 +642,10 @@ function marketingHome(site: ThemeSiteContext): Html {
       </div>
     </div>
   </div>
+  </div>
 </section>
 
+<div class="wrap">
 <p class="accent-lead" data-reveal-on-scroll>
   Built for people who write in <strong>Markdown</strong>, ship on <strong>Cloudflare</strong>, and want the <strong>edge</strong> to do the heavy lifting.
 </p>
