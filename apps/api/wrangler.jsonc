@@ -21,6 +21,6 @@
   "vars": {
     "ENVIRONMENT": "production",
     "PUBLIC_SITE_SUFFIX": "kumooo.dev",
-    "DASHBOARD_ORIGIN": "https://kumooo-dashboard.pages.dev"
+    "DASHBOARD_ORIGIN": "https://dash.kumooo.dev"
   }
 }

@@ -45,6 +45,10 @@ function isDashboardHost(host: string, suffix: string): boolean {
   return host === `dash.${suffix}` || host === "dash.kumooo.dev";
 }
 
+function isApiHost(host: string, suffix: string): boolean {
+  return host === `api.${suffix}` || host === "api.kumooo.dev";
+}
+
 /** Wildcard Worker route owns *.kumooo.dev, so Pages cannot serve dash directly. Proxy instead. */
 async function proxyDashboard(request: Request): Promise<Response> {
   const url = new URL(request.url);
@@ -63,6 +67,14 @@ async function proxyDashboard(request: Request): Promise<Response> {
     out.set("Location", `${url.origin}${location.slice(DASHBOARD_PAGES_ORIGIN.length)}`);
   }
   return new Response(upstream.body, { status: upstream.status, headers: out });
+}
+
+/**
+ * Renderer owns *.kumooo.dev. Forward api.* to the API Worker via service binding
+ * so session cookies are set for api.kumooo.dev (same site as dash.kumooo.dev).
+ */
+async function proxyApi(request: Request, env: Env): Promise<Response> {
+  return env.API.fetch(request);
 }
 
 registerTheme(haruTheme);
@@ -292,6 +304,10 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
 
   if (isDashboardHost(host, env.PUBLIC_SITE_SUFFIX)) {
     return proxyDashboard(request);
+  }
+
+  if (isApiHost(host, env.PUBLIC_SITE_SUFFIX)) {
+    return proxyApi(request, env);
   }
 
   if (request.method !== "GET" && request.method !== "HEAD") {

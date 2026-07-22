@@ -9,6 +9,9 @@
     { "pattern": "docs.kumooo.dev", "custom_domain": true },
     { "pattern": "*.kumooo.dev/*", "zone_name": "kumooo.dev" }
   ],
+  "services": [
+    { "binding": "API", "service": "kumooo-api" }
+  ],
   "d1_databases": [
     {
       "binding": "DB",

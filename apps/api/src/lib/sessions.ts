@@ -55,7 +55,8 @@ export async function resolveSession(db: Db, token: string | undefined | null) {
 
 export function sessionCookie(token: string, secure: boolean): string {
   const maxAge = SESSION_DAYS * 24 * 60 * 60;
-  // SameSite=None when Secure: dashboard (Pages) and API (Workers) are different sites.
+  // Lax is enough when dashboard + API share *.kumooo.dev (same site).
+  // None kept for the pages.dev fallback origin (cross-site).
   const sameSite = secure ? "None" : "Lax";
   return `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=${maxAge}${secure ? "; Secure" : ""}`;
 }

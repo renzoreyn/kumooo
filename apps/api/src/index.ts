@@ -25,8 +25,15 @@ app.use("*", async (c, next) => {
 
 app.use("*", (c, next) =>
   cors({
-    origin: (origin) =>
-      origin === c.env.DASHBOARD_ORIGIN || c.env.ENVIRONMENT === "development" ? origin : "",
+    origin: (origin) => {
+      const allowed = new Set([
+        c.env.DASHBOARD_ORIGIN,
+        "https://dash.kumooo.dev",
+        "https://kumooo-dashboard.pages.dev",
+      ]);
+      if (allowed.has(origin) || c.env.ENVIRONMENT === "development") return origin;
+      return "";
+    },
     credentials: true,
     allowHeaders: ["Content-Type", "Authorization"],
     exposeHeaders: ["X-Request-Id"],

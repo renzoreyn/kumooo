@@ -21,6 +21,8 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
       if (mode === "signup") await api.signup({ email, password, name });
       else await api.login({ email, password });
       await refresh();
+      const me = await api.me();
+      if (!me.user) throw new Error("Signed in, but the session cookie did not stick. Try again.");
       nav("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "That didn't work.");
