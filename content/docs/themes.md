@@ -2,6 +2,23 @@ A theme is a TypeScript module with five functions that return HTML.
 
 No template language. No mandatory client framework.
 
+## Free tenant themes
+
+Tenants pick from four first-party season themes:
+
+| Id | Name | Feel |
+| --- | --- | --- |
+| `haru` | Haru | Spring. Soft paper, calm reading, blossom accent. **Default for new sites.** |
+| `natsu` | Natsu | Summer. Coastal light, wider measure, high energy. |
+| `aki` | Aki | Autumn. Warm cream, editorial serif, ochre accent. |
+| `fuyu` | Fuyu | Winter. Cool ink, crisp type, quiet chrome. |
+
+The legacy id `default` aliases to `haru` at render time, so older sites keep working without a database rewrite.
+
+Platform themes `marketing` and `docs` stay first-party only. They do not appear in the tenant gallery.
+
+Theme Studio (edit HTML/CSS/JS against our structure) is planned next. It is not a visual page builder.
+
 ## The contract
 
 ```ts
@@ -35,5 +52,4 @@ Official themes may be animated. That's the showcase.
 ## Registering
 
 Import and `registerTheme(...)` in the renderer.
-Set `site.theme` to the theme name (`default`, `marketing`, `docs`, â€?.
-
+Set `site.theme` to a registered name (`haru`, `natsu`, `aki`, `fuyu`, or the `default` alias).
