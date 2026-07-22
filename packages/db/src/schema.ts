@@ -66,11 +66,41 @@ export const sites = sqliteTable(
     name: text("name").notNull(),
     slug: text("slug").notNull().unique(),
     theme: text("theme").notNull().default("default"),
+    status: text("status", { enum: ["active", "archived"] }).notNull().default("active"),
     settings: text("settings").notNull().default("{}"),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
   (t) => [index("sites_org").on(t.orgId)],
+);
+
+export const siteEvents = sqliteTable(
+  "site_events",
+  {
+    id: text("id").primaryKey(),
+    siteId: text("site_id").notNull(),
+    actorId: text("actor_id"),
+    type: text("type").notNull(),
+    resourceType: text("resource_type"),
+    resourceId: text("resource_id"),
+    metadata: text("metadata").notNull().default("{}"),
+    createdAt: createdAt(),
+  },
+  (t) => [index("site_events_site_created").on(t.siteId, t.createdAt)],
+);
+
+export const ogTemplates = sqliteTable(
+  "og_templates",
+  {
+    id: text("id").primaryKey(),
+    siteId: text("site_id").notNull(),
+    name: text("name").notNull(),
+    isDefault: integer("is_default", { mode: "boolean" }).notNull().default(false),
+    config: text("config").notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [index("og_templates_site").on(t.siteId)],
 );
 
 export const domains = sqliteTable(

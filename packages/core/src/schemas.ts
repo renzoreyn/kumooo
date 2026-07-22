@@ -6,6 +6,9 @@ export type Role = (typeof roles)[number];
 export const contentStatuses = ["draft", "scheduled", "published", "archived"] as const;
 export type ContentStatus = (typeof contentStatuses)[number];
 
+export const siteStatuses = ["active", "archived"] as const;
+export type SiteStatus = (typeof siteStatuses)[number];
+
 export const siteSettingsSchema = z
   .object({
     title: z.string().default(""),
@@ -78,7 +81,9 @@ export const createContentSchema = z.object({
   featuredImage: z.string().optional(),
 });
 
-export const updateContentSchema = createContentSchema.partial();
+export const updateContentSchema = createContentSchema.partial().extend({
+  expectedUpdatedAt: z.string().datetime().optional(),
+});
 
 export const RESERVED_SLUGS = new Set([
   "www",

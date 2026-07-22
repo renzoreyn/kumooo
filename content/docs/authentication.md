@@ -1,5 +1,3 @@
-# Authentication
-
 ## Sessions (humans)
 
 ```
@@ -30,3 +28,4 @@ Double-check your email and password.
 
 **You need the editor role (or higher) for that.**
 Authors draft. Editors publish.
+

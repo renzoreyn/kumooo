@@ -7,6 +7,7 @@ import {
   renderRobots,
   renderRss,
   renderSitemap,
+  verifyPreviewToken,
   websiteJsonLd,
   type Html,
   type PageMeta,
@@ -19,6 +20,7 @@ import type { ThemeSiteContext } from "@kumooo/theme-kit";
 import { and, eq } from "drizzle-orm";
 import { cachedResponse, cacheKeyFor, getSiteVersion, storeInCache } from "./cache.js";
 import {
+  getContentById,
   getPublishedContent,
   listAllPublished,
   listByTaxonomy,
@@ -207,6 +209,50 @@ async function serveMedia(
   });
 }
 
+async function renderPreview(
+  db: Db,
+  site: ResolvedSite,
+  contentId: string,
+  themeOverride?: string,
+): Promise<Response> {
+  const item = await getContentById(db, site, contentId);
+  if (!item) return new Response("Preview content not found.", { status: 404 });
+  const seo = item.seo as {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    canonicalUrl?: string;
+    noindex?: boolean;
+  };
+  const head = buildHead(site, {
+    meta: {
+      title: seo.title ?? item.title,
+      description: seo.description ?? item.excerpt ?? undefined,
+      canonicalUrl: seo.canonicalUrl ?? `${site.origin}${item.url}`,
+      ogImage: seo.ogImage ?? item.featuredImage ?? site.settings.seo.defaultOgImage,
+      ogType: "article",
+      publishedAt: item.publishedAt,
+      modifiedAt: item.updatedAt,
+      authorName: item.authorName ?? undefined,
+      noindex: true,
+    },
+  });
+  const ctx = await themeContext(db, site, head);
+  const theme = getTheme(themeOverride || site.theme);
+  const body =
+    item.type === "page" ? theme.page(ctx, { page: item }) : theme.post(ctx, { post: item });
+  return new Response(body.value, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "private, no-store",
+      "X-Robots-Tag": "noindex",
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+    },
+  });
+}
+
 async function handle(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const url = new URL(request.url);
   if (request.method !== "GET" && request.method !== "HEAD") {
@@ -220,6 +266,24 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
     return new Response("There's no Kumooo site at this address.", { status: 404 });
   }
   if (!site.origin) site.origin = url.origin;
+
+  if (url.pathname === "/_preview") {
+    const token = url.searchParams.get("token");
+    if (!token || !env.PREVIEW_SIGNING_SECRET) {
+      return new Response("Preview unavailable.", { status: 401 });
+    }
+    try {
+      const payload = await verifyPreviewToken(token, env.PREVIEW_SIGNING_SECRET);
+      if (payload.siteId !== site.id || !payload.contentId) {
+        return new Response("Preview token does not match this site.", { status: 403 });
+      }
+      return await renderPreview(db, site, payload.contentId, payload.theme);
+    } catch (err) {
+      return new Response(err instanceof Error ? err.message : "Invalid preview token.", {
+        status: 401,
+      });
+    }
+  }
 
   const version = await getSiteVersion(env, site.id);
   const cacheKey = cacheKeyFor(site.id, version, url);

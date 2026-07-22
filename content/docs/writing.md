@@ -1,5 +1,3 @@
-# Writing
-
 This is how Kumooo should sound.
 
 Write like a technical founder explaining something over coffee.
@@ -18,7 +16,7 @@ Never cringe. Never arrogant.
 Words like revolutionary, seamless, leverage, unlock, ecosystem, robust,
 enterprise-grade, next-generation, world-class.
 
-Phrases like "the future ofâ€¦", "supercharge your workflow", "powered by innovation".
+Phrases like "the future ofâ€?, "supercharge your workflow", "powered by innovation".
 
 If it sounds like a SaaS template, delete it.
 
@@ -39,3 +37,4 @@ If it sounds like a SaaS template, delete it.
 > You don't have any sites yet. Let's build one.
 
 The best compliment is: "I forgot the CMS existed."
+

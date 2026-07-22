@@ -1,5 +1,3 @@
-# Getting started
-
 Ten minutes from nothing to a published page.
 
 You need Node 20+, pnpm, and a terminal you're not afraid of.
@@ -56,3 +54,4 @@ kumooo doctor
 ```
 
 It tells you what's wrong in English.
+

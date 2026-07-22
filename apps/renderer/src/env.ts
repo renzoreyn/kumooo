@@ -4,4 +4,5 @@ export interface Env {
   MEDIA: R2Bucket;
   ENVIRONMENT: string;
   PUBLIC_SITE_SUFFIX: string;
+  PREVIEW_SIGNING_SECRET?: string;
 }

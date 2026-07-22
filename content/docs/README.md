@@ -1,20 +1,13 @@
-# Kumooo docs
-
 Clear docs. No fluff.
 
 ## Start here
 
-- [Getting started](/getting-started): from zero to a published page
-- [Installation](/installation): what `create-kumooo` does
-- [CLI](/cli): every command
+- [Getting started](/getting-started)
+- [Installation](/installation)
+- [Architecture](/architecture)
+- [CLI](/cli)
+- [Themes](/themes)
+- [API reference](/api-reference)
 
-## How it works
+Questions? Open an issue on [GitHub](https://github.com/renzoreyn/kumooo).
 
-- [Architecture](/architecture): two workers, one database
-- [Themes](/themes): SSR HTML or React with motion
-- [Authentication](/authentication): sessions and roles
-- [API reference](/api-reference): the REST surface
-
-## House style
-
-- [Writing](/writing): how Kumooo should sound

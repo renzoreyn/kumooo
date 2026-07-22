@@ -105,6 +105,54 @@ export async function listPublishedPosts(db: Db, siteId: string, page: number, p
   return { posts, total };
 }
 
+export async function getContentById(
+  db: Db,
+  site: ResolvedSite,
+  contentId: string,
+): Promise<RenderedContent | null> {
+  const row = (
+    await db
+      .select()
+      .from(content)
+      .where(and(eq(content.id, contentId), eq(content.siteId, site.id)))
+  )[0];
+  if (!row) return null;
+
+  const author = (await db.select().from(users).where(eq(users.id, row.authorId)))[0];
+  const tagRows = await db
+    .select({ name: tags.name, slug: tags.slug })
+    .from(contentTags)
+    .innerJoin(tags, eq(tags.id, contentTags.tagId))
+    .where(eq(contentTags.contentId, row.id));
+  const catRows = await db
+    .select({ name: categories.name, slug: categories.slug })
+    .from(contentCategories)
+    .innerJoin(categories, eq(categories.id, contentCategories.categoryId))
+    .where(eq(contentCategories.contentId, row.id));
+
+  const html = renderMarkdown(row.bodyMarkdown, {
+    allowRawHtml: site.settings.allowRawHtml,
+  }).value;
+
+  return {
+    title: row.title,
+    slug: row.slug,
+    type: row.type,
+    excerpt: row.excerpt,
+    html,
+    markdown: row.bodyMarkdown,
+    publishedAt: row.publishedAt,
+    updatedAt: row.updatedAt,
+    authorName: author?.name ?? null,
+    featuredImage: row.featuredImage,
+    tags: tagRows,
+    categories: catRows,
+    seo: safeJson(row.seo) as Record<string, unknown>,
+    customFields: safeJson(row.customFields) as Record<string, unknown>,
+    url: `/${row.slug}`,
+  };
+}
+
 export async function getPublishedContent(
   db: Db,
   site: ResolvedSite,
