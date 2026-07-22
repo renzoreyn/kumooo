@@ -8,6 +8,7 @@ export interface Env {
   TURNSTILE_SECRET_KEY?: string;
   CF_API_TOKEN?: string;
   CF_ZONE_ID?: string;
+  PREVIEW_SIGNING_SECRET?: string;
 }
 
 export type AppVariables = {

@@ -10,6 +10,7 @@ import { contentRoutes } from "./routes/content.js";
 import { domainRoutes } from "./routes/domains.js";
 import { mediaRoutes } from "./routes/media.js";
 import { orgRoutes, siteRoutes } from "./routes/orgs.js";
+import { overviewRoutes } from "./routes/overview.js";
 
 const app = new Hono<AppEnv>();
 
@@ -40,6 +41,7 @@ app.get("/health", (c) => c.json({ ok: true }));
 app.route("/v1/auth", authRoutes);
 app.route("/v1/orgs", orgRoutes);
 app.route("/v1", siteRoutes);
+app.route("/v1", overviewRoutes);
 app.route("/v1", contentRoutes);
 app.route("/v1", mediaRoutes);
 app.route("/v1", domainRoutes);

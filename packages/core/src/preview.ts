@@ -24,10 +24,14 @@ function textToBytes(value: string): Uint8Array {
   return new TextEncoder().encode(value);
 }
 
+function asBufferSource(bytes: Uint8Array): ArrayBuffer {
+  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+}
+
 async function hmacKey(secret: string): Promise<CryptoKey> {
   return crypto.subtle.importKey(
     "raw",
-    textToBytes(secret),
+    asBufferSource(textToBytes(secret)),
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign", "verify"],
@@ -36,13 +40,18 @@ async function hmacKey(secret: string): Promise<CryptoKey> {
 
 async function sign(data: string, secret: string): Promise<string> {
   const key = await hmacKey(secret);
-  const sig = await crypto.subtle.sign("HMAC", key, textToBytes(data));
+  const sig = await crypto.subtle.sign("HMAC", key, asBufferSource(textToBytes(data)));
   return bytesToBase64Url(new Uint8Array(sig));
 }
 
 async function verifySig(data: string, signature: string, secret: string): Promise<boolean> {
   const key = await hmacKey(secret);
-  return crypto.subtle.verify("HMAC", key, base64UrlToBytes(signature), textToBytes(data));
+  return crypto.subtle.verify(
+    "HMAC",
+    key,
+    asBufferSource(base64UrlToBytes(signature)),
+    asBufferSource(textToBytes(data)),
+  );
 }
 
 /** Sign a short-lived draft preview token (HMAC-SHA256). */
