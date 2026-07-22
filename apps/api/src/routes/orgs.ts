@@ -17,6 +17,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import type { AppEnv } from "../env.js";
 import { ApiError } from "../errors.js";
 import { requireOrgRole, requireSiteAccess } from "../lib/authz.js";
+import { bumpCacheVersion } from "../lib/cachever.js";
 import { recordSiteEvent } from "../lib/events.js";
 import { requireUser } from "../middleware/auth.js";
 
@@ -156,6 +157,7 @@ siteRoutes.patch("/sites/:siteId", async (c) => {
       resourceId: site.id,
       metadata: { from: site.theme, to: body.theme },
     });
+    await bumpCacheVersion(c.env.KV, site.id);
   } else {
     await recordSiteEvent(c.get("db"), {
       siteId: site.id,
