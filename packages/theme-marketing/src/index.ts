@@ -7,7 +7,7 @@ import {
   type ThemeSiteContext,
 } from "@kumooo/theme-kit";
 
-/** Lucide-style icons as inline SVG. No npm required at render time. */
+/** Lucide-style icons as inline SVG. */
 const ic = {
   zap: `<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
   cloud: `<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`,
@@ -20,14 +20,15 @@ const ic = {
 
 const css = `
 :root {
-  --bg: #101218;
-  --fg: #f3f1ea;
-  --muted: #9a968c;
-  --line: #262b37;
-  --accent: #6ee7b7;
-  --accent-ink: #06261c;
-  --card: #12151d;
-  --panel: #161922;
+  --bg: #070708;
+  --fg: #f4f1e8;
+  --muted: #9a958a;
+  --line: rgba(255,255,255,0.09);
+  --accent: #f5c542;
+  --accent-ink: #1a1400;
+  --card: #101012;
+  --panel: #141416;
+  --glow: rgba(245,197,66,0.45);
   --max: 72rem;
   color-scheme: dark;
 }
@@ -35,34 +36,38 @@ const css = `
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  font: 16px/1.6 "Sora", "Segoe UI", sans-serif;
-  background:
-    radial-gradient(ellipse 80% 60% at 90% -10%, rgba(110,231,183,.16), transparent 55%),
-    radial-gradient(ellipse 60% 40% at 0% 20%, rgba(147,197,253,.08), transparent 50%),
-    var(--bg);
+  font: 16px/1.65 Sora, "Segoe UI", sans-serif;
   color: var(--fg);
+  background: var(--bg);
   min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .i { width: 1.1rem; height: 1.1rem; display: inline-block; vertical-align: -0.15em; }
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
 @media (max-width: 640px) { .wrap { padding: 0 1rem; } }
+
 .site-header {
-  position: sticky; top: 0; z-index: 20;
-  backdrop-filter: blur(14px);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  position: sticky; top: 0; z-index: 30;
+  backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
   border-bottom: 1px solid var(--line);
 }
 .site-header .inner {
   display: flex; align-items: center; gap: 1rem; height: 3.75rem;
 }
 .logo {
-  font-weight: 700; letter-spacing: -0.04em; color: var(--fg); font-size: 1.2rem;
+  font-weight: 700; letter-spacing: -0.05em; color: var(--fg); font-size: 1.25rem;
 }
 .logo span { color: var(--accent); }
-.nav { margin-left: auto; display: flex; gap: 1.25rem; align-items: center; }
-.nav a { color: var(--muted); font-size: 0.92rem; white-space: nowrap; }
+.nav { margin-left: auto; display: flex; gap: 1.15rem; align-items: center; }
+.nav a { color: var(--muted); font-size: 0.9rem; white-space: nowrap; }
 .nav a:hover { color: var(--fg); text-decoration: none; }
 .nav-toggle {
   display: none; margin-left: auto;
@@ -72,7 +77,7 @@ a:hover { text-decoration: underline; }
 }
 .nav-drawer {
   display: none; position: fixed; inset: 0; z-index: 40;
-  background: rgba(8,10,14,.72);
+  background: rgba(0,0,0,.72);
 }
 .nav-drawer[hidden] { display: none !important; }
 .nav-drawer-panel {
@@ -85,224 +90,371 @@ a:hover { text-decoration: underline; }
   color: var(--fg); background: var(--card); border: 1px solid var(--line);
 }
 .nav-drawer-panel a:hover { border-color: var(--accent); text-decoration: none; }
-.nav-drawer-panel .btn { justify-content: center; margin-top: .5rem; }
 @media (max-width: 800px) {
   .nav { display: none; }
   .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
   .nav-drawer:not([hidden]) { display: block; }
 }
+
 .btn {
   display: inline-flex; align-items: center; gap: 0.45rem;
-  padding: 0.55rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: 0.92rem;
+  padding: 0.65rem 1.15rem; border-radius: 12px; font-weight: 600; font-size: 0.92rem;
   border: 1px solid var(--line); color: var(--fg); background: transparent;
-  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
   cursor: pointer;
 }
-.btn:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); }
-.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn:hover { text-decoration: none; border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); transform: translateY(-1px); }
+.btn.primary {
+  background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+}
+.btn.primary:hover { box-shadow: 0 0 28px var(--glow); }
+
 .hero {
-  padding: 5rem 0 3.5rem;
-  display: grid; gap: 2rem;
-  grid-template-columns: 1.1fr .9fr;
-  align-items: center;
+  position: relative;
+  padding: 4.5rem 0 2rem;
+  isolation: isolate;
 }
-@media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-top: 3rem; } }
-.hero h1 {
-  font-size: clamp(2.4rem, 6vw, 3.8rem);
-  line-height: 1.05; letter-spacing: -0.045em; margin: 0 0 1rem;
+.hero-orb {
+  position: absolute;
+  right: -8%; top: -10%;
+  width: min(42rem, 90vw); height: min(42rem, 90vw);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 40% 40%, rgba(245,197,66,.55), rgba(245,140,40,.18) 42%, transparent 68%);
+  filter: blur(8px);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: -1;
+  animation: orb-drift 14s ease-in-out infinite alternate;
+}
+.hero-orb::after {
+  content: "";
+  position: absolute; inset: 8%;
+  border-radius: 50%;
+  background-image: radial-gradient(rgba(0,0,0,.55) 1px, transparent 1.2px);
+  background-size: 5px 5px;
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+}
+@keyframes orb-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-3%, 4%) scale(1.06); }
+}
+.hero-brand {
+  display: block;
+  font-size: clamp(3.5rem, 12vw, 6.5rem);
   font-weight: 700;
+  letter-spacing: -0.07em;
+  line-height: 0.9;
+  margin: 0 0 1.25rem;
+  color: var(--fg);
 }
-.lead { color: var(--muted); font-size: 1.1rem; max-width: 34rem; margin: 0 0 1.5rem; }
+.hero-brand span { color: var(--accent); }
+.hero h1 {
+  font-size: clamp(1.85rem, 4.5vw, 3rem);
+  line-height: 1.12; letter-spacing: -0.04em; margin: 0 0 1rem;
+  font-weight: 700; max-width: 18ch;
+}
+.hero h1 em {
+  font-style: normal; color: var(--accent);
+}
+.lead { color: var(--muted); font-size: 1.08rem; max-width: 34rem; margin: 0 0 1.5rem; }
+.hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.75rem; }
 .install {
   display: inline-flex; align-items: center; gap: 0.75rem;
   font-family: "IBM Plex Mono", ui-monospace, monospace;
   background: var(--card); border: 1px solid var(--line);
-  border-radius: 12px; padding: 0.75rem 1rem; margin-bottom: 1.1rem;
-  font-size: 0.92rem;
+  border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem;
+  font-size: 0.88rem; color: var(--muted);
 }
-.install::before { content: "$"; color: var(--muted); }
 .install button {
-  margin-left: .35rem; border: 0; background: transparent; color: var(--accent);
-  font: inherit; cursor: pointer; padding: 0;
+  margin-left: auto; border: 0; background: transparent; color: var(--accent);
+  font: inherit; cursor: pointer; font-weight: 600;
 }
 .install button.copied { color: var(--fg); }
+
+.product-mock {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #151518, #0c0c0e);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.55),
+    0 0 0 1px rgba(255,255,255,.03) inset;
+  overflow: hidden;
+  min-height: 18rem;
+}
+.product-mock .mock-top {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--line);
+  background: rgba(255,255,255,.02);
+}
+.product-mock .dot {
+  width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #3a3a3e;
+}
+.product-mock .dot:nth-child(1) { background: #ff5f57; }
+.product-mock .dot:nth-child(2) { background: #febc2e; }
+.product-mock .dot:nth-child(3) { background: #28c840; }
+.product-mock .mock-url {
+  margin-left: 0.75rem; font: 0.72rem/1 "IBM Plex Mono", monospace; color: var(--muted);
+}
+.product-mock .mock-body {
+  display: grid; grid-template-columns: 11rem 1fr; min-height: 16rem;
+}
+.product-mock .mock-side {
+  border-right: 1px solid var(--line); padding: 1rem 0.85rem;
+  background: rgba(0,0,0,.25);
+}
+.product-mock .mock-side .line {
+  height: 0.45rem; border-radius: 4px; background: rgba(255,255,255,.08);
+  margin-bottom: 0.55rem;
+}
+.product-mock .mock-side .line.on { background: color-mix(in srgb, var(--accent) 55%, transparent); width: 70%; }
+.product-mock .mock-main { padding: 1.25rem 1.35rem; }
+.product-mock .mock-main h3 {
+  margin: 0 0 0.75rem; font-size: 1.15rem; letter-spacing: -0.03em;
+}
+.product-mock .mock-main .para {
+  height: 0.5rem; border-radius: 4px; background: rgba(255,255,255,.07);
+  margin-bottom: 0.45rem;
+}
+.product-mock .mock-main .para.short { width: 62%; }
+@media (max-width: 700px) {
+  .product-mock .mock-body { grid-template-columns: 1fr; }
+  .product-mock .mock-side { display: none; }
+}
+
+.accent-lead {
+  padding: 4rem 0 2rem;
+  font-size: clamp(1.35rem, 3.2vw, 2rem);
+  line-height: 1.35; letter-spacing: -0.03em;
+  max-width: 48rem; margin: 0;
+  color: var(--muted);
+}
+.accent-lead strong { color: var(--accent); font-weight: 700; }
+
+.block { padding: 3.5rem 0; }
 .kicker {
-  text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem;
-  font-weight: 700; color: var(--accent); margin-bottom: 0.6rem;
+  color: var(--accent); font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 0.75rem;
 }
-.dash {
-  background: linear-gradient(160deg, #1a1e29, #0f1219);
-  border: 1px solid var(--line); border-radius: 16px; padding: .85rem;
-  box-shadow: 0 28px 70px rgba(0,0,0,.35);
+.section-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  letter-spacing: -0.04em; margin: 0 0 1.5rem; line-height: 1.15;
 }
-.dash-label { font-size: .72rem; color: var(--muted); margin-bottom: .55rem; }
-.dash-inner {
-  display: grid; grid-template-columns: 2.4rem 1fr; gap: .55rem;
-  background: #12151d; border-radius: 10px; padding: .7rem; min-height: 11rem;
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.85rem;
 }
-.dash-rail { background: #0c0e14; border-radius: 8px; }
-.dash-bar {
-  height: .65rem; width: 58%; background: var(--accent); border-radius: 4px; margin-bottom: .55rem;
+.bento-card {
+  grid-column: span 4;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.25rem 1.2rem 1.35rem;
+  min-height: 11rem;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  position: relative; overflow: hidden;
 }
-.dash-line {
-  height: .45rem; background: #262b37; border-radius: 3px; margin-bottom: .35rem;
+.bento-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  box-shadow: 0 16px 40px rgba(0,0,0,.35), 0 0 24px rgba(245,197,66,.08);
 }
-.dash-line.short { width: 72%; }
-.dash-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; margin-top: .55rem; }
-.dash-tile { height: 2.4rem; background: #0e1017; border-radius: 6px; border: 1px solid #1c2030; }
-section.block { padding: 3.25rem 0; border-top: 1px solid var(--line); }
-.stats { display: grid; gap: .75rem; grid-template-columns: repeat(4, 1fr); }
-@media (max-width: 800px) { .stats { grid-template-columns: repeat(2, 1fr); } }
-.stat {
-  background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem;
+.bento-card.wide { grid-column: span 8; min-height: 14rem; }
+.bento-card.tall { min-height: 16rem; }
+.bento-card .halftone {
+  position: absolute; inset: auto -10% -30% auto; width: 12rem; height: 12rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(245,197,66,.35), transparent 65%),
+    radial-gradient(rgba(0,0,0,.5) 1px, transparent 1.2px);
+  background-size: auto, 4px 4px;
+  opacity: 0.55; pointer-events: none;
 }
-.stat b { display: block; font-size: 1.55rem; letter-spacing: -.03em; }
-.stat span { color: var(--muted); font-size: .82rem; }
-.tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .85rem; }
-.tab {
-  border: 1px solid var(--line); background: transparent; color: var(--muted);
-  border-radius: 8px; padding: .35rem .75rem; font: inherit; font-size: .9rem; cursor: pointer;
+.bento-card h3 {
+  margin: 0.65rem 0 0.4rem; font-size: 1.15rem; letter-spacing: -0.03em;
 }
-.tab.active, .tab:hover { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
-.tour-panel {
-  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-  padding: 1.25rem; min-height: 9rem;
+.bento-card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+.bento-card .code {
+  margin-top: 1rem;
+  font: 0.78rem/1.5 "IBM Plex Mono", monospace;
+  background: #0a0a0b; border: 1px solid var(--line); border-radius: 10px;
+  padding: 0.85rem 1rem; color: #c8c5bb; overflow: auto;
 }
-.tour-panel[hidden] { display: none; }
-.tour-panel h3 { margin: 0 0 .4rem; font-size: 1.05rem; }
-.tour-panel p { margin: 0; color: var(--muted); font-size: .92rem; }
-.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
-.card {
-  background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.25rem;
-  transition: transform .25s ease, border-color .25s ease;
+.bento-card .code .g { color: #7dcea0; }
+.bento-card .code .y { color: var(--accent); }
+@media (max-width: 900px) {
+  .bento-card, .bento-card.wide { grid-column: span 12; }
 }
-.card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
-.card h3 { margin: 0.5rem 0 0.4rem; font-size: 1.05rem; }
-.card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+
+.split {
+  display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2rem; align-items: center;
+  padding: 2rem 0 1rem;
+}
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+.split ul { margin: 1rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.65rem; }
+.split li {
+  display: flex; gap: 0.65rem; align-items: flex-start; color: var(--muted);
+}
+.split li::before {
+  content: ""; width: 0.55rem; height: 0.55rem; margin-top: 0.45rem;
+  border-radius: 50%; background: var(--accent); flex-shrink: 0;
+}
+
 .cta-box {
-  background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-  padding: 2rem 1.5rem; text-align: center;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 2.5rem 1.5rem;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 0%, rgba(245,197,66,.12), transparent 55%),
+    var(--card);
 }
-.cta-box h2 { margin: 0 0 .4rem; letter-spacing: -.03em; font-size: 1.7rem; }
-.page-hero { padding: 4rem 0 2rem; max-width: 40rem; }
+.cta-box h2 {
+  margin: 0 0 0.75rem; font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.04em;
+}
+
+.page-hero { padding: 4rem 0 2rem; max-width: 42rem; }
 .page-hero h1 {
-  font-size: clamp(2.2rem, 5vw, 3.2rem);
-  line-height: 1.08; letter-spacing: -0.04em; margin: 0 0 .85rem;
+  font-size: clamp(2rem, 5vw, 2.8rem); letter-spacing: -0.045em;
+  line-height: 1.12; margin: 0 0 1rem;
 }
 .feature-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: center;
-  padding: 2.5rem 0; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+  align-items: center; padding: 2.5rem 0; border-top: 1px solid var(--line);
 }
 .feature-row.reverse { direction: rtl; }
 .feature-row.reverse > * { direction: ltr; }
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .feature-row, .feature-row.reverse { grid-template-columns: 1fr; direction: ltr; }
 }
-.feature-copy h2 { margin: 0 0 .6rem; letter-spacing: -.03em; font-size: 1.55rem; }
-.feature-copy p { margin: 0; color: var(--muted); }
-.feature-copy ul { margin: .85rem 0 0; padding: 0; list-style: none; }
-.feature-copy li {
-  position: relative; padding: .35rem 0 .35rem 1.2rem; color: var(--muted); font-size: .95rem;
-}
-.feature-copy li::before {
-  content: ""; position: absolute; left: 0; top: .7rem;
-  width: .45rem; height: .45rem; border-radius: 99px; background: var(--accent);
-}
+.feature-copy h2 { letter-spacing: -0.03em; margin: 0 0 0.75rem; }
+.feature-copy p { color: var(--muted); }
+.feature-copy ul { margin: 1rem 0 0; padding-left: 1.1rem; color: var(--muted); }
 .feature-visual {
-  background: linear-gradient(160deg, #1a1e29, #0f1219);
-  border: 1px solid var(--line); border-radius: 16px; padding: 1.1rem; min-height: 10rem;
+  border: 1px solid var(--line); border-radius: 16px; padding: 1.25rem;
+  background: var(--card); min-height: 12rem;
 }
-.price-grid {
-  display: grid; grid-template-columns: 1.1fr .9fr; gap: 1rem; margin-top: 1.5rem;
-}
+.dash-label { font-size: 0.72rem; color: var(--accent); margin-bottom: 0.75rem; font-family: "IBM Plex Mono", monospace; }
+.dash-bar { height: 0.55rem; border-radius: 4px; background: color-mix(in srgb, var(--accent) 50%, transparent); width: 78%; margin-bottom: 0.65rem; }
+.dash-line { height: 0.4rem; border-radius: 4px; background: rgba(255,255,255,.08); margin-bottom: 0.45rem; }
+.dash-line.short { width: 55%; }
+.dash-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.85rem; }
+.dash-tile { height: 3.2rem; border-radius: 10px; background: rgba(255,255,255,.04); border: 1px solid var(--line); }
+
+.price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 @media (max-width: 800px) { .price-grid { grid-template-columns: 1fr; } }
 .price-card {
-  background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 1.5rem;
+  border: 1px solid var(--line); border-radius: 16px; padding: 1.5rem;
+  background: var(--card);
 }
 .price-card.featured {
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
-  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 10%, var(--card)), var(--card));
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  box-shadow: 0 0 40px rgba(245,197,66,.08);
 }
-.price-card .amount {
-  font-size: 2.6rem; font-weight: 700; letter-spacing: -.04em; margin: .4rem 0 .2rem;
-}
+.price-card .amount { font-size: 2.4rem; letter-spacing: -0.04em; margin: 0.35rem 0 0.75rem; font-weight: 700; }
 .price-card .amount span { font-size: 1rem; color: var(--muted); font-weight: 500; }
-.price-card ul { list-style: none; padding: 0; margin: 1.1rem 0 1.4rem; }
-.price-card li {
-  padding: .4rem 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem;
-}
-.price-card li:first-child { border-top: 0; }
-.cf-deploy-dialog {
-  border: 1px solid var(--line); border-radius: 16px; padding: 0;
-  background: var(--bg); color: var(--fg); max-width: min(40rem, calc(100vw - 2rem));
-  width: 100%;
-}
-.cf-deploy-dialog::backdrop { background: rgba(8,10,14,.72); }
-.cf-deploy-inner { padding: 1.35rem 1.35rem 1.5rem; }
-.cf-deploy-inner h2 { margin: 0 0 .35rem; letter-spacing: -.03em; font-size: 1.35rem; }
-.cf-deploy-inner > p { margin: 0 0 1rem; color: var(--muted); font-size: .92rem; }
-.cf-deploy-choices { display: grid; gap: .75rem; grid-template-columns: 1fr 1fr; margin-bottom: 1rem; }
-@media (max-width: 640px) { .cf-deploy-choices { grid-template-columns: 1fr; } }
-.cf-deploy-choice {
-  display: flex; flex-direction: column; gap: .45rem;
-  background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1rem;
-  text-align: left; color: inherit; text-decoration: none;
-  transition: border-color .2s ease, transform .2s ease;
-}
-.cf-deploy-choice:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-2px); }
-.cf-deploy-choice strong { font-size: 1rem; }
-.cf-deploy-choice span { color: var(--muted); font-size: .85rem; line-height: 1.45; }
-.cf-deploy-actions { display: flex; justify-content: flex-end; }
-.compare {
-  width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .92rem;
-}
-.compare th, .compare td {
-  text-align: left; padding: .75rem .9rem; border-bottom: 1px solid var(--line);
-}
-.compare th { color: var(--muted); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
-.compare td:nth-child(2), .compare td:nth-child(3) { color: var(--muted); }
+.price-card ul { margin: 1rem 0 1.25rem; padding-left: 1.1rem; color: var(--muted); }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+.compare { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.compare th, .compare td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--line); text-align: left; }
+.compare th { color: var(--muted); font-weight: 600; background: rgba(255,255,255,.02); }
 .compare .yes { color: var(--accent); font-weight: 600; }
-.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1rem 0; }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.card {
+  border: 1px solid var(--line); border-radius: 16px; padding: 1.2rem;
+  background: var(--card);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+}
+.card h3 { margin: 0.5rem 0 0.35rem; letter-spacing: -0.02em; }
+.card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+
 .muted { color: var(--muted); }
-.prose { max-width: 44rem; }
-.prose h1, .prose h2 { letter-spacing: -0.03em; }
-.prose h1 { font-size: clamp(1.7rem, 6vw, 2.2rem); margin: 0 0 1rem; }
-.prose h2 { margin-top: 2rem; }
-.prose pre {
-  background: var(--card); border: 1px solid var(--line); padding: 1rem; border-radius: 10px; overflow-x: auto;
-}
-.prose table { width: 100%; border-collapse: collapse; font-size: .9rem; }
-.prose th, .prose td { border: 1px solid var(--line); padding: .55rem .7rem; text-align: left; }
-.prose th { background: var(--panel); }
-@media (max-width: 640px) {
-  .page-hero { padding: 2.5rem 0 1.25rem; }
-  .btn { padding: .5rem .9rem; }
-  .hero h1 { font-size: clamp(2rem, 9vw, 2.8rem); }
-  .install { width: 100%; justify-content: space-between; }
-  .feature-copy ul { padding: 0; }
-  .cta-box { padding: 1.4rem 1rem; }
-  .cta-box h2 { font-size: 1.35rem; }
-}
+.prose { max-width: 42rem; }
+.prose h1 { letter-spacing: -0.04em; }
+
 footer.site {
   border-top: 1px solid var(--line); padding: 2.5rem 0 3rem; margin-top: 2rem;
 }
 footer.site .fine { color: var(--muted); font-size: 0.85rem; }
+
+.cf-deploy-dialog {
+  border: 1px solid var(--line); border-radius: 16px; padding: 0;
+  background: var(--panel); color: var(--fg); max-width: 28rem; width: calc(100% - 2rem);
+}
+.cf-deploy-dialog::backdrop { background: rgba(0,0,0,.7); }
+.cf-deploy-inner { padding: 1.35rem; }
+.cf-deploy-inner h2 { margin: 0 0 0.5rem; letter-spacing: -0.03em; }
+.cf-deploy-inner > p { color: var(--muted); margin: 0 0 1rem; }
+.cf-deploy-choices { display: grid; gap: 0.65rem; }
+.cf-deploy-choice {
+  display: grid; gap: 0.25rem; padding: 0.9rem 1rem; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--card); color: inherit; text-decoration: none;
+}
+.cf-deploy-choice:hover { border-color: var(--accent); text-decoration: none; }
+.cf-deploy-choice span { color: var(--muted); font-size: 0.88rem; }
+.cf-deploy-actions { margin-top: 1rem; display: flex; justify-content: flex-end; }
+
 [data-reveal-on-scroll] {
-  opacity: 0; transform: translateY(14px);
-  transition: opacity .55s ease, transform .55s ease;
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .65s ease, transform .65s ease;
 }
 [data-reveal-on-scroll].is-visible { opacity: 1; transform: none; }
+[data-reveal-on-scroll].is-visible .bento-card {
+  animation: card-in .55s ease backwards;
+}
+[data-reveal-on-scroll].is-visible .bento-card:nth-child(1) { animation-delay: .04s; }
+[data-reveal-on-scroll].is-visible .bento-card:nth-child(2) { animation-delay: .1s; }
+[data-reveal-on-scroll].is-visible .bento-card:nth-child(3) { animation-delay: .16s; }
+[data-reveal-on-scroll].is-visible .bento-card:nth-child(4) { animation-delay: .22s; }
+[data-reveal-on-scroll].is-visible .bento-card:nth-child(5) { animation-delay: .28s; }
+[data-reveal-on-scroll].is-visible .bento-card:nth-child(6) { animation-delay: .34s; }
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-orb { animation: none; }
+  [data-reveal-on-scroll] { opacity: 1; transform: none; transition: none; }
+  [data-reveal-on-scroll].is-visible .bento-card { animation: none; }
+  .btn, .bento-card, .card { transition: none; }
+}
 `;
 
 const clientIsland = `
 import { animate, stagger } from "https://esm.sh/framer-motion@11.15.0/dom";
 
-const hero = document.querySelector("[data-motion-hero]");
-if (hero) animate(hero, { opacity: [0, 1], y: [20, 0] }, { duration: 0.55, easing: "ease-out" });
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const heroBits = document.querySelectorAll("[data-hero-bit]");
+if (heroBits.length && !reduce) {
+  animate(heroBits, { opacity: [0, 1], y: [22, 0] }, { delay: stagger(0.08), duration: 0.55, easing: [0.22, 1, 0.36, 1] });
+} else {
+  for (const el of heroBits) el.style.opacity = "1";
+}
+
+const mock = document.querySelector("[data-hero-mock]");
+if (mock && !reduce) {
+  animate(mock, { opacity: [0, 1], y: [28, 0] }, { delay: 0.28, duration: 0.7, easing: [0.22, 1, 0.36, 1] });
+} else if (mock) {
+  mock.style.opacity = "1";
+}
 
 const cards = document.querySelectorAll("[data-motion-card]");
-if (cards.length) {
-  animate(cards, { opacity: [0, 1], y: [16, 0] }, { delay: stagger(0.06), duration: 0.45, easing: "ease-out" });
+if (cards.length && !reduce) {
+  animate(cards, { opacity: [0, 1], y: [14, 0] }, { delay: stagger(0.05), duration: 0.4, easing: "ease-out" });
 }
 
 for (const el of document.querySelectorAll("[data-copy]")) {
@@ -317,23 +469,13 @@ for (const el of document.querySelectorAll("[data-copy]")) {
   });
 }
 
-const tabs = [...document.querySelectorAll("[data-tour-tab]")];
-const panels = [...document.querySelectorAll("[data-tour-panel]")];
-function showTab(id) {
-  for (const t of tabs) t.classList.toggle("active", t.getAttribute("data-tour-tab") === id);
-  for (const p of panels) {
-    const on = p.getAttribute("data-tour-panel") === id;
-    p.hidden = !on;
-    if (on) animate(p, { opacity: [0, 1], y: [8, 0] }, { duration: 0.28, easing: "ease-out" });
-  }
-}
-for (const t of tabs) t.addEventListener("click", () => showTab(t.getAttribute("data-tour-tab")));
-if (tabs[0]) showTab(tabs[0].getAttribute("data-tour-tab"));
-
 const io = new IntersectionObserver((entries) => {
   for (const e of entries) if (e.isIntersecting) e.target.classList.add("is-visible");
 }, { threshold: 0.12 });
-for (const n of document.querySelectorAll("[data-reveal-on-scroll]")) io.observe(n);
+for (const n of document.querySelectorAll("[data-reveal-on-scroll]")) {
+  if (reduce) n.classList.add("is-visible");
+  else io.observe(n);
+}
 
 const drawer = document.querySelector("[data-nav-drawer]");
 document.querySelector("[data-nav-open]")?.addEventListener("click", () => { if (drawer) drawer.hidden = false; });
@@ -380,7 +522,7 @@ ${site.head}
   <a class="logo" href="/">k<span>.</span></a>
   <nav class="nav" aria-label="Primary">
     ${joinHtml(nav.map((n) => html`<a href="${n.url}">${n.title}</a>`))}
-    <a class="btn primary" href="https://github.com/renzoreyn/kumooo">${raw(ic.github)} GitHub</a>
+    <a class="btn primary" href="https://dash.kumooo.dev/signup">Open dashboard</a>
   </nav>
   <button type="button" class="nav-toggle" data-nav-open aria-label="Open menu">☰</button>
 </div></header>
@@ -388,7 +530,8 @@ ${site.head}
   <div class="nav-drawer-panel">
     <button type="button" class="btn" data-nav-close style="align-self:flex-end">Close</button>
     ${joinHtml(nav.map((n) => html`<a href="${n.url}">${n.title}</a>`))}
-    <a class="btn primary" href="https://github.com/renzoreyn/kumooo">${raw(ic.github)} GitHub</a>
+    <a class="btn primary" href="https://dash.kumooo.dev/signup">Open dashboard</a>
+    <a class="btn" href="https://github.com/renzoreyn/kumooo">${raw(ic.github)} GitHub</a>
   </div>
 </div>
 ${opts?.fullBleed ? body : html`<main class="wrap">${body}</main>`}
@@ -450,76 +593,116 @@ function marketingHome(site: ThemeSiteContext): Html {
     site,
     html`<div class="wrap">
 <section class="hero">
-  <div data-motion-hero>
-    <div class="kicker">Publishing on Cloudflare</div>
-    <h1>Websites shouldn't need babysitting.</h1>
-    <p class="lead">Write, publish, ship themes with as much React as you want. Readers get HTML. You get your evenings back.</p>
-    <div class="install" data-copy="npx create-kumooo">npx create-kumooo <button type="button">copy</button></div>
-    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
-      <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
-      <a class="btn" href="https://docs.kumooo.dev">Read the docs</a>
-    </div>
+  <div class="hero-orb" aria-hidden="true"></div>
+  <div class="hero-brand" data-hero-bit>k<span>.</span></div>
+  <h1 data-hero-bit>Publish on <em>Cloudflare</em>. Keep your evenings.</h1>
+  <p class="lead" data-hero-bit>Markdown in. HTML out at the edge. Themes, media, and a dashboard that does not need babysitting.</p>
+  <div class="install" data-hero-bit data-copy="npx create-kumooo">npx create-kumooo <button type="button">copy</button></div>
+  <div class="hero-actions" data-hero-bit>
+    <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
+    <a class="btn" href="https://docs.kumooo.dev">Read the docs</a>
   </div>
-  <div class="dash" data-reveal-on-scroll>
-    <div class="dash-label">Dashboard, live</div>
-    <div class="dash-inner">
-      <div class="dash-rail"></div>
-      <div>
-        <div class="dash-bar"></div>
-        <div class="dash-line"></div>
-        <div class="dash-line short"></div>
+  <div class="product-mock" data-hero-mock style="opacity:0">
+    <div class="mock-top">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="mock-url">docs.kumooo.dev/getting-started</span>
+    </div>
+    <div class="mock-body">
+      <aside class="mock-side" aria-hidden="true">
+        <div class="line on"></div>
+        <div class="line" style="width:88%"></div>
+        <div class="line" style="width:72%"></div>
+        <div class="line" style="width:80%"></div>
+        <div class="line" style="width:64%"></div>
+      </aside>
+      <div class="mock-main">
+        <h3>Getting started</h3>
+        <div class="para"></div>
+        <div class="para"></div>
+        <div class="para short"></div>
+        <div class="para" style="margin-top:1rem"></div>
+        <div class="para short"></div>
         <div class="dash-tiles"><div class="dash-tile"></div><div class="dash-tile"></div></div>
       </div>
     </div>
   </div>
 </section>
 
+<p class="accent-lead" data-reveal-on-scroll>
+  Built for people who write in <strong>Markdown</strong>, ship on <strong>Cloudflare</strong>, and want the <strong>edge</strong> to do the heavy lifting.
+</p>
+
 <section class="block" data-reveal-on-scroll>
-  <div class="kicker">Live numbers</div>
-  <div class="stats">
-    <div class="stat"><b>41ms</b><span>edge TTFB</span></div>
-    <div class="stat"><b>0kb</b><span>required JS</span></div>
-    <div class="stat"><b>330+</b><span>edge cities</span></div>
-    <div class="stat"><b>$0</b><span>to start</span></div>
+  <p class="kicker">Why Kumooo</p>
+  <h2 class="section-title">A publishing stack that feels finished.</h2>
+  <div class="bento">
+    <article class="bento-card wide tall">
+      <div class="halftone" aria-hidden="true"></div>
+      <p class="kicker">Edge HTML</p>
+      <h3>Readers get HTML. You keep your nights.</h3>
+      <p>Workers render close to your audience. Cache bumps on publish. Default themes need zero client JS.</p>
+      <pre class="code"><span class="g"># publish</span>
+<span class="y">POST</span> /v1/sites/:id/content/:id
+x-kumooo-cache: miss → hit</pre>
+    </article>
+    <article class="bento-card">
+      <p class="kicker">Seasons</p>
+      <h3>Four real themes</h3>
+      <p>Haru, Natsu, Aki, Fuyu. Different layouts, light and dark, not four recolors.</p>
+    </article>
+    <article class="bento-card">
+      <p class="kicker">Studio</p>
+      <h3>Theme Studio</h3>
+      <p>Edit HTML, CSS, and a little client JS. Publish when it looks right.</p>
+    </article>
+    <article class="bento-card">
+      <p class="kicker">CF Deploy</p>
+      <h3>Your Cloudflare or ours</h3>
+      <p>Managed *.kumooo.dev, or self-host the same Workers on your account.</p>
+    </article>
+    <article class="bento-card">
+      <p class="kicker">Media</p>
+      <h3>150 MB per site</h3>
+      <p>Upload to R2. Logo and favicon from Branding. No mystery CDN tax.</p>
+    </article>
+    <article class="bento-card">
+      <p class="kicker">SEO</p>
+      <h3>Meta, sitemap, RSS</h3>
+      <p>The boring SEO bits ship with the product. Not a plugin graveyard.</p>
+    </article>
   </div>
 </section>
 
-<section class="block" data-reveal-on-scroll>
-  <div class="kicker">A real CMS, tabbed</div>
-  <h2 style="letter-spacing:-.03em;margin:0 0 1rem;font-size:1.7rem">Touch the product before you install it.</h2>
-  <div class="tabs" role="tablist">
-    <button type="button" class="tab" data-tour-tab="editor">Editor</button>
-    <button type="button" class="tab" data-tour-tab="media">Media</button>
-    <button type="button" class="tab" data-tour-tab="deploy">CF Deploy</button>
-    <button type="button" class="tab" data-tour-tab="themes">Themes</button>
+<section class="split" data-reveal-on-scroll>
+  <div class="product-mock">
+    <div class="mock-top">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="mock-url">dash.kumooo.dev · editor</span>
+    </div>
+    <div class="mock-body">
+      <aside class="mock-side" aria-hidden="true">
+        <div class="line on"></div>
+        <div class="line" style="width:70%"></div>
+        <div class="line" style="width:60%"></div>
+      </aside>
+      <div class="mock-main">
+        <h3>Draft → Publish</h3>
+        <div class="para"></div>
+        <div class="para"></div>
+        <div class="para short"></div>
+        <div class="para" style="margin-top:1rem;background:color-mix(in srgb,var(--accent) 25%,transparent)"></div>
+      </div>
+    </div>
   </div>
-  <div class="tour-panel" data-tour-panel="editor">
-    <h3>Markdown in. HTML out.</h3>
-    <p>Drafts, publish, revisions. The editor is boring on purpose. Your content is the point.</p>
-  </div>
-  <div class="tour-panel" data-tour-panel="media" hidden>
-    <h3>Media that lives in your R2.</h3>
-    <p>Upload once. Serve from the edge. No third-party CDN tax unless you want one.</p>
-  </div>
-  <div class="tour-panel" data-tour-panel="deploy" hidden>
-    <h3>Deploy on Cloudflare, two ways.</h3>
-    <p>Host on Kumooo for {slug}.kumooo.dev, or run the same stack on your Cloudflare account with your domain.</p>
-  </div>
-  <div class="tour-panel" data-tour-panel="themes" hidden>
-    <h3>Four free season themes.</h3>
-    <p>Haru, Natsu, Aki, Fuyu. Distinct designs for tenant sites. Theme Studio for custom code comes next.</p>
-  </div>
-</section>
-
-<section class="block" data-reveal-on-scroll>
-  <div class="kicker">Everything you'd expect</div>
-  <div class="grid">
-    ${feature(ic.zap, "Fast by default", "Workers a few milliseconds from your readers, then cached hard.")}
-    ${feature(ic.feather, "Themes with teeth", "Ship plain HTML, or hydrate React when you want to show off.")}
-    ${feature(ic.cloud, "CF Deploy", "Kumooo-managed *.kumooo.dev, or self-host the same stack on your Cloudflare.")}
-    ${feature(ic.shield, "Boring security", "Hashed passwords, HttpOnly sessions, escaped templates.")}
-    ${feature(ic.refresh, "Revisions", "Every save keeps history. Roll back when you mess up.")}
-    ${feature(ic.search, "SEO handled", "Titles, meta, sitemap, RSS. Not a plugin graveyard.")}
+  <div>
+    <p class="kicker">Anybody can publish</p>
+    <h2 class="section-title">Write. Ship. Walk away.</h2>
+    <p class="muted">The editor is boring on purpose. Your content is the point.</p>
+    <ul>
+      <li>Markdown posts and pages with revisions</li>
+      <li>Season themes or your own Theme Studio tree</li>
+      <li>Deploy dialog: Kumooo hosting or your Cloudflare</li>
+    </ul>
   </div>
 </section>
 
@@ -533,7 +716,7 @@ function marketingFeatures(site: ThemeSiteContext): Html {
   return shell(
     site,
     html`<div class="wrap">
-<section class="page-hero" data-motion-hero>
+<section class="page-hero" data-hero-bit>
   <div class="kicker">Features</div>
   <h1>Everything a publishing platform needs. Nothing you have to babysit.</h1>
   <p class="lead">Content, themes, media, domains, and edge caching. Built on Cloudflare so the boring infrastructure is someone else's problem.</p>
@@ -588,10 +771,10 @@ function marketingFeatures(site: ThemeSiteContext): Html {
   <div class="feature-copy">
     <div class="kicker">Themes</div>
     <h2>Themes with teeth</h2>
-    <p>Ship plain HTML with zero JavaScript. Or hydrate React with Framer Motion, Lucide, and Radix when you want to show off. Same platform.</p>
+    <p>Four free seasons. Theme Studio for your own HTML and CSS. Same platform either way.</p>
     <ul>
-      <li>SSR theme contract</li>
-      <li>Optional client islands</li>
+      <li>Haru, Natsu, Aki, Fuyu</li>
+      <li>Light and dark with a toggle</li>
       <li>This marketing site is a Kumooo theme</li>
     </ul>
   </div>
@@ -605,12 +788,12 @@ function marketingFeatures(site: ThemeSiteContext): Html {
 <section class="block" data-reveal-on-scroll>
   <div class="kicker">And the rest</div>
   <div class="grid">
-    ${feature(ic.cloud, "Your Cloudflare", "D1 for content. R2 for media. KV for sessions and cache versions. Connect once.")}
-    ${feature(ic.shield, "Boring security", "PBKDF2 passwords, HttpOnly sessions, escaped templates. The unsexy stuff done right.")}
-    ${feature(ic.refresh, "Revisions", "Every save keeps history. Roll back when you inevitably mess up.")}
+    ${feature(ic.cloud, "Your Cloudflare", "D1 for content. R2 for media. KV for sessions and cache versions.")}
+    ${feature(ic.shield, "Boring security", "PBKDF2 passwords, HttpOnly sessions, escaped templates.")}
+    ${feature(ic.refresh, "Revisions", "Every save keeps history. Roll back when you mess up.")}
     ${feature(ic.search, "SEO handled", "Titles, meta, sitemap, RSS. Not a plugin graveyard.")}
-    ${feature(ic.zap, "CF Deploy", "Managed *.kumooo.dev on Kumooo, or self-host Workers on your Cloudflare with your domain.")}
-    ${feature(ic.feather, "Org + sites", "Workspaces, roles, multiple sites. Grow without migrating platforms.")}
+    ${feature(ic.zap, "CF Deploy", "Managed *.kumooo.dev, or self-host Workers on your Cloudflare.")}
+    ${feature(ic.feather, "Org + sites", "Workspaces, roles, multiple sites. Grow without migrating.")}
   </div>
 </section>
 
@@ -624,7 +807,7 @@ function marketingPricing(site: ThemeSiteContext): Html {
   return shell(
     site,
     html`<div class="wrap">
-<section class="page-hero" data-motion-hero>
+<section class="page-hero" data-hero-bit>
   <div class="kicker">Pricing</div>
   <h1>Two Cloudflare paths. Zero Kumooo tax.</h1>
   <p class="lead">Host on Kumooo for a managed *.kumooo.dev site, or self-host on your Cloudflare account. You pay Cloudflare for usage either way.</p>
@@ -665,7 +848,7 @@ function marketingPricing(site: ThemeSiteContext): Html {
 
 <section class="block" data-reveal-on-scroll>
   <div class="kicker">What you actually get</div>
-  <h2 style="letter-spacing:-.03em;margin:0 0 1rem;font-size:1.6rem">Included either way</h2>
+  <h2 class="section-title">Included either way</h2>
   <div class="table-wrap">
   <table class="compare">
     <thead>
@@ -721,7 +904,7 @@ function marketingAbout(site: ThemeSiteContext): Html {
   return shell(
     site,
     html`<div class="wrap">
-<section class="page-hero" data-motion-hero>
+<section class="page-hero" data-hero-bit>
   <div class="kicker">About</div>
   <h1>Built by Ren. Dogfooded on Cloudflare.</h1>
   <p class="lead">Kumooo exists because publishing shouldn't require babysitting servers, PHP plugins, or a VPS you forgot existed.</p>
@@ -778,9 +961,11 @@ export const marketingTheme: Theme = {
   archive: (site, d) =>
     shell(
       site,
-      html`<h1>${d.title}</h1>${joinHtml(d.posts.map((p) => html`<p><a href="${p.url}">${p.title}</a></p>`))}`,
+      html`<section style="padding:3rem 0"><h1>${d.title}</h1></section>`,
     ),
   notFound: (site) =>
-    shell(site, html`<h1>Nothing here</h1><p class="muted">That page doesn't exist.</p>`),
-  clientScript: "marketing-island",
+    shell(
+      site,
+      html`<section class="page-hero"><h1>Nothing here</h1><p class="lead">That page does not exist.</p><a class="btn primary" href="/">Home</a></section>`,
+    ),
 };
