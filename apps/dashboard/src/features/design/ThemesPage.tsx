@@ -1,19 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { resolveThemeId } from "@kumooo/core";
 import { Check, Eye } from "lucide-react";
 import { Badge, Button, PageHeader } from "../../components/ui";
 import { ConfirmDialog } from "../../components/ui/Dialog";
 import { useToast } from "../../components/ui/Toast";
 import { contentApi } from "../../lib/api/content";
 import { sitesApi, type Site } from "../../lib/api/sites";
-
-const TENANT_THEMES = [
-  {
-    id: "default",
-    name: "Default",
-    description: "Clean reading layout for posts and pages. Safe starter for every tenant.",
-  },
-] as const;
+import { TENANT_THEMES } from "../../lib/themes";
 
 export function ThemesPage() {
   const { siteId = "" } = useParams();
@@ -31,6 +25,8 @@ export function ThemesPage() {
   useEffect(() => {
     void load().catch((err) => setError(err instanceof Error ? err.message : "Could not load."));
   }, [siteId]);
+
+  const activeId = site ? resolveThemeId(site.theme) : null;
 
   async function applyTheme() {
     if (!pending) return;
@@ -67,12 +63,12 @@ export function ThemesPage() {
     <>
       <PageHeader
         title="Themes"
-        description={site ? `Active: ${site.theme}` : undefined}
+        description={site ? `Active: ${resolveThemeId(site.theme)}` : undefined}
       />
       {error ? <div className="error">{error}</div> : null}
       <div style={{ display: "grid", gap: "0.75rem" }}>
         {TENANT_THEMES.map((t) => {
-          const active = site?.theme === t.id;
+          const active = activeId === t.id;
           return (
             <div key={t.id} className="card" style={{ display: "grid", gap: "0.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
@@ -101,7 +97,7 @@ export function ThemesPage() {
       <ConfirmDialog
         open={Boolean(pending)}
         title="Apply theme?"
-        body={pending ? `Switch this site to “${pending}”. Live pages will use it after the next render.` : ""}
+        body={pending ? `Switch this site to "${pending}". Live pages will use it after the next render.` : ""}
         confirmLabel="Apply"
         onClose={() => setPending(null)}
         onConfirm={() => void applyTheme()}

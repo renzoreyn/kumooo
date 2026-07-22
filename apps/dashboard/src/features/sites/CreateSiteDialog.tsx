@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog } from "../../components/ui/Dialog";
 import { Button, Input, Select } from "../../components/ui";
 import { sitesApi, type Site } from "../../lib/api/sites";
+import { DEFAULT_TENANT_THEME, TENANT_THEMES } from "../../lib/themes";
 
 export function CreateSiteDialog({
   open,
@@ -17,7 +18,7 @@ export function CreateSiteDialog({
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
-  const [theme, setTheme] = useState("default");
+  const [theme, setTheme] = useState<string>(DEFAULT_TENANT_THEME);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -36,7 +37,7 @@ export function CreateSiteDialog({
       setName("");
       setSlug("");
       setDescription("");
-      setTheme("default");
+      setTheme(DEFAULT_TENANT_THEME);
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not create site.");
@@ -81,7 +82,11 @@ export function CreateSiteDialog({
             Theme
           </label>
           <Select id="create-theme" value={theme} onChange={(e) => setTheme(e.target.value)}>
-            <option value="default">Default</option>
+            {TENANT_THEMES.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
           </Select>
         </div>
         <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>

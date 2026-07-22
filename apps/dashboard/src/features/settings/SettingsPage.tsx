@@ -1,9 +1,11 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { resolveThemeId } from "@kumooo/core";
 import { Button, Input, PageHeader, Select, Textarea } from "../../components/ui";
 import { ConfirmDialog, Dialog } from "../../components/ui/Dialog";
 import { useToast } from "../../components/ui/Toast";
 import { sitesApi } from "../../lib/api/sites";
+import { DEFAULT_TENANT_THEME, TENANT_THEMES } from "../../lib/themes";
 
 export function SettingsPage() {
   const { siteId = "" } = useParams();
@@ -15,7 +17,7 @@ export function SettingsPage() {
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("en");
   const [timezone, setTimezone] = useState("UTC");
-  const [theme, setTheme] = useState("default");
+  const [theme, setTheme] = useState<string>(DEFAULT_TENANT_THEME);
   const [postsPerPage, setPostsPerPage] = useState("10");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -28,7 +30,7 @@ export function SettingsPage() {
     setName(site.name);
     setSlug(site.slug);
     setStatus(site.status ?? "active");
-    setTheme(site.theme);
+    setTheme(resolveThemeId(site.theme));
     setDescription(typeof site.settings.description === "string" ? site.settings.description : "");
     setLanguage(typeof site.settings.language === "string" ? site.settings.language : "en");
     setTimezone(typeof site.settings.timezone === "string" ? site.settings.timezone : "UTC");
@@ -154,7 +156,11 @@ export function SettingsPage() {
             Theme
           </label>
           <Select id="settings-theme" value={theme} onChange={(e) => setTheme(e.target.value)}>
-            <option value="default">Default</option>
+            {TENANT_THEMES.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
           </Select>
         </div>
         <div className="field" style={{ marginBottom: 0 }}>
