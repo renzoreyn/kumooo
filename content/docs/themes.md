@@ -15,6 +15,8 @@ The legacy id `default` aliases to `haru` at render time.
 
 Platform themes `marketing` and `docs` stay first-party only. They do not appear in the tenant gallery.
 
+New to Theme Studio? Start with the tutorial: [Building a theme](/building-a-theme).
+
 ## Theme Studio
 
 Dashboard ? Design ? Theme Studio. You edit a fixed file tree, preview a draft, then publish.

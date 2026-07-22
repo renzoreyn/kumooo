@@ -35,6 +35,7 @@ import {
 import type { Env } from "./env.js";
 import { getTheme, registerTheme } from "./theme.js";
 import { resolveRenderableTheme } from "./custom-theme.js";
+import { unknownSitePage } from "./unknown-site.js";
 
 const DASHBOARD_PAGES_ORIGIN = "https://kumooo-dashboard.pages.dev";
 
@@ -332,7 +333,15 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext): Promis
   const db = createDb(env.DB);
   const site = await resolveSiteCached(env, ctx, db, host);
   if (!site) {
-    return new Response("There's no Kumooo site at this address.", { status: 404 });
+    return new Response(unknownSitePage(host), {
+      status: 404,
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "public, max-age=60",
+        "X-Content-Type-Options": "nosniff",
+        "X-Robots-Tag": "noindex",
+      },
+    });
   }
   if (!site.origin) site.origin = url.origin;
 

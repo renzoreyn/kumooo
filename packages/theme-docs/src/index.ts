@@ -17,6 +17,7 @@ const NAV_MAP: NavItem[] = [
   { slug: "architecture", title: "Architecture", group: "Guides", order: 10 },
   { slug: "cli", title: "CLI", group: "Guides", order: 11 },
   { slug: "themes", title: "Themes", group: "Guides", order: 12 },
+  { slug: "building-a-theme", title: "Building a theme", group: "Tutorials", order: 15 },
   { slug: "authentication", title: "Authentication", group: "Guides", order: 13 },
   { slug: "writing", title: "Writing", group: "Guides", order: 14 },
   { slug: "api-reference", title: "API reference", group: "Reference", order: 20 },

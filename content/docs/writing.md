@@ -16,7 +16,7 @@ Never cringe. Never arrogant.
 Words like revolutionary, seamless, leverage, unlock, ecosystem, robust,
 enterprise-grade, next-generation, world-class.
 
-Phrases like "the future ofâ€?, "supercharge your workflow", "powered by innovation".
+Phrases like "the future of X", "supercharge your workflow", "powered by innovation".
 
 If it sounds like a SaaS template, delete it.
 
