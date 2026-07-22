@@ -3,7 +3,7 @@ import { AppShell, SimpleShell } from "./AppShell";
 import { useAuth } from "./providers";
 import { AuthPage } from "../pages/AuthPage";
 import { AllSitesPage } from "../features/sites/AllSitesPage";
-import { MediaPage } from "../pages/MediaPage";
+import { MediaPage } from "../features/media/MediaPage";
 import { PlaceholderPage } from "../features/common/PlaceholderPage";
 import { OverviewPage } from "../features/overview/OverviewPage";
 import { ContentListPage } from "../features/content/ContentListPage";

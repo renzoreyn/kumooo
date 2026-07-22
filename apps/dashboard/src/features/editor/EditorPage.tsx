@@ -9,6 +9,7 @@ import { MarkdownToolbar } from "./MarkdownToolbar";
 import { MetaPanel, type MetaDraft } from "./MetaPanel";
 import { SlashMenu } from "./SlashMenu";
 import { useAutosave, type SaveStatus } from "./useAutosave";
+import { MediaPickerDialog } from "../media/MediaPickerDialog";
 
 type Draft = MetaDraft & {
   title: string;
@@ -85,6 +86,7 @@ export function EditorPage() {
   const [busy, setBusy] = useState(false);
   const [split, setSplit] = useState(true);
   const [metaOpen, setMetaOpen] = useState(true);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [slash, setSlash] = useState<{ open: boolean; query: string; start: number }>({
     open: false,
     query: "",
@@ -388,11 +390,7 @@ export function EditorPage() {
             textareaRef={textareaRef}
             value={draft.bodyMarkdown}
             onChange={(bodyMarkdown) => patchDraft({ bodyMarkdown })}
-            onInsertImage={() => {
-              const url = window.prompt("Image URL");
-              if (!url) return;
-              applyInsert((s) => insertImage(s, url));
-            }}
+            onInsertImage={() => setPickerOpen(true)}
           />
           <div style={{ display: "grid", gap: "0.75rem", gridTemplateColumns: split ? "1fr 1fr" : "1fr" }}>
             <div className="field" style={{ marginBottom: 0, position: "relative" }}>
@@ -438,6 +436,14 @@ export function EditorPage() {
           onRestore={(id) => void restoreRevision(id)}
         />
       </div>
+      <MediaPickerDialog
+        open={pickerOpen}
+        siteId={siteId}
+        onClose={() => setPickerOpen(false)}
+        onPick={(item, absoluteUrl) => {
+          applyInsert((s) => insertImage(s, absoluteUrl, item.alt || item.filename));
+        }}
+      />
     </>
   );
 }
