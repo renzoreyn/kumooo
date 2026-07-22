@@ -9,6 +9,10 @@ import { OverviewPage } from "../features/overview/OverviewPage";
 import { ContentListPage } from "../features/content/ContentListPage";
 import { CollectionsPage } from "../features/content/CollectionsPage";
 import { EditorPage } from "../features/editor/EditorPage";
+import { ThemesPage } from "../features/design/ThemesPage";
+import { NavigationPage } from "../features/design/NavigationPage";
+import { SeoPage } from "../features/seo/SeoPage";
+import { SettingsPage } from "../features/settings/SettingsPage";
 import type { ReactNode } from "react";
 
 function Private({ children }: { children: ReactNode }) {
@@ -44,17 +48,9 @@ export function AppRouter() {
         <Route path="pages" element={<ContentListPage type="page" />} />
         <Route path="collections" element={<CollectionsPage />} />
         <Route path="media" element={<MediaPage />} />
-        <Route
-          path="design/themes"
-          element={<PlaceholderPage title="Themes" body="Theme gallery lands with the design screens task." />}
-        />
-        <Route
-          path="design/navigation"
-          element={
-            <PlaceholderPage title="Navigation" body="Nav editor lands with the design screens task." />
-          }
-        />
-        <Route path="seo" element={<PlaceholderPage title="SEO" body="SEO settings and health land next." />} />
+        <Route path="design/themes" element={<ThemesPage />} />
+        <Route path="design/navigation" element={<NavigationPage />} />
+        <Route path="seo" element={<SeoPage />} />
         <Route
           path="deployments"
           element={
@@ -65,10 +61,7 @@ export function AppRouter() {
           path="domains"
           element={<PlaceholderPage title="Domains" body="Guided custom domains come after media and SEO." />}
         />
-        <Route
-          path="settings"
-          element={<PlaceholderPage title="Settings" body="General site settings land with the design task." />}
-        />
+        <Route path="settings" element={<SettingsPage />} />
         <Route path="new" element={<EditorPage />} />
         <Route path="content/:contentId" element={<EditorPage />} />
       </Route>
