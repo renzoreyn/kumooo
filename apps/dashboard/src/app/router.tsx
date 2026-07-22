@@ -3,11 +3,12 @@ import { AppShell, SimpleShell } from "./AppShell";
 import { useAuth } from "./providers";
 import { AuthPage } from "../pages/AuthPage";
 import { AllSitesPage } from "../features/sites/AllSitesPage";
-import { SitePage } from "../pages/SitePage";
-import { EditorPage } from "../pages/EditorPage";
 import { MediaPage } from "../pages/MediaPage";
 import { PlaceholderPage } from "../features/common/PlaceholderPage";
 import { OverviewPage } from "../features/overview/OverviewPage";
+import { ContentListPage } from "../features/content/ContentListPage";
+import { CollectionsPage } from "../features/content/CollectionsPage";
+import { EditorPage } from "../features/editor/EditorPage";
 import type { ReactNode } from "react";
 
 function Private({ children }: { children: ReactNode }) {
@@ -39,17 +40,9 @@ export function AppRouter() {
         }
       >
         <Route index element={<OverviewPage />} />
-        <Route path="posts" element={<SitePage forcedType="post" />} />
-        <Route path="pages" element={<SitePage forcedType="page" />} />
-        <Route
-          path="collections"
-          element={
-            <PlaceholderPage
-              title="Collections"
-              body="Collections will list available content types and route into filtered views."
-            />
-          }
-        />
+        <Route path="posts" element={<ContentListPage type="post" />} />
+        <Route path="pages" element={<ContentListPage type="page" />} />
+        <Route path="collections" element={<CollectionsPage />} />
         <Route path="media" element={<MediaPage />} />
         <Route
           path="design/themes"

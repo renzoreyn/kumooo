@@ -13,6 +13,7 @@ export type ContentItem = {
   publishedAt?: string | null;
   scheduledAt?: string | null;
   featuredImage?: string | null;
+  tags?: string[];
   seo?: Record<string, unknown>;
 };
 

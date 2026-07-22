@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
 export function Button({
   variant = "default",
@@ -13,9 +13,11 @@ export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input className="input" {...props} />;
 }
 
-export function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea className="textarea" {...props} />;
-}
+export const Textarea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
+  function Textarea(props, ref) {
+    return <textarea ref={ref} className="textarea" {...props} />;
+  },
+);
 
 export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return <select className="select input" {...props} />;
