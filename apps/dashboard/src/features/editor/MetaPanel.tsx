@@ -20,12 +20,16 @@ export function MetaPanel({
   onChange,
   revisions,
   onRestore,
+  onGenerateOg,
+  generatingOg,
 }: {
   open: boolean;
   draft: MetaDraft;
   onChange: (patch: Partial<MetaDraft>) => void;
   revisions: { id: string; createdBy: string; createdAt: string }[];
   onRestore: (revisionId: string) => void;
+  onGenerateOg?: () => void;
+  generatingOg?: boolean;
 }) {
   if (!open) return null;
   return (
@@ -127,6 +131,11 @@ export function MetaPanel({
         </label>
         <Input id="seo-og" value={draft.seoOgImage} onChange={(e) => onChange({ seoOgImage: e.target.value })} />
       </div>
+      {onGenerateOg ? (
+        <Button type="button" disabled={generatingOg} onClick={onGenerateOg}>
+          {generatingOg ? "Generating…" : "Generate social image"}
+        </Button>
+      ) : null}
       <label style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
         <input
           type="checkbox"

@@ -1,15 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Columns2, Eye, PanelRight, Send } from "lucide-react";
-import { insertImage, renderMarkdown, type InsertResult, type TextSelection } from "@kumooo/core";
+import { insertImage, ogTemplateSchema, renderMarkdown, renderOgPayload, type InsertResult, type TextSelection } from "@kumooo/core";
 import { Button, Input, PageHeader, Textarea } from "../../components/ui";
 import { contentApi, type ContentItem } from "../../lib/api/content";
+import { absoluteMediaUrl, mediaApi } from "../../lib/api/media";
+import { ogApi } from "../../lib/api/og";
+import { sitesApi } from "../../lib/api/sites";
 import { useToast } from "../../components/ui/Toast";
 import { MarkdownToolbar } from "./MarkdownToolbar";
 import { MetaPanel, type MetaDraft } from "./MetaPanel";
 import { SlashMenu } from "./SlashMenu";
 import { useAutosave, type SaveStatus } from "./useAutosave";
 import { MediaPickerDialog } from "../media/MediaPickerDialog";
+import { generateOgPng } from "../seo/generateOgPng";
 
 type Draft = MetaDraft & {
   title: string;
@@ -87,6 +91,7 @@ export function EditorPage() {
   const [split, setSplit] = useState(true);
   const [metaOpen, setMetaOpen] = useState(true);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [generatingOg, setGeneratingOg] = useState(false);
   const [slash, setSlash] = useState<{ open: boolean; query: string; start: number }>({
     open: false,
     query: "",
@@ -321,6 +326,48 @@ export function EditorPage() {
     setError(null);
   }
 
+  async function generateSocialImage() {
+    setGeneratingOg(true);
+    setError(null);
+    try {
+      const [{ templates }, { site }] = await Promise.all([ogApi.list(siteId), sitesApi.get(siteId)]);
+      const row = templates.find((t) => t.isDefault) ?? templates[0];
+      const config = ogTemplateSchema.parse(
+        row?.config ?? {
+          layout: "left",
+          background: { type: "gradient", from: "#1c1f26", to: "#3a3428" },
+          title: { text: "{{title}}", color: "#f3f1ea", size: 64 },
+          subtitle: { text: "{{excerpt}}", color: "#c4b8a0", size: 28 },
+          showHostname: true,
+        },
+      );
+      const siteUrl = site.url ?? `https://${site.slug}.kumooo.dev`;
+      const hostname = new URL(siteUrl).hostname;
+      const payload = renderOgPayload(config, {
+        title: draft.seoTitle || draft.title || "Untitled",
+        siteName: site.name,
+        excerpt: draft.excerpt || draft.seoDescription || "",
+        featuredImage: draft.featuredImage || null,
+        hostname,
+      });
+      const blob = await generateOgPng(payload);
+      const file = new File([blob], `og-${Date.now()}.png`, { type: "image/png" });
+      const { media } = await mediaApi.upload(siteId, file, draft.title || "og");
+      const url = absoluteMediaUrl(siteUrl, media.url);
+      await ogApi.recordGenerated(siteId, {
+        mediaId: media.id,
+        url,
+        templateId: row?.id,
+      });
+      patchDraft({ seoOgImage: url });
+      toast.push("Social image generated");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not generate social image.");
+    } finally {
+      setGeneratingOg(false);
+    }
+  }
+
   return (
     <>
       <PageHeader
@@ -434,6 +481,8 @@ export function EditorPage() {
           onChange={patchDraft}
           revisions={revisions}
           onRestore={(id) => void restoreRevision(id)}
+          onGenerateOg={() => void generateSocialImage()}
+          generatingOg={generatingOg}
         />
       </div>
       <MediaPickerDialog

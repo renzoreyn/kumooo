@@ -12,6 +12,7 @@ import { EditorPage } from "../features/editor/EditorPage";
 import { ThemesPage } from "../features/design/ThemesPage";
 import { NavigationPage } from "../features/design/NavigationPage";
 import { SeoPage } from "../features/seo/SeoPage";
+import { OgMakerPage } from "../features/seo/OgMakerPage";
 import { SettingsPage } from "../features/settings/SettingsPage";
 import type { ReactNode } from "react";
 
@@ -51,6 +52,7 @@ export function AppRouter() {
         <Route path="design/themes" element={<ThemesPage />} />
         <Route path="design/navigation" element={<NavigationPage />} />
         <Route path="seo" element={<SeoPage />} />
+        <Route path="seo/og" element={<OgMakerPage />} />
         <Route
           path="deployments"
           element={
