@@ -232,6 +232,27 @@ section.block { padding: 3.25rem 0; border-top: 1px solid var(--line); }
   padding: .4rem 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem;
 }
 .price-card li:first-child { border-top: 0; }
+.cf-deploy-dialog {
+  border: 1px solid var(--line); border-radius: 16px; padding: 0;
+  background: var(--bg); color: var(--fg); max-width: min(40rem, calc(100vw - 2rem));
+  width: 100%;
+}
+.cf-deploy-dialog::backdrop { background: rgba(8,10,14,.72); }
+.cf-deploy-inner { padding: 1.35rem 1.35rem 1.5rem; }
+.cf-deploy-inner h2 { margin: 0 0 .35rem; letter-spacing: -.03em; font-size: 1.35rem; }
+.cf-deploy-inner > p { margin: 0 0 1rem; color: var(--muted); font-size: .92rem; }
+.cf-deploy-choices { display: grid; gap: .75rem; grid-template-columns: 1fr 1fr; margin-bottom: 1rem; }
+@media (max-width: 640px) { .cf-deploy-choices { grid-template-columns: 1fr; } }
+.cf-deploy-choice {
+  display: flex; flex-direction: column; gap: .45rem;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1rem;
+  text-align: left; color: inherit; text-decoration: none;
+  transition: border-color .2s ease, transform .2s ease;
+}
+.cf-deploy-choice:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-2px); }
+.cf-deploy-choice strong { font-size: 1rem; }
+.cf-deploy-choice span { color: var(--muted); font-size: .85rem; line-height: 1.45; }
+.cf-deploy-actions { display: flex; justify-content: flex-end; }
 .compare {
   width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .92rem;
 }
@@ -319,6 +340,19 @@ document.querySelector("[data-nav-open]")?.addEventListener("click", () => { if 
 document.querySelector("[data-nav-close]")?.addEventListener("click", () => { if (drawer) drawer.hidden = true; });
 drawer?.addEventListener("click", (e) => { if (e.target === drawer) drawer.hidden = true; });
 window.addEventListener("keydown", (e) => { if (e.key === "Escape" && drawer) drawer.hidden = true; });
+
+const deployDialog = document.querySelector("[data-cf-deploy]");
+for (const openBtn of document.querySelectorAll("[data-cf-deploy-open]")) {
+  openBtn.addEventListener("click", () => {
+    if (deployDialog && typeof deployDialog.showModal === "function") deployDialog.showModal();
+  });
+}
+deployDialog?.querySelector("[data-cf-deploy-close]")?.addEventListener("click", () => {
+  if (typeof deployDialog.close === "function") deployDialog.close();
+});
+deployDialog?.addEventListener("click", (e) => {
+  if (e.target === deployDialog && typeof deployDialog.close === "function") deployDialog.close();
+});
 `;
 
 function shell(site: ThemeSiteContext, body: Html, opts?: { fullBleed?: boolean }): Html {
@@ -358,6 +392,7 @@ ${site.head}
   </div>
 </div>
 ${opts?.fullBleed ? body : html`<main class="wrap">${body}</main>`}
+${cfDeployDialog()}
 <footer class="site"><div class="wrap">
   <p class="fine">Made by <a href="https://renzoreyn.dev">Ren</a>. <a href="https://github.com/renzoreyn/kumooo">GitHub</a> · <a href="https://docs.kumooo.dev">Docs</a></p>
   <p class="fine">This marketing site runs on Kumooo. Yes, really.</p>
@@ -375,6 +410,41 @@ function feature(icon: string, title: string, body: string): Html {
   </div>`;
 }
 
+function cfDeployDialog(): Html {
+  return html`<dialog class="cf-deploy-dialog" data-cf-deploy>
+  <div class="cf-deploy-inner">
+    <h2>Deploy on Cloudflare</h2>
+    <p>Pick how you want to run Kumooo. No OAuth into your account. You choose the path.</p>
+    <div class="cf-deploy-choices">
+      <a class="cf-deploy-choice" href="https://kumooo-dashboard.pages.dev/signup">
+        <strong>Host on Kumooo</strong>
+        <span>We run the Worker. You get {slug}.kumooo.dev in minutes.</span>
+      </a>
+      <a class="cf-deploy-choice" href="https://docs.kumooo.dev/getting-started">
+        <strong>Host on your Cloudflare</strong>
+        <span>Own the Worker and your domain. Same stack. CLI + wrangler deploy.</span>
+      </a>
+    </div>
+    <div class="cf-deploy-actions">
+      <button type="button" class="btn" data-cf-deploy-close>Cancel</button>
+    </div>
+  </div>
+</dialog>`;
+}
+
+function deployCta(title: string, lead: string): Html {
+  return html`<section class="block" data-reveal-on-scroll>
+  <div class="cta-box">
+    <h2>${title}</h2>
+    <p class="muted" style="margin:0 0 1rem">${lead}</p>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+      <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
+      <a class="btn" href="https://docs.kumooo.dev">Read the docs</a>
+    </div>
+  </div>
+</section>`;
+}
+
 function marketingHome(site: ThemeSiteContext): Html {
   return shell(
     site,
@@ -386,8 +456,8 @@ function marketingHome(site: ThemeSiteContext): Html {
     <p class="lead">Write, publish, ship themes with as much React as you want. Readers get HTML. You get your evenings back.</p>
     <div class="install" data-copy="npx create-kumooo">npx create-kumooo <button type="button">copy</button></div>
     <div style="display:flex;gap:.75rem;flex-wrap:wrap">
-      <a class="btn primary" href="https://docs.kumooo.dev">Read the docs</a>
-      <a class="btn" href="https://github.com/renzoreyn/kumooo">Live on GitHub</a>
+      <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
+      <a class="btn" href="https://docs.kumooo.dev">Read the docs</a>
     </div>
   </div>
   <div class="dash" data-reveal-on-scroll>
@@ -420,7 +490,7 @@ function marketingHome(site: ThemeSiteContext): Html {
   <div class="tabs" role="tablist">
     <button type="button" class="tab" data-tour-tab="editor">Editor</button>
     <button type="button" class="tab" data-tour-tab="media">Media</button>
-    <button type="button" class="tab" data-tour-tab="domains">Domains</button>
+    <button type="button" class="tab" data-tour-tab="deploy">CF Deploy</button>
     <button type="button" class="tab" data-tour-tab="themes">Themes</button>
   </div>
   <div class="tour-panel" data-tour-panel="editor">
@@ -431,13 +501,13 @@ function marketingHome(site: ThemeSiteContext): Html {
     <h3>Media that lives in your R2.</h3>
     <p>Upload once. Serve from the edge. No third-party CDN tax unless you want one.</p>
   </div>
-  <div class="tour-panel" data-tour-panel="domains" hidden>
-    <h3>Custom domains without the ticket queue.</h3>
-    <p>Point a CNAME. SSL shows up when Cloudflare for SaaS is wired. Renewals are someone else's problem.</p>
+  <div class="tour-panel" data-tour-panel="deploy" hidden>
+    <h3>Deploy on Cloudflare, two ways.</h3>
+    <p>Host on Kumooo for {slug}.kumooo.dev, or run the same stack on your Cloudflare account with your domain.</p>
   </div>
   <div class="tour-panel" data-tour-panel="themes" hidden>
-    <h3>Themes with teeth.</h3>
-    <p>Plain HTML, or hydrate React with Framer Motion, Lucide, and Radix. Same platform. Your call.</p>
+    <h3>Four free season themes.</h3>
+    <p>Haru, Natsu, Aki, Fuyu. Distinct designs for tenant sites. Theme Studio for custom code comes next.</p>
   </div>
 </section>
 
@@ -446,20 +516,14 @@ function marketingHome(site: ThemeSiteContext): Html {
   <div class="grid">
     ${feature(ic.zap, "Fast by default", "Workers a few milliseconds from your readers, then cached hard.")}
     ${feature(ic.feather, "Themes with teeth", "Ship plain HTML, or hydrate React when you want to show off.")}
-    ${feature(ic.cloud, "Your Cloudflare", "D1, R2, KV. Content stays in your account.")}
+    ${feature(ic.cloud, "CF Deploy", "Kumooo-managed *.kumooo.dev, or self-host the same stack on your Cloudflare.")}
     ${feature(ic.shield, "Boring security", "Hashed passwords, HttpOnly sessions, escaped templates.")}
     ${feature(ic.refresh, "Revisions", "Every save keeps history. Roll back when you mess up.")}
     ${feature(ic.search, "SEO handled", "Titles, meta, sitemap, RSS. Not a plugin graveyard.")}
   </div>
 </section>
 
-<section class="block" data-reveal-on-scroll>
-  <div class="cta-box">
-    <h2>Ship your first site tonight.</h2>
-    <p class="muted" style="margin:0 0 1rem">Deploy once. Go outside.</p>
-    <a class="btn primary" href="https://docs.kumooo.dev/getting-started">npx create-kumooo</a>
-  </div>
-</section>
+${deployCta("Ship your first site tonight.", "Pick Kumooo hosting or your Cloudflare. Then go outside.")}
 </div>`,
     { fullBleed: true },
   );
@@ -545,18 +609,12 @@ function marketingFeatures(site: ThemeSiteContext): Html {
     ${feature(ic.shield, "Boring security", "PBKDF2 passwords, HttpOnly sessions, escaped templates. The unsexy stuff done right.")}
     ${feature(ic.refresh, "Revisions", "Every save keeps history. Roll back when you inevitably mess up.")}
     ${feature(ic.search, "SEO handled", "Titles, meta, sitemap, RSS. Not a plugin graveyard.")}
-    ${feature(ic.zap, "Custom domains", "Point a CNAME. SSL shows up when Cloudflare for SaaS is wired.")}
+    ${feature(ic.zap, "CF Deploy", "Managed *.kumooo.dev on Kumooo, or self-host Workers on your Cloudflare with your domain.")}
     ${feature(ic.feather, "Org + sites", "Workspaces, roles, multiple sites. Grow without migrating platforms.")}
   </div>
 </section>
 
-<section class="block" data-reveal-on-scroll>
-  <div class="cta-box">
-    <h2>Try it on your account tonight.</h2>
-    <p class="muted" style="margin:0 0 1rem">Open source. Self-hosted. No Kumooo tax.</p>
-    <a class="btn primary" href="https://docs.kumooo.dev/getting-started">npx create-kumooo</a>
-  </div>
-</section>
+${deployCta("Try it on Cloudflare tonight.", "Managed hosting or your own account. Same product.")}
 </div>`,
     { fullBleed: true },
   );
@@ -568,49 +626,59 @@ function marketingPricing(site: ThemeSiteContext): Html {
     html`<div class="wrap">
 <section class="page-hero" data-motion-hero>
   <div class="kicker">Pricing</div>
-  <h1>Open source. Self-hosted. You pay Cloudflare, not us.</h1>
-  <p class="lead">Kumooo runs on your Cloudflare account. The free tier is enough to start. There is no Kumooo tax on top.</p>
+  <h1>Two Cloudflare paths. Zero Kumooo tax.</h1>
+  <p class="lead">Host on Kumooo for a managed *.kumooo.dev site, or self-host on your Cloudflare account. You pay Cloudflare for usage either way.</p>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem">
+    <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
+    <a class="btn" href="https://docs.kumooo.dev/getting-started">Getting started</a>
+  </div>
 </section>
 
 <section data-reveal-on-scroll>
   <div class="price-grid">
     <div class="price-card featured" data-motion-card>
-      <div class="kicker">Self-host</div>
+      <div class="kicker">Host on Kumooo</div>
       <div class="amount">$0 <span>/ Kumooo</span></div>
-      <p class="muted" style="margin:0">You pay Cloudflare for what you use. That's the whole model.</p>
+      <p class="muted" style="margin:0">We run the Worker. You get {slug}.kumooo.dev. Cloudflare usage still applies on our side.</p>
       <ul>
-        <li>API + renderer Workers</li>
-        <li>D1 content, R2 media, KV sessions</li>
-        <li>Unlimited sites on your account</li>
-        <li>Themes, revisions, custom domains</li>
-        <li>This marketing site dogfoods the same stack</li>
+        <li>Managed *.kumooo.dev hostname</li>
+        <li>Dashboard, editor, media, themes</li>
+        <li>Four free season themes</li>
+        <li>Same edge stack as self-host</li>
       </ul>
-      <a class="btn primary" href="https://docs.kumooo.dev/getting-started">Start with create-kumooo</a>
+      <a class="btn primary" href="https://kumooo-dashboard.pages.dev/signup">Open the dashboard</a>
     </div>
     <div class="price-card" data-motion-card>
-      <div class="kicker">Hosted later?</div>
-      <div class="amount" style="font-size:1.6rem">Maybe</div>
-      <p class="muted" style="margin:0 0 1rem">Not today. Self-hosting is the product. If we ever offer hosted, it'll be optional, not the pitch.</p>
-      <a class="btn" href="https://github.com/renzoreyn/kumooo">Watch the repo</a>
+      <div class="kicker">Your Cloudflare</div>
+      <div class="amount" style="font-size:1.6rem">Self-host</div>
+      <p class="muted" style="margin:0 0 1rem">Own the Worker and your domain. Run create-kumooo, bind D1/KV/R2, wrangler deploy.</p>
+      <ul>
+        <li>API + renderer Workers on your account</li>
+        <li>Your D1, R2, KV</li>
+        <li>Attach your domain in Cloudflare</li>
+        <li>No Kumooo SaaS fee</li>
+      </ul>
+      <a class="btn" href="https://docs.kumooo.dev/getting-started">Follow the install guide</a>
     </div>
   </div>
 </section>
 
 <section class="block" data-reveal-on-scroll>
   <div class="kicker">What you actually get</div>
-  <h2 style="letter-spacing:-.03em;margin:0 0 1rem;font-size:1.6rem">Included with self-host</h2>
+  <h2 style="letter-spacing:-.03em;margin:0 0 1rem;font-size:1.6rem">Included either way</h2>
   <div class="table-wrap">
   <table class="compare">
     <thead>
-      <tr><th>Capability</th><th>Self-host</th><th>Notes</th></tr>
+      <tr><th>Capability</th><th>Kumooo hosted</th><th>Your Cloudflare</th></tr>
     </thead>
     <tbody>
-      <tr><td>Sites &amp; content</td><td class="yes">Yes</td><td>Posts, pages, drafts, revisions</td></tr>
-      <tr><td>Media library</td><td class="yes">Yes</td><td>Your R2 bucket</td></tr>
-      <tr><td>Custom domains</td><td class="yes">Yes</td><td>Needs Cloudflare for SaaS when you go multi-tenant</td></tr>
-      <tr><td>Interactive themes</td><td class="yes">Yes</td><td>Framer Motion, Lucide, Radix welcome</td></tr>
-      <tr><td>Dashboard</td><td class="yes">Yes</td><td>Auth, editor, media, settings</td></tr>
-      <tr><td>Kumooo SaaS fee</td><td class="yes">$0</td><td>Cloudflare usage only</td></tr>
+      <tr><td>Sites &amp; content</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+      <tr><td>Media library</td><td class="yes">Yes</td><td class="yes">Your R2</td></tr>
+      <tr><td>Managed *.kumooo.dev</td><td class="yes">Yes</td><td>Optional if you point DNS</td></tr>
+      <tr><td>Self-host on your CF</td><td>N/A</td><td class="yes">Yes</td></tr>
+      <tr><td>Interactive themes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+      <tr><td>Dashboard</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+      <tr><td>Kumooo SaaS fee</td><td class="yes">$0</td><td class="yes">$0</td></tr>
     </tbody>
   </table>
   </div>
@@ -637,9 +705,9 @@ function marketingPricing(site: ThemeSiteContext): Html {
 <section class="block" data-reveal-on-scroll>
   <div class="cta-box">
     <h2>Ship a site before you open a spreadsheet.</h2>
-    <p class="muted" style="margin:0 0 1rem">Read the docs, run create-kumooo, deploy.</p>
+    <p class="muted" style="margin:0 0 1rem">Pick a Cloudflare path, then deploy.</p>
     <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
-      <a class="btn primary" href="https://docs.kumooo.dev">Docs</a>
+      <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
       <a class="btn" href="/features">Features</a>
     </div>
   </div>
