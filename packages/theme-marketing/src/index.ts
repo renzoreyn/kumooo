@@ -20,15 +20,15 @@ const ic = {
 
 const css = `
 :root {
-  --bg: #070708;
-  --fg: #f4f1e8;
-  --muted: #9a958a;
+  --bg: #101218;
+  --fg: #f3f1ea;
+  --muted: #9a968c;
   --line: rgba(255,255,255,0.09);
-  --accent: #f5c542;
-  --accent-ink: #1a1400;
-  --card: #101012;
-  --panel: #141416;
-  --glow: rgba(245,197,66,0.45);
+  --accent: #6ee7b7;
+  --accent-ink: #06261c;
+  --card: #12151d;
+  --panel: #161922;
+  --glow: rgba(110,231,183,0.4);
   --max: 72rem;
   color-scheme: dark;
 }
@@ -42,11 +42,26 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-body::before {
-  content: "";
-  position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: 0.055;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Atmosphere only behind content. Never overlay buttons/text. */
+.page-atmosphere {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
 }
+.page-atmosphere::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1.2px);
+  background-size: 4px 4px;
+  opacity: 0.22;
+  mask-image: radial-gradient(ellipse 70% 55% at 80% 10%, #000 20%, transparent 70%);
+}
+.page-atmosphere::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 90% -5%, rgba(110,231,183,.16), transparent 55%),
+    radial-gradient(ellipse 45% 35% at 0% 30%, rgba(147,197,253,.07), transparent 50%);
+}
+body > *:not(.page-atmosphere) { position: relative; z-index: 1; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .i { width: 1.1rem; height: 1.1rem; display: inline-block; vertical-align: -0.15em; }
@@ -120,21 +135,21 @@ a:hover { text-decoration: underline; }
   width: min(42rem, 90vw); height: min(42rem, 90vw);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 40% 40%, rgba(245,197,66,.55), rgba(245,140,40,.18) 42%, transparent 68%);
-  filter: blur(8px);
-  opacity: 0.9;
+    radial-gradient(circle at 40% 40%, rgba(110,231,183,.5), rgba(52,180,140,.16) 42%, transparent 68%);
+  filter: blur(10px);
+  opacity: 0.85;
   pointer-events: none;
   z-index: -1;
   animation: orb-drift 14s ease-in-out infinite alternate;
 }
 .hero-orb::after {
   content: "";
-  position: absolute; inset: 8%;
+  position: absolute; inset: 10%;
   border-radius: 50%;
-  background-image: radial-gradient(rgba(0,0,0,.55) 1px, transparent 1.2px);
+  /* Pixel / halftone dots, clipped to the orb only */
+  background-image: radial-gradient(rgba(6,38,28,.75) 1.1px, transparent 1.3px);
   background-size: 5px 5px;
-  opacity: 0.45;
-  mix-blend-mode: multiply;
+  opacity: 0.55;
 }
 @keyframes orb-drift {
   from { transform: translate(0, 0) scale(1); }
@@ -261,7 +276,7 @@ a:hover { text-decoration: underline; }
 .bento-card:hover {
   transform: translateY(-4px);
   border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
-  box-shadow: 0 16px 40px rgba(0,0,0,.35), 0 0 24px rgba(245,197,66,.08);
+  box-shadow: 0 16px 40px rgba(0,0,0,.35), 0 0 24px rgba(110,231,183,.1);
 }
 .bento-card.wide { grid-column: span 8; min-height: 14rem; }
 .bento-card.tall { min-height: 16rem; }
@@ -269,11 +284,12 @@ a:hover { text-decoration: underline; }
   position: absolute; inset: auto -10% -30% auto; width: 12rem; height: 12rem;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, rgba(245,197,66,.35), transparent 65%),
-    radial-gradient(rgba(0,0,0,.5) 1px, transparent 1.2px);
+    radial-gradient(circle at 50% 50%, rgba(110,231,183,.3), transparent 65%),
+    radial-gradient(rgba(0,0,0,.55) 1.1px, transparent 1.3px);
   background-size: auto, 4px 4px;
-  opacity: 0.55; pointer-events: none;
+  opacity: 0.5; pointer-events: none; z-index: 0;
 }
+.bento-card > *:not(.halftone) { position: relative; z-index: 1; }
 .bento-card h3 {
   margin: 0.65rem 0 0.4rem; font-size: 1.15rem; letter-spacing: -0.03em;
 }
@@ -310,7 +326,7 @@ a:hover { text-decoration: underline; }
   border-radius: 20px;
   padding: 2.5rem 1.5rem;
   background:
-    radial-gradient(ellipse 60% 80% at 50% 0%, rgba(245,197,66,.12), transparent 55%),
+    radial-gradient(ellipse 60% 80% at 50% 0%, rgba(110,231,183,.12), transparent 55%),
     var(--card);
 }
 .cta-box h2 {
@@ -353,7 +369,7 @@ a:hover { text-decoration: underline; }
 }
 .price-card.featured {
   border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
-  box-shadow: 0 0 40px rgba(245,197,66,.08);
+  box-shadow: 0 0 40px rgba(110,231,183,.08);
 }
 .price-card .amount { font-size: 2.4rem; letter-spacing: -0.04em; margin: 0.35rem 0 0.75rem; font-weight: 700; }
 .price-card .amount span { font-size: 1rem; color: var(--muted); font-weight: 500; }
@@ -518,6 +534,7 @@ ${site.head}
 <style>${raw(css)}</style>
 </head>
 <body>
+<div class="page-atmosphere" aria-hidden="true"></div>
 <header class="site-header"><div class="wrap inner">
   <a class="logo" href="/">k<span>.</span></a>
   <nav class="nav" aria-label="Primary">
