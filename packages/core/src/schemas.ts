@@ -92,6 +92,7 @@ export const RESERVED_SLUGS = new Set([
   "app",
   "admin",
   "dashboard",
+  "dash",
   "static",
   "cdn",
   "mail",

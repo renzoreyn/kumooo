@@ -35,6 +35,36 @@ import {
 import type { Env } from "./env.js";
 import { getTheme, registerTheme } from "./theme.js";
 
+const DASHBOARD_PAGES_ORIGIN = "https://kumooo-dashboard.pages.dev";
+
+function hostnameOf(request: Request, url: URL): string {
+  return (request.headers.get("Host") ?? url.hostname).split(":")[0]!.toLowerCase();
+}
+
+function isDashboardHost(host: string, suffix: string): boolean {
+  return host === `dash.${suffix}` || host === "dash.kumooo.dev";
+}
+
+/** Wildcard Worker route owns *.kumooo.dev, so Pages cannot serve dash directly. Proxy instead. */
+async function proxyDashboard(request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const target = new URL(url.pathname + url.search, DASHBOARD_PAGES_ORIGIN);
+  const headers = new Headers(request.headers);
+  headers.delete("host");
+  const upstream = await fetch(target, {
+    method: request.method,
+    headers,
+    body: request.method === "GET" || request.method === "HEAD" ? undefined : request.body,
+    redirect: "manual",
+  });
+  const out = new Headers(upstream.headers);
+  const location = out.get("Location");
+  if (location?.startsWith(DASHBOARD_PAGES_ORIGIN)) {
+    out.set("Location", `${url.origin}${location.slice(DASHBOARD_PAGES_ORIGIN.length)}`);
+  }
+  return new Response(upstream.body, { status: upstream.status, headers: out });
+}
+
 registerTheme(haruTheme);
 registerTheme(natsuTheme);
 registerTheme(akiTheme);
@@ -258,12 +288,17 @@ async function renderPreview(
 
 async function handle(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const url = new URL(request.url);
+  const host = hostnameOf(request, url);
+
+  if (isDashboardHost(host, env.PUBLIC_SITE_SUFFIX)) {
+    return proxyDashboard(request);
+  }
+
   if (request.method !== "GET" && request.method !== "HEAD") {
     return new Response("Method not allowed", { status: 405 });
   }
 
   const db = createDb(env.DB);
-  const host = request.headers.get("Host") ?? url.hostname;
   const site = await resolveSiteCached(env, ctx, db, host);
   if (!site) {
     return new Response("There's no Kumooo site at this address.", { status: 404 });
