@@ -1,4 +1,4 @@
-import { html, raw, type Html, type ThemeSiteContext } from "@kumooo/theme-kit";
+import { html, raw, type Html, type ThemeSiteContext, brandBadgeMarkSvg } from "@kumooo/theme-kit";
 
 const ICON_SUN = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`;
 const ICON_MOON = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
@@ -32,10 +32,13 @@ html[data-theme="dark"] { color-scheme: dark; }
 .km-badge:hover { filter: none; opacity: 0.92; }
 .km-badge-mark {
   display: inline-grid; place-items: center;
-  width: 1.35rem; height: 1.35rem; border-radius: 999px;
-  background: var(--primary, var(--accent)); color: var(--primary-foreground, var(--bg));
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.7rem; font-weight: 700;
+  width: 1.35rem; height: 1.35rem; border-radius: 0.35rem;
+  overflow: hidden; flex: none;
+  background: transparent;
+  padding: 0;
+}
+.km-badge-mark-svg, .km-badge-mark svg {
+  display: block; width: 1.35rem; height: 1.35rem;
 }
 `;
 
@@ -187,7 +190,7 @@ export function colorSchemeBootScript(): string {
 
 export function madeWithBadge(): Html {
   return html`<a class="km-badge" href="https://kumooo.dev" rel="noopener" title="Made with Kumooo">
-    <span class="km-badge-mark" aria-hidden="true">k.</span>
+    <span class="km-badge-mark" aria-hidden="true">${raw(brandBadgeMarkSvg())}</span>
     <span>Made with Kumooo</span>
   </a>`;
 }

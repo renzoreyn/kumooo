@@ -1,9 +1,7 @@
+import { brandFaviconDataUri } from "@kumooo/theme-kit";
+
 /** Default brand mark when a site has no uploaded favicon. */
-export const DEFAULT_FAVICON_HREF =
-  "data:image/svg+xml," +
-  encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#101218"/><text x="16" y="21.5" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="13" font-weight="700" fill="#6ee7b7">k.</text></svg>`,
-  );
+export const DEFAULT_FAVICON_HREF = brandFaviconDataUri();
 
 export function faviconLinkTag(href: string = DEFAULT_FAVICON_HREF): string {
   return `<link rel="icon" href="${href}" type="image/svg+xml">`;

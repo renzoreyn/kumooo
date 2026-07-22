@@ -1,4 +1,5 @@
 import type { ThemeFiles } from "./types.js";
+import { brandBadgeMarkSvg } from "@kumooo/theme-kit";
 
 const shellOpen = `<!doctype html>
 <html lang="{{site.language}}">
@@ -17,7 +18,7 @@ const shellOpen = `<!doctype html>
 
 const shellClose = `
 </main>
-<a class="km-badge" href="https://kumooo.dev" rel="noopener">Made with Kumooo</a>
+<a class="km-badge" href="https://kumooo.dev" rel="noopener" title="Made with Kumooo"><span class="km-badge-mark" aria-hidden="true">${brandBadgeMarkSvg()}</span><span>Made with Kumooo</span></a>
 {{{clientScript}}}
 </body>
 </html>
@@ -72,11 +73,13 @@ h1 { letter-spacing: -0.03em; line-height: 1.15; }
 .site-footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
 .km-badge {
   position: fixed; right: 1rem; bottom: 1rem; z-index: 40;
-  display: inline-flex; align-items: center;
-  padding: 0.45rem 0.75rem; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.45rem 0.75rem 0.45rem 0.55rem; border-radius: 999px;
   background: var(--ink); color: var(--bg);
   text-decoration: none; font-size: 0.72rem; font-weight: 600;
 }
+.km-badge-mark { display: inline-grid; place-items: center; width: 1.35rem; height: 1.35rem; border-radius: 0.35rem; overflow: hidden; }
+.km-badge-mark svg { display: block; width: 1.35rem; height: 1.35rem; }
 `;
 
   const home = `${shellOpen}

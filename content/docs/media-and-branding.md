@@ -21,7 +21,7 @@ Use Media for logos, favicons, post images, and anything else you link from Mark
 
 Same page. Upload a square PNG or SVG.
 
-If you skip it, Kumooo serves the default **`k.`** mark so the tab is never blank.
+If you skip it, Kumooo serves the default geometric **k** mark (mint dot) so the tab is never blank.
 
 ## Quotas
 

@@ -156,7 +156,7 @@ export function BrandingPage() {
           </label>
         </div>
         <p className="muted" style={{ margin: 0 }}>
-          Official Kumooo surfaces use the <strong>k.</strong> mark. Your site can replace both logo and favicon here.
+          Official Kumooo surfaces use the geometric <strong>k</strong> mark (mint dot). Your site can replace both logo and favicon here.
         </p>
       </div>
     </>

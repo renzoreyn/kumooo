@@ -40,7 +40,7 @@ The marketing CTA opens this same fork. Managed vs one site. Not "fork the SaaS.
 - [ ] Can sign in to the dashboard
 - [ ] Site loads on `*.kumooo.dev` or your hostname
 - [ ] Publish a draft and see it live
-- [ ] Favicon / logo set (or accept the default `k.`)
+- [ ] Favicon / logo set (or accept the default geometric k mark)
 - [ ] Theme chosen (season or Studio)
 
 ## Next

@@ -69,3 +69,14 @@ export interface Theme {
 
 export { html, raw, joinHtml, escapeHtml } from "@kumooo/core";
 export type { Html } from "@kumooo/core";
+export {
+  BRAND_MINT,
+  BRAND_INK,
+  BRAND_STEM,
+  MARK_VIEWBOX,
+  brandMarkInner,
+  brandMarkSvg,
+  brandFaviconSvg,
+  brandFaviconDataUri,
+  brandBadgeMarkSvg,
+} from "./brand-mark.js";
