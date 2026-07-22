@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { api } from "../api";
-import { useAuth } from "../App";
+import { useAuth } from "../app/providers";
 
 export function AuthPage({ mode }: { mode: "login" | "signup" }) {
   const nav = useNavigate();

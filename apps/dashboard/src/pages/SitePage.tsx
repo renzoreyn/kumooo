@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FilePlus, Image, ExternalLink } from "lucide-react";
+import { FilePlus, ExternalLink } from "lucide-react";
 import { api, type ContentItem, type Site } from "../api";
-import { Shell, useAuth } from "../App";
+import { useAuth } from "../app/providers";
+import { PageHeader } from "../components/ui";
 
-export function SitePage() {
+export function SitePage({ forcedType }: { forcedType?: "post" | "page" }) {
   const { siteId = "" } = useParams();
   const { orgs } = useAuth();
   const [site, setSite] = useState<Site | null>(null);
   const [items, setItems] = useState<ContentItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const title = forcedType === "page" ? "Pages" : forcedType === "post" ? "Posts" : "Content";
 
   useEffect(() => {
     void (async () => {
@@ -19,35 +21,34 @@ export function SitePage() {
           const listed = await api.sites(org.id);
           setSite(listed.sites.find((s) => s.id === siteId) ?? null);
         }
-        const list = await api.content(siteId);
+        const q = forcedType ? `?type=${forcedType}` : "";
+        const list = await api.content(siteId, q);
         setItems(list.content);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Could not load site.");
       }
     })();
-  }, [siteId, orgs]);
+  }, [siteId, orgs, forcedType]);
 
   return (
-    <Shell
-      title={site?.name ?? "Site"}
-      actions={
-        <>
-          <Link className="btn" to={`/sites/${siteId}/media`}><Image size={16} /> Media</Link>
-          <Link className="btn primary" to={`/sites/${siteId}/new`}><FilePlus size={16} /> New post</Link>
-        </>
-      }
-    >
+    <>
+      <PageHeader
+        title={title}
+        description={site ? `${site.slug}.kumooo.dev · theme: ${site.theme}` : undefined}
+        actions={
+          <Link className="btn primary" to={`/sites/${siteId}/new?type=${forcedType ?? "post"}`}>
+            <FilePlus size={16} /> New {forcedType ?? "post"}
+          </Link>
+        }
+      />
       {error ? <div className="error">{error}</div> : null}
-      {site ? (
-        <p className="muted" style={{ marginTop: 0 }}>
-          {site.slug}.kumooo.dev · theme: {site.theme}
-        </p>
-      ) : null}
       {items.length === 0 ? (
         <div className="card">
           <h2 style={{ marginTop: 0 }}>Nothing here yet.</h2>
-          <p className="muted">Draft a post. Publish when you're ready.</p>
-          <Link className="btn primary" to={`/sites/${siteId}/new`}>New post</Link>
+          <p className="muted">Draft something. Publish when you're ready.</p>
+          <Link className="btn primary" to={`/sites/${siteId}/new?type=${forcedType ?? "post"}`}>
+            New {forcedType ?? "post"}
+          </Link>
         </div>
       ) : (
         <div style={{ display: "grid", gap: "0.65rem" }}>
@@ -69,6 +70,6 @@ export function SitePage() {
           ))}
         </div>
       )}
-    </Shell>
+    </>
   );
 }

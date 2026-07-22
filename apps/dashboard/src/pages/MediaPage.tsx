@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Upload } from "lucide-react";
 import { api } from "../api";
-import { Shell } from "../App";
+import { PageHeader } from "../components/ui";
 
 export function MediaPage() {
   const { siteId = "" } = useParams();
@@ -31,15 +31,22 @@ export function MediaPage() {
   }
 
   return (
-    <Shell title="Media">
+    <>
+      <PageHeader
+        title="Media"
+        actions={
+          <label className="btn primary">
+            <Upload size={16} /> Upload
+            <input type="file" hidden onChange={(e) => void onUpload(e)} />
+          </label>
+        }
+      />
       {error ? <div className="error">{error}</div> : null}
-      <label className="btn primary" style={{ marginBottom: "1rem" }}>
-        <Upload size={16} /> Upload
-        <input type="file" hidden onChange={(e) => void onUpload(e)} />
-      </label>
       {items.length === 0 ? (
         <div className="card">
-          <p className="muted" style={{ margin: 0 }}>No files yet. Drop an image when you're ready.</p>
+          <p className="muted" style={{ margin: 0 }}>
+            No files yet. Drop an image when you're ready.
+          </p>
         </div>
       ) : (
         <div style={{ display: "grid", gap: "0.65rem" }}>
@@ -47,12 +54,14 @@ export function MediaPage() {
             <div key={m.id} className="card" style={{ display: "flex", justifyContent: "space-between", gap: "1rem" }}>
               <div>
                 <strong>{m.filename}</strong>
-                <div className="muted" style={{ fontSize: "0.88rem" }}>{m.mime} · {m.url}</div>
+                <div className="muted" style={{ fontSize: "0.88rem" }}>
+                  {m.mime} · {m.url}
+                </div>
               </div>
             </div>
           ))}
         </div>
       )}
-    </Shell>
+    </>
   );
 }
