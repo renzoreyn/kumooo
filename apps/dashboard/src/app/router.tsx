@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell, SimpleShell } from "./AppShell";
 import { useAuth } from "./providers";
 import { AuthPage } from "../pages/AuthPage";
-import { HomePage } from "../pages/HomePage";
+import { AllSitesPage } from "../features/sites/AllSitesPage";
 import { SitePage } from "../pages/SitePage";
 import { EditorPage } from "../pages/EditorPage";
 import { MediaPage } from "../pages/MediaPage";
@@ -25,7 +25,7 @@ export function AppRouter() {
         path="/"
         element={
           <Private>
-            <HomePage />
+            <AllSitesPage />
           </Private>
         }
       />
