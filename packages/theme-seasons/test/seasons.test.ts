@@ -20,9 +20,12 @@ describe("season themes", () => {
     const doc = haruTheme.home(site, { posts: [], page: 1, totalPages: 1, basePath: "/" });
     expect(doc.value).toContain("<!doctype html>");
     expect(doc.value).toContain("Test");
+    expect(doc.value).toContain("theme-haru");
+    expect(doc.value).toContain("Made with Kumooo");
+    expect(doc.value).toContain("data-km-scheme");
   });
 
-  it("each theme renders home and post", () => {
+  it("each theme is structurally distinct and hides the season id label", () => {
     const post = {
       title: "Hello",
       slug: "hello",
@@ -40,10 +43,19 @@ describe("season themes", () => {
       customFields: {},
       url: "/hello",
     };
+    const markers = {
+      haru: "haru-hero",
+      natsu: "natsu-hero",
+      aki: "aki-hero",
+      fuyu: "fuyu-hero",
+    } as const;
     for (const theme of seasonThemes) {
       const home = theme.home(site, { posts: [], page: 1, totalPages: 1, basePath: "/" });
       const rendered = theme.post(site, { post });
-      expect(home.value).toContain(theme.name);
+      expect(home.value).not.toMatch(new RegExp(`class="eyebrow"[^>]*>\\s*${theme.name}`, "i"));
+      expect(home.value).toContain(`theme-${theme.name}`);
+      expect(home.value).toContain(markers[theme.name as keyof typeof markers]);
+      expect(home.value).toContain("km-badge");
       expect(rendered.value).toContain("Hello");
     }
   });

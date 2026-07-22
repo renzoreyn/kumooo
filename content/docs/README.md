@@ -4,6 +4,7 @@ Clear docs. No fluff.
 
 - [Getting started](/getting-started)
 - [Installation](/installation)
+- [Your first post](/publishing-your-first-post)
 - [Architecture](/architecture)
 - [CLI](/cli)
 - [Themes](/themes)

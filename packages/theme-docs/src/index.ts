@@ -17,9 +17,9 @@ const NAV_MAP: NavItem[] = [
   { slug: "architecture", title: "Architecture", group: "Guides", order: 10 },
   { slug: "cli", title: "CLI", group: "Guides", order: 11 },
   { slug: "themes", title: "Themes", group: "Guides", order: 12 },
-  { slug: "building-a-theme", title: "Building a theme", group: "Tutorials", order: 15 },
   { slug: "authentication", title: "Authentication", group: "Guides", order: 13 },
-  { slug: "writing", title: "Writing", group: "Guides", order: 14 },
+  { slug: "publishing-your-first-post", title: "Your first post", group: "Tutorials", order: 14 },
+  { slug: "building-a-theme", title: "Building a theme", group: "Tutorials", order: 15 },
   { slug: "api-reference", title: "API reference", group: "Reference", order: 20 },
 ];
 
@@ -513,7 +513,7 @@ ${site.head}
 <div class="fd-root" data-theme="system">
   <header class="fd-header">
     <button type="button" class="fd-icon-btn fd-menu" data-drawer-open aria-label="Open menu">☰</button>
-    <a class="fd-brand" href="/">kumooo <span>docs</span></a>
+    <a class="fd-brand" href="/">k<span>.</span> docs</a>
     <button type="button" class="fd-search-btn" data-search-open><span class="label">Search docs…</span> <kbd>⌘K</kbd></button>
     <div class="fd-header-actions">
       <button type="button" class="fd-icon-btn" data-theme-toggle aria-label="Toggle theme" title="Theme">${raw(themeIcon)}</button>

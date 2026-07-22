@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { newId } from "@kumooo/core";
-import { media } from "@kumooo/db";
-import { and, desc, eq } from "drizzle-orm";
+import { media, type Db } from "@kumooo/db";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { AppEnv } from "../env.js";
 import { ApiError } from "../errors.js";
@@ -9,7 +9,10 @@ import { requireSiteAccess } from "../lib/authz.js";
 import { recordSiteEvent } from "../lib/events.js";
 import { requireUser } from "../middleware/auth.js";
 
+/** Per-file upload cap. */
 const MAX_BYTES = 25 * 1024 * 1024;
+/** Per-site media storage cap (R2 budget). */
+export const SITE_MEDIA_QUOTA_BYTES = 150 * 1024 * 1024;
 const ALLOWED = new Set([
   "image/jpeg",
   "image/png",
@@ -41,6 +44,16 @@ function serializeMedia(m: typeof media.$inferSelect) {
   };
 }
 
+async function usedBytesForSite(db: Db, siteId: string): Promise<number> {
+  const row = (
+    await db
+      .select({ total: sql<number>`coalesce(sum(${media.size}), 0)` })
+      .from(media)
+      .where(eq(media.siteId, siteId))
+  )[0];
+  return Number(row?.total ?? 0);
+}
+
 mediaRoutes.get("/sites/:siteId/media", async (c) => {
   const user = requireUser(c);
   const siteId = c.req.param("siteId");
@@ -52,8 +65,11 @@ mediaRoutes.get("/sites/:siteId/media", async (c) => {
     .where(eq(media.siteId, siteId))
     .orderBy(desc(media.createdAt))
     .limit(100);
+  const usedBytes = await usedBytesForSite(c.get("db"), siteId);
   return c.json({
     media: rows.map(serializeMedia),
+    usedBytes,
+    quotaBytes: SITE_MEDIA_QUOTA_BYTES,
   });
 });
 
@@ -72,6 +88,14 @@ mediaRoutes.post("/sites/:siteId/media", async (c) => {
   }
   if (!ALLOWED.has(file.type)) {
     throw ApiError.badRequest(`That file type (${file.type || "unknown"}) isn't allowed.`);
+  }
+
+  const usedBytes = await usedBytesForSite(c.get("db"), siteId);
+  if (usedBytes + file.size > SITE_MEDIA_QUOTA_BYTES) {
+    const left = Math.max(0, SITE_MEDIA_QUOTA_BYTES - usedBytes);
+    throw ApiError.badRequest(
+      `Site media quota is 150 MB. ${Math.round(left / 1024)} KB left. Delete something first.`,
+    );
   }
 
   const id = newId("med");
@@ -101,7 +125,11 @@ mediaRoutes.post("/sites/:siteId/media", async (c) => {
   });
 
   const row = (await c.get("db").select().from(media).where(eq(media.id, id)))[0]!;
-  return c.json({ media: serializeMedia(row) }, 201);
+  return c.json({
+    media: serializeMedia(row),
+    usedBytes: usedBytes + file.size,
+    quotaBytes: SITE_MEDIA_QUOTA_BYTES,
+  }, 201);
 });
 
 mediaRoutes.patch("/sites/:siteId/media/:id", async (c) => {

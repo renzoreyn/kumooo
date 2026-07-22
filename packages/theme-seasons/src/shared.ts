@@ -1,110 +1,66 @@
-import { html, joinHtml, raw, type Html, type Theme, type ThemeSiteContext } from "@kumooo/theme-kit";
+import {
+  html,
+  joinHtml,
+  raw,
+  type Html,
+  type Theme,
+  type ThemeSiteContext,
+} from "@kumooo/theme-kit";
+import { documentShell, schemeToggle, siteBrand } from "./chrome.js";
 
-export type SeasonThemeOptions = {
+export type SeasonParts = {
   name: string;
   label: string;
   css: string;
-  fontStylesheet: string;
+  fontHref: string;
+  bodyClass: string;
+  header: (site: ThemeSiteContext) => Html;
+  homeMain: (
+    site: ThemeSiteContext,
+    data: { posts: Parameters<Theme["home"]>[1]["posts"]; page: number; totalPages: number },
+  ) => Html;
+  articleMain: (title: string, body: Html, excerpt?: string | null) => Html;
+  archiveMain: (title: string, posts: Parameters<Theme["home"]>[1]["posts"]) => Html;
+  notFoundMain: () => Html;
 };
 
-export function createSeasonTheme(opts: SeasonThemeOptions): Theme {
-  const shell = (site: ThemeSiteContext, body: Html): Html => html`<!doctype html>
-<html lang="${site.language}">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-${site.head}
-<style>${raw(opts.css)}</style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="${opts.fontStylesheet}">
-</head>
-<body>
-<div class="wrap">
-<header class="site-header">
-  <a class="logo" href="/">${site.title}</a>
-  <nav>
-    ${joinHtml(
-      site.nav.map((n) => html`<a href="${n.url}">${n.title}</a>`),
-      "",
-    )}
-  </nav>
-</header>
-<main>
-${body}
-</main>
-<footer class="site-footer">
-  <p>${site.title}. Built with <a href="https://kumooo.dev">Kumooo</a>.</p>
-</footer>
-</div>
-</body>
-</html>`;
+export function buildSeasonTheme(parts: SeasonParts): Theme {
+  const shell = (site: ThemeSiteContext, main: Html) =>
+    documentShell({
+      site,
+      css: parts.css,
+      fontHref: parts.fontHref,
+      bodyClass: parts.bodyClass,
+      header: parts.header(site),
+      main,
+    });
 
   return {
-    name: opts.name,
-    label: opts.label,
-    home(site, { posts, page, totalPages }) {
-      const list =
-        posts.length === 0
-          ? html`<p class="muted">Nothing published yet.</p>`
-          : html`<div class="post-list">${joinHtml(
-              posts.map(
-                (p) => html`<article class="post-card">
-                  <h2><a href="${p.url}">${p.title}</a></h2>
-                  ${p.excerpt ? html`<p class="muted">${p.excerpt}</p>` : raw("")}
-                </article>`,
-              ),
-            )}</div>`;
-      const pager =
-        totalPages > 1
-          ? html`<p class="muted pager">Page ${String(page)} of ${String(totalPages)}</p>`
-          : raw("");
-      return shell(
-        site,
-        html`<section class="hero">
-          <p class="eyebrow">${opts.name}</p>
-          <h1>${site.title}</h1>
-          ${site.description ? html`<p class="lede muted">${site.description}</p>` : raw("")}
-        </section>
-        ${list}${pager}`,
-      );
+    name: parts.name,
+    label: parts.label,
+    home(site, data) {
+      return shell(site, parts.homeMain(site, data));
     },
     post(site, { post }) {
-      return shell(
-        site,
-        html`<article class="prose">
-          <h1>${post.title}</h1>
-          ${raw(post.html)}
-        </article>`,
-      );
+      return shell(site, parts.articleMain(post.title, raw(post.html), post.excerpt));
     },
     page(site, { page }) {
-      return shell(
-        site,
-        html`<article class="prose">
-          <h1>${page.title}</h1>
-          ${raw(page.html)}
-        </article>`,
-      );
+      return shell(site, parts.articleMain(page.title, raw(page.html), page.excerpt));
     },
     archive(site, { title, posts }) {
-      return shell(
-        site,
-        html`<h1>${title}</h1>
-          <div class="post-list">${joinHtml(
-            posts.map(
-              (p) => html`<article class="post-card">
-                <h2><a href="${p.url}">${p.title}</a></h2>
-              </article>`,
-            ),
-          )}</div>`,
-      );
+      return shell(site, parts.archiveMain(title, posts));
     },
     notFound(site) {
-      return shell(
-        site,
-        html`<h1>Nothing here</h1><p class="muted">That page does not exist.</p>`,
-      );
+      return shell(site, parts.notFoundMain());
     },
   };
 }
+
+export function defaultNav(site: ThemeSiteContext): Html {
+  return html`<nav class="site-nav">${joinHtml(
+    site.nav.map((n) => html`<a href="${n.url}">${n.title}</a>`),
+    "",
+  )}${schemeToggle()}</nav>`;
+}
+
+export { siteBrand, schemeToggle };

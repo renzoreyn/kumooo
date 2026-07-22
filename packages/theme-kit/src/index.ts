@@ -7,6 +7,10 @@ export interface ThemeSiteContext {
   origin: string;
   head: Html;
   nav: { title: string; url: string }[];
+  /** Public URL for site logo image, if set. */
+  logoUrl?: string | null;
+  /** Public URL for favicon image, if set. */
+  faviconUrl?: string | null;
 }
 
 export interface PostListItem {

@@ -13,15 +13,21 @@ export type MediaItem = {
 };
 
 export const mediaApi = {
-  list: (siteId: string) => request<{ media: MediaItem[] }>(`/v1/sites/${siteId}/media`),
+  list: (siteId: string) =>
+    request<{ media: MediaItem[]; usedBytes: number; quotaBytes: number }>(
+      `/v1/sites/${siteId}/media`,
+    ),
   upload: (siteId: string, file: File, alt = "") => {
     const form = new FormData();
     form.append("file", file);
     form.append("alt", alt);
-    return request<{ media: MediaItem }>(`/v1/sites/${siteId}/media`, {
-      method: "POST",
-      body: form,
-    });
+    return request<{ media: MediaItem; usedBytes: number; quotaBytes: number }>(
+      `/v1/sites/${siteId}/media`,
+      {
+        method: "POST",
+        body: form,
+      },
+    );
   },
   update: (siteId: string, id: string, body: { alt?: string }) =>
     request<{ media: MediaItem }>(`/v1/sites/${siteId}/media/${id}`, {

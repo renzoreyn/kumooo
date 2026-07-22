@@ -1,98 +1,161 @@
-import { createSeasonTheme } from "./shared.js";
+import { html, joinHtml, raw } from "@kumooo/theme-kit";
+import { buildSeasonTheme, defaultNav, siteBrand } from "./shared.js";
 
 const css = `
 :root {
-  --bg: #eef1f5;
-  --fg: #10141c;
-  --muted: #5c6678;
-  --line: #cfd6e2;
-  --accent: #3d5afe;
+  --bg: #eef2f6;
+  --fg: #0f1720;
+  --muted: #5b6b7c;
+  --line: #cfd8e3;
+  --accent: #3b82c4;
   --card: #ffffff;
-  --max: 42rem;
-  --display: "Syne", "Avenir Next", system-ui, sans-serif;
-  --body: "IBM Plex Sans", "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
-  color-scheme: light dark;
+  --display: "IBM Plex Sans", "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b0e14;
-    --fg: #e7ebf3;
-    --muted: #8b95a8;
-    --line: #222836;
-    --accent: #8ab4ff;
-    --card: #121722;
+    --bg: #0b1016;
+    --fg: #e8eef6;
+    --muted: #8b9aab;
+    --line: #243041;
+    --accent: #6eb6ff;
+    --card: #121a24;
   }
 }
+html[data-theme="light"] {
+  --bg: #eef2f6; --fg: #0f1720; --muted: #5b6b7c; --line: #cfd8e3;
+  --accent: #3b82c4; --card: #ffffff;
+}
+html[data-theme="dark"] {
+  --bg: #0b1016; --fg: #e8eef6; --muted: #8b9aab; --line: #243041;
+  --accent: #6eb6ff; --card: #121a24;
+}
 * { box-sizing: border-box; }
-body {
+body.theme-fuyu {
   margin: 0;
-  font: 16.5px/1.65 var(--body);
+  font: 15px/1.65 var(--display);
   color: var(--fg);
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--accent) 7%, transparent), transparent 42%),
+    linear-gradient(180deg, #dbe7f3 0%, var(--bg) 18%),
+    var(--bg);
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+@media (prefers-color-scheme: dark) {
+  body.theme-fuyu {
+    background:
+      linear-gradient(180deg, #0e1620 0%, var(--bg) 22%),
+      var(--bg);
+  }
+}
+html[data-theme="light"] body.theme-fuyu {
+  background:
+    linear-gradient(180deg, #dbe7f3 0%, var(--bg) 18%),
     var(--bg);
 }
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; text-underline-offset: 0.15em; }
-.wrap { max-width: var(--max); margin: 0 auto; padding: 2rem 1.2rem 4rem; }
-.site-header {
-  display: flex; justify-content: space-between; align-items: center;
-  gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap;
-  padding: 0.85rem 1rem; background: var(--card);
-  border: 1px solid var(--line); border-radius: 12px;
+html[data-theme="dark"] body.theme-fuyu {
+  background:
+    linear-gradient(180deg, #0e1620 0%, var(--bg) 22%),
+    var(--bg);
+}
+a { color: var(--accent); }
+.fuyu-shell { max-width: 40rem; margin: 0 auto; padding: 1.25rem 1rem 0; }
+.fuyu-top {
+  display: flex; justify-content: space-between; gap: 0.75rem; align-items: center; flex-wrap: wrap;
+  padding: 0.75rem 0.85rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
 }
 .logo {
-  font-family: var(--display); font-weight: 700; font-size: 1.05rem;
-  letter-spacing: -0.03em; color: var(--fg); text-decoration: none;
+  font-family: var(--mono); font-weight: 600; font-size: 0.95rem;
+  color: var(--fg); text-decoration: none;
 }
-nav { display: flex; gap: 0.85rem; flex-wrap: wrap; }
-nav a {
-  color: var(--muted); font-size: 0.82rem; font-family: var(--mono);
-  letter-spacing: 0.02em; text-decoration: none;
+.logo-img img { display: block; height: 1.5rem; width: auto; }
+.site-nav { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.site-nav a {
+  color: var(--muted); text-decoration: none; font-family: var(--mono); font-size: 0.78rem;
 }
-nav a:hover { color: var(--fg); }
-.eyebrow {
-  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--muted); margin: 0 0 0.7rem;
+.site-nav a:hover { color: var(--accent); }
+main { max-width: 40rem; margin: 0 auto; padding: 0 1rem 3rem; }
+.fuyu-hero {
+  padding: 1.25rem 0 1.5rem;
 }
-.hero h1 {
-  font-family: var(--display); font-weight: 700;
-  font-size: clamp(2.3rem, 6vw, 3.3rem); letter-spacing: -0.04em;
-  line-height: 1.05; margin: 0 0 0.8rem;
+.fuyu-hero .kicker {
+  font-family: var(--mono); font-size: 0.72rem; color: var(--accent);
+  letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 0.6rem;
 }
-.lede { font-size: 1.05rem; max-width: 34rem; margin: 0 0 2.25rem; }
+.fuyu-hero h1 {
+  font-size: clamp(1.6rem, 4vw, 2rem); margin: 0 0 0.5rem; letter-spacing: -0.02em;
+}
+.fuyu-hero .lede { color: var(--muted); margin: 0; }
+.fuyu-list { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); }
+.fuyu-item {
+  display: grid; grid-template-columns: 1fr auto; gap: 0.75rem; align-items: baseline;
+  padding: 0.9rem 1rem;
+  border-top: 1px solid var(--line);
+  text-decoration: none; color: inherit;
+}
+.fuyu-item:first-child { border-top: 0; }
+.fuyu-item:hover { background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+.fuyu-item strong { font-weight: 600; }
+.fuyu-item .meta { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
 .muted { color: var(--muted); }
-.post-list { display: grid; gap: 0.75rem; }
-.post-card {
-  padding: 1.1rem 1.15rem; border: 1px solid var(--line);
-  border-radius: 10px; background: var(--card);
-}
-.post-card h2 {
-  font-family: var(--display); font-size: 1.2rem; font-weight: 700;
-  letter-spacing: -0.025em; margin: 0 0 0.35rem;
-}
-.post-card h2 a { color: var(--fg); text-decoration: none; }
-.post-card h2 a:hover { color: var(--accent); }
-.prose h1 {
-  font-family: var(--display); font-size: clamp(2rem, 4.5vw, 2.7rem);
-  letter-spacing: -0.035em; line-height: 1.1; margin: 0 0 1.15rem;
-}
+.prose h1 { font-size: clamp(1.5rem, 3.5vw, 1.9rem); margin: 0 0 1rem; }
 .prose pre {
-  background: var(--card); border: 1px solid var(--line);
-  padding: 1rem; overflow-x: auto; border-radius: 10px;
-}
-.prose code { font-family: var(--mono); font-size: 0.88em; }
-.site-footer {
-  margin-top: 3.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
-  color: var(--muted); font-size: 0.82rem; font-family: var(--mono);
+  background: var(--card); border: 1px solid var(--line); padding: 0.9rem;
+  overflow-x: auto; border-radius: 8px; font-family: var(--mono); font-size: 0.85em;
 }
 `;
 
-export const fuyuTheme = createSeasonTheme({
+export const fuyuTheme = buildSeasonTheme({
   name: "fuyu",
-  label: "Fuyu - winter crisp theme",
+  label: "Fuyu - winter engineer diary",
+  bodyClass: "theme-fuyu",
+  fontHref:
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap",
   css,
-  fontStylesheet:
-    "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Syne:wght@700&display=swap",
+  header: (site) =>
+    html`<div class="fuyu-shell"><header class="fuyu-top">${siteBrand(site)}${defaultNav(site)}</header></div>`,
+  homeMain: (site, { posts, page, totalPages }) => {
+    const list =
+      posts.length === 0
+        ? html`<p class="muted">Nothing published yet.</p>`
+        : html`<div class="fuyu-list">${joinHtml(
+            posts.map((p) => {
+              const d = p.publishedAt
+                ? p.publishedAt.toISOString().slice(0, 10)
+                : "";
+              return html`<a class="fuyu-item" href="${p.url}">
+                <strong>${p.title}</strong>
+                <span class="meta">${d}</span>
+              </a>`;
+            }),
+          )}</div>`;
+    const pager =
+      totalPages > 1
+        ? html`<p class="muted" style="margin-top:1.25rem">Page ${String(page)} of ${String(totalPages)}</p>`
+        : raw("");
+    return html`<section class="fuyu-hero">
+      <p class="kicker">log</p>
+      <h1>${site.title}</h1>
+      ${site.description ? html`<p class="lede">${site.description}</p>` : raw("")}
+    </section>${list}${pager}`;
+  },
+  articleMain: (title, body, excerpt) =>
+    html`<article class="prose">
+      <h1>${title}</h1>
+      ${excerpt ? html`<p class="muted">${excerpt}</p>` : raw("")}
+      ${body}
+    </article>`,
+  archiveMain: (title, posts) =>
+    html`<h1 class="prose">${title}</h1>
+      <div class="fuyu-list">${joinHtml(
+        posts.map(
+          (p) => html`<a class="fuyu-item" href="${p.url}"><strong>${p.title}</strong><span class="meta"></span></a>`,
+        ),
+      )}</div>`,
+  notFoundMain: () =>
+    html`<h1>Nothing here</h1><p class="muted">That page does not exist.</p>`,
 });

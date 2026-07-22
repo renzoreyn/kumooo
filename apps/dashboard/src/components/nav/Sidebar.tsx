@@ -25,6 +25,7 @@ const items = [
   { group: "Design" },
   { to: "design/themes", label: "Themes", icon: LayoutTemplate },
   { to: "design/studio", label: "Theme Studio", icon: Code2 },
+  { to: "design/branding", label: "Branding", icon: Image },
   { to: "design/navigation", label: "Navigation", icon: Navigation },
   { to: "seo", label: "SEO", icon: Search },
   { to: "deployments", label: "Deployments", icon: Rocket },

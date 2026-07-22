@@ -24,6 +24,8 @@ export function MediaPage() {
   const { siteId = "" } = useParams();
   const toast = useToast();
   const [items, setItems] = useState<MediaItem[]>([]);
+  const [usedBytes, setUsedBytes] = useState(0);
+  const [quotaBytes, setQuotaBytes] = useState(150 * 1024 * 1024);
   const [siteUrl, setSiteUrl] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -37,6 +39,8 @@ export function MediaPage() {
   const load = useCallback(async () => {
     const [mediaRes, siteRes] = await Promise.all([mediaApi.list(siteId), sitesApi.get(siteId)]);
     setItems(mediaRes.media);
+    setUsedBytes(mediaRes.usedBytes ?? 0);
+    setQuotaBytes(mediaRes.quotaBytes ?? 150 * 1024 * 1024);
     setSiteUrl(siteRes.site.url ?? `https://${siteRes.site.slug}.kumooo.dev`);
     setEditingAlt(Object.fromEntries(mediaRes.media.map((m) => [m.id, m.alt ?? ""])));
   }, [siteId]);
@@ -123,7 +127,7 @@ export function MediaPage() {
     <>
       <PageHeader
         title="Media"
-        description={`${items.length} file${items.length === 1 ? "" : "s"}`}
+        description={`${formatBytes(usedBytes)} of ${formatBytes(quotaBytes)} used · ${items.length} file${items.length === 1 ? "" : "s"}`}
         actions={
           <>
             <Button type="button" aria-pressed={view === "grid"} onClick={() => setView("grid")}>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Eye, RotateCcw, Save, Upload } from "lucide-react";
-import { Button, PageHeader } from "../../components/ui";
+import { Badge, Button, PageHeader } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
 import { contentApi } from "../../lib/api/content";
 import { themeStudioApi, type ThemeStudioFiles } from "../../lib/api/theme-studio";
@@ -23,6 +23,7 @@ export function ThemeStudioPage() {
   const [files, setFiles] = useState<ThemeStudioFiles | null>(null);
   const [active, setActive] = useState<keyof ThemeStudioFiles>("styles.css");
   const [siteTheme, setSiteTheme] = useState("");
+  const [dirty, setDirty] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -30,11 +31,22 @@ export function ThemeStudioPage() {
     const data = await themeStudioApi.get(siteId);
     setFiles(data.files);
     setSiteTheme(data.siteTheme);
+    setDirty(false);
   }
 
   useEffect(() => {
     void load().catch((err) => setError(err instanceof Error ? err.message : "Could not load."));
   }, [siteId]);
+
+  useEffect(() => {
+    if (!dirty) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [dirty]);
 
   async function save() {
     if (!files) return;
@@ -43,7 +55,8 @@ export function ThemeStudioPage() {
     try {
       const { files: next } = await themeStudioApi.save(siteId, files);
       setFiles(next);
-      toast.push("Draft saved");
+      setDirty(false);
+      toast.push("Draft saved to Theme Studio");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Save failed.");
     } finally {
@@ -52,11 +65,13 @@ export function ThemeStudioPage() {
   }
 
   async function reset() {
+    if (dirty && !window.confirm("Discard unsaved edits and reset the draft?")) return;
     setBusy(true);
     setError(null);
     try {
       const { files: next } = await themeStudioApi.reset(siteId);
       setFiles(next);
+      setDirty(false);
       toast.push("Draft reset to starter");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Reset failed.");
@@ -73,7 +88,8 @@ export function ThemeStudioPage() {
       await themeStudioApi.save(siteId, files);
       const res = await themeStudioApi.publish(siteId);
       setSiteTheme(res.theme);
-      toast.push(`Published v${res.version}`);
+      setDirty(false);
+      toast.push(`Published v${res.version}. Live theme is now ${res.theme}`);
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Publish failed.");
@@ -84,7 +100,11 @@ export function ThemeStudioPage() {
 
   async function preview() {
     try {
-      await themeStudioApi.save(siteId, files ?? {});
+      if (!files) return;
+      if (dirty) {
+        await themeStudioApi.save(siteId, files);
+        setDirty(false);
+      }
       const list = await contentApi.list(siteId, "?perPage=1");
       const item = list.content[0];
       if (!item) {
@@ -109,23 +129,25 @@ export function ThemeStudioPage() {
   }
 
   const value = files[active] ?? "";
+  const liveCustom = siteTheme.startsWith("custom:");
 
   return (
     <>
       <PageHeader
         title="Theme Studio"
         description={
-          siteTheme.startsWith("custom:")
-            ? `Live theme: ${siteTheme}`
-            : "Edit HTML, CSS, and optional client JS. Publish to activate."
+          liveCustom
+            ? `Live theme: ${siteTheme}. Save writes the draft. Publish makes it live.`
+            : "Edit HTML, CSS, and optional client JS. Publish to switch this site onto your custom theme."
         }
         actions={
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
+            {dirty ? <Badge tone="warn">Unsaved</Badge> : <Badge tone="ok">Draft clean</Badge>}
             <Button type="button" disabled={busy} onClick={() => void preview()}>
               <Eye size={16} /> Preview draft
             </Button>
-            <Button type="button" disabled={busy} onClick={() => void save()}>
-              <Save size={16} /> Save
+            <Button type="button" disabled={busy || !dirty} onClick={() => void save()}>
+              <Save size={16} /> Save draft
             </Button>
             <Button type="button" variant="primary" disabled={busy} onClick={() => void publish()}>
               <Upload size={16} /> Publish
@@ -136,7 +158,7 @@ export function ThemeStudioPage() {
       {error ? <div className="error">{error}</div> : null}
       <p className="muted" style={{ marginTop: 0 }}>
         First-party seasons stay under <Link to={`/sites/${siteId}/design/themes`}>Themes</Link>.
-        Studio is for your own file tree.
+        Studio is for your own file tree. Saving Settings will not change this theme anymore.
       </p>
       <div
         style={{
@@ -180,6 +202,7 @@ export function ThemeStudioPage() {
             value={value}
             onChange={(e) => {
               const next = e.target.value;
+              setDirty(true);
               setFiles((prev) => {
                 if (!prev) return prev;
                 if (active === "client.js") return { ...prev, "client.js": next };

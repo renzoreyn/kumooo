@@ -377,7 +377,7 @@ ${site.head}
 </head>
 <body>
 <header class="site-header"><div class="wrap inner">
-  <a class="logo" href="/">kumooo<span>.</span></a>
+  <a class="logo" href="/">k<span>.</span></a>
   <nav class="nav" aria-label="Primary">
     ${joinHtml(nav.map((n) => html`<a href="${n.url}">${n.title}</a>`))}
     <a class="btn primary" href="https://github.com/renzoreyn/kumooo">${raw(ic.github)} GitHub</a>

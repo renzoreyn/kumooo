@@ -10,6 +10,7 @@ import { CollectionsPage } from "../features/content/CollectionsPage";
 import { EditorPage } from "../features/editor/EditorPage";
 import { ThemesPage } from "../features/design/ThemesPage";
 import { ThemeStudioPage } from "../features/design/ThemeStudioPage";
+import { BrandingPage } from "../features/design/BrandingPage";
 import { NavigationPage } from "../features/design/NavigationPage";
 import { SeoPage } from "../features/seo/SeoPage";
 import { OgMakerPage } from "../features/seo/OgMakerPage";
@@ -53,6 +54,7 @@ export function AppRouter() {
         <Route path="media" element={<MediaPage />} />
         <Route path="design/themes" element={<ThemesPage />} />
         <Route path="design/studio" element={<ThemeStudioPage />} />
+        <Route path="design/branding" element={<BrandingPage />} />
         <Route path="design/navigation" element={<NavigationPage />} />
         <Route path="seo" element={<SeoPage />} />
         <Route path="seo/og" element={<OgMakerPage />} />

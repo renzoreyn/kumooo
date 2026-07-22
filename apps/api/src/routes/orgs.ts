@@ -123,12 +123,20 @@ siteRoutes.get("/sites/:siteId", async (c) => {
 
 siteRoutes.patch("/sites/:siteId", async (c) => {
   const user = requireUser(c);
-  const { site } = await requireSiteAccess(c.get("db"), c.req.param("siteId"), user.id, "admin");
   const body = (await c.req.json()) as {
     name?: string;
     theme?: string;
     settings?: Record<string, unknown>;
   };
+  // Theme-only updates (Design → Themes) need editor. Name/settings stay admin.
+  const themeOnly =
+    typeof body.theme === "string" && body.name === undefined && body.settings === undefined;
+  const { site } = await requireSiteAccess(
+    c.get("db"),
+    c.req.param("siteId"),
+    user.id,
+    themeOnly ? "editor" : "admin",
+  );
   const current = siteSettingsSchema.parse(safeJson(site.settings));
   const nextSettings = body.settings
     ? siteSettingsSchema.parse({

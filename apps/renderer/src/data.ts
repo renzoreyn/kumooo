@@ -5,6 +5,7 @@ import {
   contentCategories,
   contentTags,
   domains,
+  media,
   sites,
   tags,
   users,
@@ -63,6 +64,22 @@ function toResolved(row: typeof sites.$inferSelect, origin: string): ResolvedSit
     settings: siteSettingsSchema.parse(safeJson(row.settings)),
     origin,
   };
+}
+
+export async function mediaPublicUrl(
+  db: Db,
+  site: ResolvedSite,
+  mediaId: string | undefined,
+): Promise<string | null> {
+  if (!mediaId) return null;
+  const row = (
+    await db
+      .select({ id: media.id, filename: media.filename })
+      .from(media)
+      .where(and(eq(media.id, mediaId), eq(media.siteId, site.id)))
+  )[0];
+  if (!row) return null;
+  return `${site.origin}/media/${row.id}/${encodeURIComponent(row.filename)}`;
 }
 
 function safeJson(value: string): unknown {

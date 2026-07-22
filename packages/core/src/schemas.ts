@@ -28,6 +28,8 @@ export const siteSettingsSchema = z
     nav: z
       .array(z.object({ title: z.string(), url: z.string() }))
       .default([]),
+    logoMediaId: z.string().optional(),
+    faviconMediaId: z.string().optional(),
   })
   .default({});
 

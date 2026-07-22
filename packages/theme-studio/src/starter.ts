@@ -17,7 +17,7 @@ const shellOpen = `<!doctype html>
 
 const shellClose = `
 </main>
-<footer class="site-footer"><p>{{site.title}}</p></footer>
+<a class="km-badge" href="https://kumooo.dev" rel="noopener">Made with Kumooo</a>
 {{{clientScript}}}
 </body>
 </html>
@@ -70,6 +70,13 @@ h1 { letter-spacing: -0.03em; line-height: 1.15; }
 .post-list a { text-decoration: none; color: var(--ink); font-size: 1.2rem; font-weight: 600; }
 .prose img { max-width: 100%; height: auto; }
 .site-footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+.km-badge {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 40;
+  display: inline-flex; align-items: center;
+  padding: 0.45rem 0.75rem; border-radius: 999px;
+  background: var(--ink); color: var(--bg);
+  text-decoration: none; font-size: 0.72rem; font-weight: 600;
+}
 `;
 
   const home = `${shellOpen}

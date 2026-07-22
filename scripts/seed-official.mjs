@@ -190,10 +190,10 @@ const docs = await ensureSite(
     { title: "Architecture", url: "/architecture" },
     { title: "CLI", url: "/cli" },
     { title: "Themes", url: "/themes" },
+    { title: "Your first post", url: "/publishing-your-first-post" },
     { title: "Building a theme", url: "/building-a-theme" },
     { title: "Authentication", url: "/authentication" },
     { title: "API", url: "/api-reference" },
-    { title: "Writing", url: "/writing" },
   ],
 );
 
@@ -204,16 +204,18 @@ const DOC_TITLES = {
   architecture: "Architecture",
   cli: "CLI",
   themes: "Themes",
+  "publishing-your-first-post": "Your first post",
   "building-a-theme": "Building a theme",
   authentication: "Authentication",
-  writing: "Writing",
   "api-reference": "API reference",
 };
 
 const docsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "content", "docs");
 const files = (await readdir(docsDir)).filter((f) => f.endsWith(".md")).sort();
 // Prefer index.md over README.md (both would map to slug "index").
-const docsFiles = files.includes("index.md") ? files.filter((f) => f !== "README.md") : files;
+const docsFiles = files
+  .filter((f) => f !== "writing.md")
+  .filter((f) => (files.includes("index.md") ? f !== "README.md" : true));
 for (const file of docsFiles) {
   const markdown = await readFile(join(docsDir, file), "utf8");
   const slug = file === "README.md" ? "index" : file.replace(/\.md$/, "");

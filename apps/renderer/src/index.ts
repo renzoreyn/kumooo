@@ -28,6 +28,7 @@ import {
   listNavPages,
   listPublishedPosts,
   listTaxonomySlugs,
+  mediaPublicUrl,
   resolveFirstSite,
   resolveSite,
   type ResolvedSite,
@@ -138,13 +139,22 @@ async function themeContext(db: Db, site: ResolvedSite, head: Html): Promise<The
     site.settings.nav.length > 0
       ? site.settings.nav
       : (await listNavPages(db, site.id)).map((p) => ({ title: p.title, url: `/${p.slug}` }));
+  const [logoUrl, faviconUrl] = await Promise.all([
+    mediaPublicUrl(db, site, site.settings.logoMediaId),
+    mediaPublicUrl(db, site, site.settings.faviconMediaId),
+  ]);
+  const headWithIcon = faviconUrl
+    ? joinHtml([head, html`<link rel="icon" href="${faviconUrl}">`], "\n")
+    : head;
   return {
     title: site.settings.title || site.name,
     description: site.settings.description,
     language: site.settings.language,
     origin: site.origin,
-    head,
+    head: headWithIcon,
     nav,
+    logoUrl,
+    faviconUrl,
   };
 }
 

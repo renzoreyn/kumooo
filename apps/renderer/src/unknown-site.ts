@@ -85,7 +85,7 @@ p strong { color: var(--fg); font-weight: 600; }
 </head>
 <body>
   <div class="wrap">
-    <a class="logo" href="https://kumooo.dev">kumooo<span>.</span></a>
+    <a class="logo" href="https://kumooo.dev">k<span>.</span></a>
     <h1>No site at this address.</h1>
     <p>${hint}</p>
     <p>Kumooo is a publishing platform on Cloudflare. Write in Markdown, pick a theme, ship from the edge.</p>
