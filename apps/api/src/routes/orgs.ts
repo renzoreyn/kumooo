@@ -165,7 +165,6 @@ siteRoutes.patch("/sites/:siteId", async (c) => {
       resourceId: site.id,
       metadata: { from: site.theme, to: body.theme },
     });
-    await bumpCacheVersion(c.env.KV, site.id);
   } else {
     await recordSiteEvent(c.get("db"), {
       siteId: site.id,
@@ -175,6 +174,8 @@ siteRoutes.patch("/sites/:siteId", async (c) => {
       resourceId: site.id,
     });
   }
+  // Settings (logo/favicon/copy) and theme both affect public HTML.
+  await bumpCacheVersion(c.env.KV, site.id);
 
   return c.json({ ok: true });
 });

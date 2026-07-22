@@ -38,30 +38,13 @@ body {
   margin: 0;
   font: 16px/1.65 Sora, "Segoe UI", sans-serif;
   color: var(--fg);
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse 55% 45% at 90% -5%, rgba(110,231,183,.14), transparent 55%),
+    radial-gradient(ellipse 45% 35% at 0% 30%, rgba(147,197,253,.06), transparent 50%),
+    var(--bg);
   min-height: 100vh;
   overflow-x: hidden;
 }
-/* Atmosphere only behind content. Never overlay buttons/text. */
-.page-atmosphere {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-}
-.page-atmosphere::before {
-  content: "";
-  position: absolute; inset: 0;
-  background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1.2px);
-  background-size: 4px 4px;
-  opacity: 0.22;
-  mask-image: radial-gradient(ellipse 70% 55% at 80% 10%, #000 20%, transparent 70%);
-}
-.page-atmosphere::after {
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 55% 45% at 90% -5%, rgba(110,231,183,.16), transparent 55%),
-    radial-gradient(ellipse 45% 35% at 0% 30%, rgba(147,197,253,.07), transparent 50%);
-}
-body > *:not(.page-atmosphere) { position: relative; z-index: 1; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .i { width: 1.1rem; height: 1.1rem; display: inline-block; vertical-align: -0.15em; }
@@ -128,29 +111,36 @@ a:hover { text-decoration: underline; }
   position: relative;
   padding: 4.5rem 0 2rem;
   isolation: isolate;
+  overflow: hidden;
 }
 .hero-orb {
   position: absolute;
   right: -8%; top: -10%;
   width: min(42rem, 90vw); height: min(42rem, 90vw);
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 40% 40%, rgba(110,231,183,.5), rgba(52,180,140,.16) 42%, transparent 68%);
-  filter: blur(10px);
-  opacity: 0.85;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
+  animation: orb-drift 14s ease-in-out infinite alternate;
+  /* Soft glow layer */
+  background: radial-gradient(circle at 40% 40%, rgba(110,231,183,.48), rgba(52,180,140,.14) 42%, transparent 68%);
+  filter: blur(12px);
+}
+.hero-pixels {
+  position: absolute;
+  right: -4%; top: -6%;
+  width: min(36rem, 80vw); height: min(36rem, 80vw);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  /* Fumadocs-style pixel dots, clipped to orb only, never over text/buttons */
+  background-image: radial-gradient(rgba(110,231,183,.28) 1.15px, transparent 1.35px);
+  background-size: 6px 6px;
+  mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 38%, transparent 68%);
+  -webkit-mask-image: radial-gradient(circle at 45% 45%, #000 0%, #000 38%, transparent 68%);
+  opacity: 0.85;
   animation: orb-drift 14s ease-in-out infinite alternate;
 }
-.hero-orb::after {
-  content: "";
-  position: absolute; inset: 10%;
-  border-radius: 50%;
-  /* Pixel / halftone dots, clipped to the orb only */
-  background-image: radial-gradient(rgba(6,38,28,.75) 1.1px, transparent 1.3px);
-  background-size: 5px 5px;
-  opacity: 0.55;
-}
+.hero > *:not(.hero-orb):not(.hero-pixels) { position: relative; z-index: 1; }
 @keyframes orb-drift {
   from { transform: translate(0, 0) scale(1); }
   to { transform: translate(-3%, 4%) scale(1.06); }
@@ -442,7 +432,7 @@ footer.site .fine { color: var(--muted); font-size: 0.85rem; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .hero-orb { animation: none; }
+  .hero-orb, .hero-pixels { animation: none; }
   [data-reveal-on-scroll] { opacity: 1; transform: none; transition: none; }
   [data-reveal-on-scroll].is-visible .bento-card { animation: none; }
   .btn, .bento-card, .card { transition: none; }
@@ -534,9 +524,8 @@ ${site.head}
 <style>${raw(css)}</style>
 </head>
 <body>
-<div class="page-atmosphere" aria-hidden="true"></div>
 <header class="site-header"><div class="wrap inner">
-  <a class="logo" href="/">k<span>.</span></a>
+  <a class="logo" href="/">kumooo<span>.</span></a>
   <nav class="nav" aria-label="Primary">
     ${joinHtml(nav.map((n) => html`<a href="${n.url}">${n.title}</a>`))}
     <a class="btn primary" href="https://dash.kumooo.dev/signup">Open dashboard</a>
@@ -611,7 +600,8 @@ function marketingHome(site: ThemeSiteContext): Html {
     html`<div class="wrap">
 <section class="hero">
   <div class="hero-orb" aria-hidden="true"></div>
-  <div class="hero-brand" data-hero-bit>k<span>.</span></div>
+  <div class="hero-pixels" aria-hidden="true"></div>
+  <div class="hero-brand" data-hero-bit>kumooo<span>.</span></div>
   <h1 data-hero-bit>Publish on <em>Cloudflare</em>. Keep your evenings.</h1>
   <p class="lead" data-hero-bit>Markdown in. HTML out at the edge. Themes, media, and a dashboard that does not need babysitting.</p>
   <div class="install" data-hero-bit data-copy="npx create-kumooo">npx create-kumooo <button type="button">copy</button></div>
