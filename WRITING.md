@@ -22,7 +22,7 @@ Assume they're smart. Never talk down.
 - Short sentences. Use contractions. Prefer simple words.
 - Specific beats adjectives.
 - Don't sell. Explain. Show.
-- **Never use em dashes (—).** Use commas, periods, parentheses, semicolons, or colons.
+- **Never use em dashes (U+2014).** Use commas, periods, parentheses, semicolons, or colons.
 
 ## Forbidden words
 

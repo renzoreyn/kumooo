@@ -45,7 +45,7 @@ export function DeploymentsPage() {
     <>
       <PageHeader
         title="Deployments"
-        description="Real publish and configuration events — not Git builds."
+        description="Real publish and configuration events, not Git builds."
       />
       {error ? <div className="error">{error}</div> : null}
       {releases.length === 0 ? (

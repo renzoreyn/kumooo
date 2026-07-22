@@ -147,7 +147,7 @@ export function DomainsPage() {
                     <td>{r.type}</td>
                     <td>{r.name}</td>
                     <td style={{ wordBreak: "break-all" }}>{r.value}</td>
-                    <td>{r.proxied ? "yes" : "—"}</td>
+                    <td>{r.proxied ? "yes" : "-"}</td>
                   </tr>
                 ))}
               </tbody>

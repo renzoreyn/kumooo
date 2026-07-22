@@ -100,7 +100,7 @@ export function SeoPage() {
                 {c.ok ? "✓" : "×"} {c.label}
               </span>
               {!c.ok && c.detail ? (
-                <span className="muted"> — {c.detail}</span>
+                <span className="muted">: {c.detail}</span>
               ) : null}
               {c.id === "ogImage" && !c.ok ? (
                 <>

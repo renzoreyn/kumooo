@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Ship a real Kumooo dashboard control center with working `*.kumooo.dev` tenant sites, site/page/post CRUD, Markdown publishing, media, themes, SEO, OpenGraph maker, guided domains, and real release activity — with no fabricated metrics.
+**Goal:** Ship a real Kumooo dashboard control center with working `*.kumooo.dev` tenant sites, site/page/post CRUD, Markdown publishing, media, themes, SEO, OpenGraph maker, guided domains, and real release activity  - with no fabricated metrics.
 
 **Architecture:** Keep the Vite React dashboard and Hono API / Renderer Workers. Extend D1 for site status, activity events, and OG templates. Rebuild the dashboard into a site-scoped app shell with typed API modules. Tenant hosting is fixed with Cloudflare wildcard DNS + Worker routes; OpenGraph images are generated client-side from structured templates and stored as immutable R2 media.
 
@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Spec: `docs/superpowers/specs/2026-07-21-dashboard-launchable-core-design.md`
-- Real data only — never invent visitors, uptime, security scores, or performance numbers.
+- Real data only  - never invent visitors, uptime, security scores, or performance numbers.
 - Deferred product areas (analytics, team invites, API keys, marketplace, AI, page builder, Git builds, site duplication/transfer) must not appear as fake working controls.
 - Markdown remains the content source of truth.
 - Publishing updates D1 + KV cache version; it is not a Git/Workers “deploy”.
@@ -284,7 +284,7 @@ git commit -m "Add dashboard core schema, SEO health, OG templates, and preview 
 
 ---
 
-### Task 3: API foundation — events, overview, routing health, site lifecycle
+### Task 3: API foundation  - events, overview, routing health, site lifecycle
 
 **Files:**
 - Create: `apps/api/src/lib/events.ts`
@@ -425,7 +425,7 @@ Always create a revision before applying the patch (existing behavior). On publi
 
 - Soft archive: `status = "archived"` (keep row)
 - Restore from archived → `draft`
-- Hard delete only when current status is `archived` (or accept explicit `?force=true` only for admins if already deleted today — prefer archive-first)
+- Hard delete only when current status is `archived` (or accept explicit `?force=true` only for admins if already deleted today  - prefer archive-first)
 - Keep existing DELETE but gate it behind archived status to match the spec
 
 - [ ] **Step 3: Revision restore endpoint**
@@ -581,7 +581,7 @@ git commit -m "Rebuild dashboard shell with site-scoped navigation."
 
 Show searchable cards with name, hostname, status badge (`Live` only if routing health status is `live`), theme, content counts if available, Open / Visit / Edit actions.
 
-Create wizard fields: name, slug, description, theme select (`default`, `marketing`, `docs` only if allowed for customer sites — default to `default` for new tenants).
+Create wizard fields: name, slug, description, theme select (`default`, `marketing`, `docs` only if allowed for customer sites  - default to `default` for new tenants).
 
 - [ ] **Step 3: Typecheck + manual create-site smoke**
 

@@ -309,10 +309,10 @@ Expected: `updated` / `created` lines for marketing + docs pages.
 
 Open:
 
-- `https://kumooo.dev` — soft charcoal, dashboard hero, stats, tabs, features, CTA; one `h1`; no email in footer
-- `https://kumooo.dev/about` — one `h1`, dense enough, Ren/GitHub links
-- `https://docs.kumooo.dev` — Fumadocs-like shell, search, theme toggle, sidebar groups
-- A deep docs page — TOC spy, breadcrumbs, prev/next, one `h1`
+- `https://kumooo.dev`  - soft charcoal, dashboard hero, stats, tabs, features, CTA; one `h1`; no email in footer
+- `https://kumooo.dev/about`  - one `h1`, dense enough, Ren/GitHub links
+- `https://docs.kumooo.dev`  - Fumadocs-like shell, search, theme toggle, sidebar groups
+- A deep docs page  - TOC spy, breadcrumbs, prev/next, one `h1`
 
 - [ ] **Step 4: Commit any deploy/script tweaks if needed**
 

@@ -65,11 +65,11 @@ function statusLabel(status: SaveStatus): string {
     case "saved":
       return "Saved";
     case "offline":
-      return "Offline — changes wait until you're back";
+      return "Offline; changes wait until you're back";
     case "error":
       return "Save failed";
     case "conflict":
-      return "Conflict — content changed elsewhere";
+      return "Conflict; content changed elsewhere";
     default:
       return "Ready";
   }

@@ -95,7 +95,7 @@ domainRoutes.post("/sites/:siteId/domains", async (c) => {
     throw ApiError.badRequest("That hostname doesn't look right.");
   }
   if (hostname.endsWith(`.${c.env.PUBLIC_SITE_SUFFIX}`)) {
-    throw ApiError.badRequest("Use a domain you control — not a *.kumooo.dev hostname.");
+    throw ApiError.badRequest("Use a domain you control, not a *.kumooo.dev hostname.");
   }
   const existing = (await c.get("db").select().from(domains).where(eq(domains.hostname, hostname)))[0];
   if (existing) throw ApiError.conflict("That domain is already registered.");

@@ -62,12 +62,12 @@ Match Fumadocs visual language:
 
 Page stack, top to bottom:
 
-1. **Sticky nav** — brand, Features / Docs / Pricing / About, GitHub CTA.
-2. **Hero** — one headline, one supporting line, `npx create-kumooo` copy chip, primary/secondary CTAs, dashboard preview panel on the right (product-first).
-3. **Live numbers** — edge TTFB, required JS (0), edge cities, free to start.
-4. **Tabbed product tour** — Editor / Media / Domains / Themes. Tab change crossfades content with Framer Motion.
-5. **Feature grid** — six concrete capabilities with hover lift.
-6. **Closing CTA** — ship tonight. No email block.
+1. **Sticky nav**  - brand, Features / Docs / Pricing / About, GitHub CTA.
+2. **Hero**  - one headline, one supporting line, `npx create-kumooo` copy chip, primary/secondary CTAs, dashboard preview panel on the right (product-first).
+3. **Live numbers**  - edge TTFB, required JS (0), edge cities, free to start.
+4. **Tabbed product tour**  - Editor / Media / Domains / Themes. Tab change crossfades content with Framer Motion.
+5. **Feature grid**  - six concrete capabilities with hover lift.
+6. **Closing CTA**  - ship tonight. No email block.
 
 Motion budget (marketing):
 
