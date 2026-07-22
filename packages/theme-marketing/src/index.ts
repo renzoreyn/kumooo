@@ -598,15 +598,15 @@ function cfDeployDialog(): Html {
   return html`<dialog class="cf-deploy-dialog" data-cf-deploy>
   <div class="cf-deploy-inner">
     <h2>Deploy on Cloudflare</h2>
-    <p>Two paths. Managed multi-site on Kumooo, or self-host a single site on your Cloudflare like WordPress on your own box.</p>
+    <p>Two paths. Managed on Kumooo, or self-host your site on your Cloudflare account.</p>
     <div class="cf-deploy-choices">
       <a class="cf-deploy-choice" href="https://dash.kumooo.dev/signup">
         <strong>Host on Kumooo</strong>
         <span>We run the platform. Orgs, multiple sites, {slug}.kumooo.dev. Sign up and publish.</span>
       </a>
       <a class="cf-deploy-choice" href="https://docs.kumooo.dev/deploy-on-cloudflare">
-        <strong>Self-host one site</strong>
-        <span>Your Cloudflare. One site. Not a clone of the whole Kumooo cloud. Single-site install path is next.</span>
+        <strong>Self-host on Cloudflare</strong>
+        <span>npx create-kumooo → your Workers, D1, KV, R2. One site on your account.</span>
       </a>
     </div>
     <div class="cf-deploy-actions">
@@ -710,8 +710,8 @@ x-kumooo-cache: miss → hit</pre>
     </article>
     <article class="bento-card">
       <p class="kicker">CF Deploy</p>
-      <h3>Managed or one site</h3>
-      <p>Host on Kumooo for orgs and multiple sites, or self-host a single site on your Cloudflare.</p>
+      <h3>Managed or self-host</h3>
+      <p>Host on Kumooo for orgs and multiple sites, or run create-kumooo on your Cloudflare for your own site.</p>
     </article>
     <article class="bento-card">
       <p class="kicker">Media</p>
@@ -754,12 +754,12 @@ x-kumooo-cache: miss → hit</pre>
     <ul>
       <li>Markdown posts and pages with revisions</li>
       <li>Season themes or your own Theme Studio tree</li>
-      <li>Deploy dialog: managed Kumooo or self-host one site</li>
+      <li>Deploy dialog: managed Kumooo or self-host on your Cloudflare</li>
     </ul>
   </div>
 </section>
 
-${deployCta("Ship your first site tonight.", "Host on Kumooo, or self-host one site on your Cloudflare. Then go outside.")}
+${deployCta("Ship your first site tonight.", "Host on Kumooo, or self-host on your Cloudflare with create-kumooo. Then go outside.")}
 </div>`,
     { fullBleed: true },
   );
@@ -846,7 +846,7 @@ function marketingFeatures(site: ThemeSiteContext): Html {
     ${feature(ic.shield, "Boring security", "PBKDF2 passwords, HttpOnly sessions, escaped templates.")}
     ${feature(ic.refresh, "Revisions", "Every save keeps history. Roll back when you mess up.")}
     ${feature(ic.search, "SEO handled", "Titles, meta, sitemap, RSS. Not a plugin graveyard.")}
-    ${feature(ic.zap, "CF Deploy", "Managed multi-site on Kumooo, or self-host one site on your Cloudflare.")}
+    ${feature(ic.zap, "CF Deploy", "Managed on Kumooo, or self-host on your Cloudflare with create-kumooo.")}
     ${feature(ic.feather, "Org + sites", "Workspaces, roles, multiple sites. Grow without migrating.")}
   </div>
 </section>
@@ -864,7 +864,7 @@ function marketingPricing(site: ThemeSiteContext): Html {
 <section class="page-hero" data-hero-bit>
   <div class="kicker">Pricing</div>
   <h1>Two paths. Zero Kumooo tax.</h1>
-  <p class="lead">Host on Kumooo for managed orgs and multiple sites, or self-host a single site on your Cloudflare. You pay Cloudflare for usage either way.</p>
+  <p class="lead">Host on Kumooo for managed orgs and sites, or self-host on your Cloudflare with create-kumooo. You pay Cloudflare for usage either way.</p>
   <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem">
     <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
     <a class="btn" href="https://docs.kumooo.dev/getting-started">Getting started</a>
@@ -886,16 +886,16 @@ function marketingPricing(site: ThemeSiteContext): Html {
       <a class="btn primary" href="https://dash.kumooo.dev/signup">Open the dashboard</a>
     </div>
     <div class="price-card" data-motion-card>
-      <div class="kicker">Self-host one site</div>
-      <div class="amount" style="font-size:1.6rem">One site</div>
-      <p class="muted" style="margin:0 0 1rem">WordPress-style. Your Cloudflare. One site. Not a clone of the whole Kumooo cloud.</p>
+      <div class="kicker">Self-host on Cloudflare</div>
+      <div class="amount" style="font-size:1.6rem">Your account</div>
+      <p class="muted" style="margin:0 0 1rem">npx create-kumooo. Workers, D1, KV, R2, dashboard on your Cloudflare. Your site. No PHP tax.</p>
       <ul>
-        <li>Single-site install (path shipping next)</li>
-        <li>Your D1, R2, KV for that site</li>
-        <li>Your domain in Cloudflare</li>
+        <li>Guided create → deploy</li>
+        <li>Your D1, R2, KV</li>
+        <li>Your domain when you attach it</li>
         <li>No Kumooo SaaS fee</li>
       </ul>
-      <a class="btn" href="https://docs.kumooo.dev/deploy-on-cloudflare">Read the deploy guide</a>
+      <a class="btn" href="https://docs.kumooo.dev/deploy-on-cloudflare">Self-host guide</a>
     </div>
   </div>
 </section>
@@ -906,13 +906,13 @@ function marketingPricing(site: ThemeSiteContext): Html {
   <div class="table-wrap">
   <table class="compare">
     <thead>
-      <tr><th>Capability</th><th>Kumooo hosted</th><th>Self-host one site</th></tr>
+      <tr><th>Capability</th><th>Kumooo hosted</th><th>Self-host (your CF)</th></tr>
     </thead>
     <tbody>
-      <tr><td>Sites &amp; content</td><td class="yes">Many sites</td><td class="yes">One site</td></tr>
+      <tr><td>Sites &amp; content</td><td class="yes">Many sites</td><td class="yes">Your site</td></tr>
       <tr><td>Media library</td><td class="yes">Yes</td><td class="yes">Your R2</td></tr>
-      <tr><td>Managed *.kumooo.dev</td><td class="yes">Yes</td><td>Your domain</td></tr>
-      <tr><td>Multi-tenant orgs</td><td class="yes">Yes</td><td>No (by design)</td></tr>
+      <tr><td>Managed *.kumooo.dev</td><td class="yes">Yes</td><td>Your domain / workers.dev</td></tr>
+      <tr><td>Who runs Workers</td><td>Kumooo</td><td class="yes">You</td></tr>
       <tr><td>Interactive themes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
       <tr><td>Dashboard</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
       <tr><td>Kumooo SaaS fee</td><td class="yes">$0</td><td class="yes">$0</td></tr>

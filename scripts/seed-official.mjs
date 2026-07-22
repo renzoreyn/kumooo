@@ -136,7 +136,7 @@ D1 for content. R2 for media. KV for sessions and cache versions.
 
 ## Hosting
 
-Host on Kumooo for orgs and multiple sites, or self-host one site on your Cloudflare (WordPress-style). Not a clone of the whole multi-tenant cloud.
+Host on Kumooo for orgs and multiple sites, or self-host on your Cloudflare with \`npx create-kumooo\`.
 
 ## No PHP required
 
@@ -152,9 +152,9 @@ Take that however you want.
 
 Managed platform. Orgs, multiple sites, dashboard. You get {slug}.kumooo.dev.
 
-## Self-host one site
+## Self-host on Cloudflare
 
-WordPress-style. Your Cloudflare. One site. The dedicated install package is next. There is no Kumooo tax either way.
+\`npx create-kumooo\`. Your Workers, D1, KV, R2, dashboard. Your site. There is no Kumooo tax either way.
 
 ## What you pay
 

@@ -5,7 +5,7 @@ import { fail, ok } from "../ui.js";
 export async function deploy(): Promise<void> {
   const root = findRoot();
   ok("Applying migrations…");
-  let code = await wrangler(["d1", "migrations", "apply", "kumooo", "--remote"], apiDir(root));
+  let code = await wrangler(["d1", "migrations", "apply", "DB", "--remote"], apiDir(root));
   if (code !== 0) {
     fail("Migration failed.");
     process.exitCode = code;

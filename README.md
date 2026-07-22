@@ -22,6 +22,8 @@ npx create-kumooo
 Marketing (`kumooo.dev`) and docs (`docs.kumooo.dev`) run on Kumooo itself.
 We dogfood the product. On purpose.
 
+Self-host on your Cloudflare with `npx create-kumooo` (pick self-host when prompted).
+
 ## Repository
 
 | Path | What |

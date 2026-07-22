@@ -1,6 +1,6 @@
 # Deploy on Cloudflare
 
-Kumooo is a Cloudflare product. Two paths. Different shapes.
+Kumooo is a Cloudflare product. Two paths.
 
 ## Path A: Host on Kumooo
 
@@ -13,32 +13,52 @@ Managed platform. Orgs, multiple sites, dashboard.
 
 You do not run Wrangler for day-to-day publishing.
 
-## Path B: Self-host one site
+## Path B: Self-host on your Cloudflare
 
-WordPress-style. Your Cloudflare account. **One site**, not a clone of the whole Kumooo multi-tenant cloud.
+Your account. Your Workers. Your site.
 
-The dedicated single-site install package is shipping next. Until then:
+```bash
+npx create-kumooo
+```
 
-1. Prefer Path A if you want to publish tonight.
-2. Watch [Installation](/installation) / CLI docs for the one-site path when it lands.
-3. Do not expect `create-kumooo` to stand up a full multi-org SaaS on your account. That is not the product promise.
+Pick **Self-host on my Cloudflare**. The installer will:
+
+1. Clone the repo and install deps
+2. `wrangler login` if needed
+3. Create D1, KV, and R2 under a name prefix you choose
+4. Write wrangler configs (no kumooo.dev routes)
+5. Migrate, deploy API + renderer Workers
+6. Build and deploy the dashboard to Cloudflare Pages
+
+Then:
+
+1. Open the Pages dashboard URL it prints
+2. Sign up
+3. Create **one site** (that is your site)
+4. Open the renderer `*.workers.dev` URL (it serves your first site)
+5. Attach your own domain in Cloudflare when you want it
 
 You pay Cloudflare for usage. There is no Kumooo tax on top.
 
+### What self-host is not
+
+It is not "run the managed multi-tenant Kumooo cloud on your account."  
+It is your publishing stack on Cloudflare for the site you create.
+
 ## Which one?
 
-- Ship a blog tonight → Path A.
-- Want your own Cloudflare bill for a single site → Path B (one-site package next).
-- Want to run your own multi-tenant Kumooo → not supported. Use Path A or talk to us.
+- Ship tonight with zero Wrangler → Path A.
+- Want the bill and the Workers under your Cloudflare → Path B.
+- Tired of PHP and plugin roulette → either path. That is the point.
 
 ## CF Deploy from marketing
 
-The marketing CTA opens this same fork. Managed vs one site. Not "fork the SaaS."
+The marketing CTA opens this same fork.
 
 ## Checklist after first deploy
 
 - [ ] Can sign in to the dashboard
-- [ ] Site loads on `*.kumooo.dev` or your hostname
+- [ ] Site loads on `*.kumooo.dev`, workers.dev, or your hostname
 - [ ] Publish a draft and see it live
 - [ ] Favicon / logo set (or accept the default geometric k mark)
 - [ ] Theme chosen (season or Studio)

@@ -16,10 +16,10 @@ ${bold("Usage")}
   kumooo <command> [options]
 
 ${bold("Commands")}
-  ${cyan("create [name]")}   Create a new Kumooo project
+  ${cyan("create [name]")}   Create a project (local or self-host on Cloudflare)
   ${cyan("dev")}             API + renderer + dashboard locally
   ${cyan("build")}           Production build (no deploy)
-  ${cyan("deploy")}          Migrate and deploy both workers
+  ${cyan("deploy")}          Migrate and deploy API + renderer Workers
   ${cyan("doctor")}          Check your toolchain and layout
   ${cyan("migrate")}         Apply database migrations ${dim("(--local for dev)")}
 

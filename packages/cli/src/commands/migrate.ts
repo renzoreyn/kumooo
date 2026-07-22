@@ -7,7 +7,7 @@ export async function migrate(args: string[]): Promise<void> {
   const local = args.includes("--local");
   const flags = local ? ["--local"] : ["--remote"];
   ok(local ? "Applying local migrations…" : "Applying remote migrations…");
-  const code = await wrangler(["d1", "migrations", "apply", "kumooo", ...flags], apiDir(root));
+  const code = await wrangler(["d1", "migrations", "apply", "DB", ...flags], apiDir(root));
   if (code !== 0) {
     fail("Migrate failed.");
     process.exitCode = code;

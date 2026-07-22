@@ -21,12 +21,12 @@ SSL comes through Cloudflare once DNS is correct and proxied.
 - Apex domains (`example.com`) need the records Kumooo lists for apex. Follow the dashboard, not a random blog post.
 - Propagation can take a few minutes. If HTTP looks fine but HTTPS fails, wait for the certificate.
 
-## Managed vs your Cloudflare
+## Managed vs self-host
 
 Marketing calls this **CF Deploy**:
 
 - **Host on Kumooo**: managed orgs and multiple sites on `*.kumooo.dev`, or attach domains through the dashboard.
-- **Self-host one site**: WordPress-style. Your Cloudflare. One site. Not a clone of the multi-tenant cloud. See [Deploy on Cloudflare](/deploy-on-cloudflare).
+- **Self-host on Cloudflare**: `npx create-kumooo` on your account. See [Deploy on Cloudflare](/deploy-on-cloudflare).
 
 ## Next
 

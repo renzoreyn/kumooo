@@ -2,18 +2,29 @@ Ten minutes from nothing to a published page.
 
 You need Node 20+, pnpm, and a terminal you're not afraid of.
 
-## 1. Create a project
+## Fastest: Host on Kumooo
+
+1. Sign up at [dash.kumooo.dev](https://dash.kumooo.dev)
+2. Create a site
+3. Publish
+
+No Wrangler. `{slug}.kumooo.dev` is live when you are.
+
+## Self-host on your Cloudflare
 
 ```bash
 npx create-kumooo
 ```
 
-Or clone this repo and install:
+Choose **Self-host on my Cloudflare**. Follow the prompts.
+Details: [Deploy on Cloudflare](/deploy-on-cloudflare) and [Installation](/installation).
+
+## Local playground
 
 ```bash
-git clone https://github.com/renzoreyn/kumooo
-cd kumooo
-pnpm install
+npx create-kumooo
+# pick Local first
+cd your-folder
 kumooo migrate --local
 kumooo dev
 ```
@@ -24,28 +35,7 @@ That starts:
 - your site on `:8788`
 - dashboard on `:5173`
 
-## 2. Create an account
-
-Open the dashboard and sign up.
-Or hit the API:
-
-```bash
-curl -X POST http://127.0.0.1:8787/v1/auth/signup \
-  -H "Content-Type: application/json" \
-  -c cookies.txt \
-  -d '{"email":"you@example.com","password":"a long passphrase","name":"You"}'
-```
-
-## 3. Create a site and publish
-
-Use the dashboard, or:
-
-```bash
-# list orgs, then create a site, then create content
-curl http://127.0.0.1:8787/v1/orgs -b cookies.txt
-```
-
-Refresh `:8788`. There it is.
+Open the dashboard, sign up, create a site, publish. Refresh `:8788`.
 
 ## When something misbehaves
 
@@ -54,4 +44,3 @@ kumooo doctor
 ```
 
 It tells you what's wrong in English.
-
