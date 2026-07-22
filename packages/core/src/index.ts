@@ -10,3 +10,4 @@ export * from "./preview.js";
 export * from "./seo-health.js";
 export * from "./og-template.js";
 export * from "./markdown-insert.js";
+export * from "./theme-id.js";

@@ -63,7 +63,7 @@ export const createSiteSchema = z.object({
     .regex(/^[a-z0-9][a-z0-9-]*$/, "Lowercase letters, numbers, hyphens.")
     .optional(),
   description: z.string().max(500).optional(),
-  theme: z.string().default("default"),
+  theme: z.string().default("haru"),
 });
 
 export const createContentSchema = z.object({

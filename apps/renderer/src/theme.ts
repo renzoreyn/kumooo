@@ -1,3 +1,4 @@
+import { resolveThemeId } from "@kumooo/core";
 import type { Theme } from "@kumooo/theme-kit";
 
 const themes = new Map<string, Theme>();
@@ -7,5 +8,6 @@ export function registerTheme(theme: Theme): void {
 }
 
 export function getTheme(name: string): Theme {
-  return themes.get(name) ?? themes.get("default")!;
+  const id = resolveThemeId(name);
+  return themes.get(id) ?? themes.get("haru") ?? themes.get("default")!;
 }

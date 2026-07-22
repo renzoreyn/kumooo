@@ -65,7 +65,7 @@ export const sites = sqliteTable(
     orgId: text("org_id").notNull(),
     name: text("name").notNull(),
     slug: text("slug").notNull().unique(),
-    theme: text("theme").notNull().default("default"),
+    theme: text("theme").notNull().default("haru"),
     status: text("status", { enum: ["active", "archived"] }).notNull().default("active"),
     settings: text("settings").notNull().default("{}"),
     createdAt: createdAt(),
