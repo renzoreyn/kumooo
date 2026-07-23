@@ -1,29 +1,43 @@
 import Link from "next/link";
 
-export function BrandMark({ className = "h-9 w-9" }: { className?: string }) {
+/** Real geometric k: white stem + diagonal leg + mint dot. */
+export function BrandMark({ className = "h-8 w-8" }: { className?: string }) {
   return (
     <svg
       className={className}
       viewBox="0 0 32 32"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
-      <rect width="32" height="32" rx="6" fill="#0a0f0d" />
-      <path
-        d="M9 7h4.2l4.1 7.2L21.4 7H26l-6.2 9.4L26 25h-4.6l-4.1-7.3L13.2 25H9l6.3-9.6L9 7z"
-        fill="#6ee7b7"
-      />
+      <rect width="32" height="32" rx="7.04" fill="#0a0a0a" />
+      <g transform="translate(6.811 3.2) scale(0.071508)">
+        <rect x="0" y="0" width="85" height="358" fill="#f5f5f5" />
+        <polygon
+          points="85,252 133,185 134,185 147,204 161,223 174,242 187,261 201,280 214,299 228,318 241,337 255,356 256,357 156,357 155,356 142,337 129,318 116,299 103,280 90,261 90,252"
+          fill="#f5f5f5"
+        />
+        <circle cx="191.65" cy="155.3" r="42" fill="#6ee7b7" />
+      </g>
     </svg>
   );
 }
 
-export function BrandWordmark({ size = "md" }: { size?: "md" | "lg" }) {
-  const text = size === "lg" ? "text-4xl sm:text-5xl md:text-6xl" : "text-lg";
+export function BrandWordmark({ size = "md" }: { size?: "md" | "lg" | "hero" }) {
+  const mark =
+    size === "hero" ? "h-11 w-11 sm:h-12 sm:w-12" : size === "lg" ? "h-9 w-9" : "h-7 w-7";
+  const text =
+    size === "hero"
+      ? "text-[2.75rem] sm:text-5xl md:text-[3.5rem] font-semibold tracking-[-0.04em]"
+      : size === "lg"
+        ? "text-xl font-semibold tracking-[-0.03em]"
+        : "text-[15px] font-semibold tracking-[-0.02em]";
+
   return (
-    <Link href="/" className="inline-flex items-center gap-3 text-[var(--paper)] no-underline">
-      <BrandMark className={size === "lg" ? "h-12 w-12 sm:h-14 sm:w-14" : "h-8 w-8"} />
-      <span className={`font-display font-bold tracking-tight ${text}`}>kumooo.js</span>
+    <Link href="/" className="group inline-flex items-center gap-2.5 text-[var(--fg)] no-underline">
+      <BrandMark className={mark} />
+      <span className={text}>
+        kumooo<span className="text-[var(--mint)]">.js</span>
+      </span>
     </Link>
   );
 }

@@ -54,7 +54,8 @@ export function SetupWizard() {
               <a className="text-[var(--mint)] underline" href="https://nodejs.org" rel="noreferrer" target="_blank">
                 Node.js LTS
               </a>{" "}
-              — after install, open a terminal and run <code className="text-[var(--mint)]">node -v</code>
+              {" "}
+              (after install, open a terminal and run <code className="text-[var(--mint)]">node -v</code>)
             </li>
             <li>
               Package manager: npm ships with Node. Or install{" "}

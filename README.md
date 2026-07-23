@@ -2,20 +2,21 @@
 
 **Websites shouldn't need babysitting.**
 
-**kumooo.js** is a framework toolkit on **Next.js** for any kind of site: blank app, blog, shop, or your own shape. Serious React UI. Open source first. Hosted on **Cloudflare Workers** (OpenNext). Hosted multi-tenant manage comes later.
+**kumooo.js** is a framework toolkit on **Next.js** for blank apps, blogs, shops, or your own shape. Serious React UI. Open source first. Hosted on **Cloudflare Workers** (OpenNext). Hosted multi-tenant manage comes later.
 
 ```bash
 npx create-kumooo
 ```
 
-Pick **blank**, **blog**, or **shop**. Or open the marketing site and hit **Deploy on Cloudflare** / **Guided setup**.
+Pick **blank**, **blog**, or **shop**. Or open [kumooo.dev](https://kumooo.dev) and hit **Deploy on Cloudflare** / **Guided setup**.
 
 ## What you get
 
-- **Built on Next.js App Router** — not a Next fork. Kumooo owns conventions, starters, CLI, and UI.
-- **`@kumooo/ui`** — shadcn-style primitives, Kibo-ready registry, Radix Icons, Framer Motion (`FadeIn`, `Stagger`, …).
-- **Starters** — blank / blog / shop.
-- **`apps/www`** — official marketing + Learn + setup (deploys to Cloudflare Workers).
+- **Built on Next.js App Router**, not a Next fork. Kumooo owns conventions, starters, CLI, and UI.
+- **`@kumooo/ui`**: shadcn-style primitives, Kibo-ready registry, Radix Icons, Framer Motion.
+- **Starters**: blank / blog / shop.
+- **`apps/www`**: marketing + Learn + setup at kumooo.dev.
+- **`apps/docs`**: Fumadocs reference at docs.kumooo.dev.
 - **Open source** you run yourself. Hosted WP.com-style is a later phase.
 
 ## Repository
@@ -23,6 +24,7 @@ Pick **blank**, **blog**, or **shop**. Or open the marketing site and hit **Depl
 | Path | What |
 |---|---|
 | `apps/www` | Marketing site (kumooo.dev) |
+| `apps/docs` | Docs (docs.kumooo.dev) |
 | `packages/ui` | `@kumooo/ui` |
 | `packages/framework` | Shared conventions |
 | `packages/create-kumooo` | `npx create-kumooo` |
@@ -35,16 +37,16 @@ Pick **blank**, **blog**, or **shop**. Or open the marketing site and hit **Depl
 ```bash
 pnpm install
 pnpm dev          # apps/www
+pnpm dev:docs     # apps/docs
 pnpm dev:blank    # blank starter
 ```
 
-## Deploy the marketing site (maintainers)
+## Deploy (maintainers)
 
 ```bash
-pnpm --filter @kumooo/www deploy
+pnpm deploy:www    # Worker kumooo-www → kumooo.dev
+pnpm deploy:docs   # Worker kumooo-docs → docs.kumooo.dev
 ```
-
-Uses `@opennextjs/cloudflare` → Worker name `kumooo-www`. Then attach `kumooo.dev` as a custom domain in the Cloudflare dashboard (Workers → kumooo-www → Domains).
 
 ## Deploy a starter (end users)
 

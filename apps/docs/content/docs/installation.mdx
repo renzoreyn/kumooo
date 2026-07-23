@@ -1,0 +1,38 @@
+---
+title: Installation
+description: Install tools and scaffold a kumooo.js project.
+---
+
+## Prerequisites
+
+| Tool | Why |
+| --- | --- |
+| Node.js 20+ | Runs Next.js and the CLI |
+| pnpm, npm, or bun | Installs dependencies |
+| Git (optional) | Needed for deploy hooks |
+
+## Scaffold with create-kumooo
+
+```bash
+npx create-kumooo my-site
+cd my-site
+pnpm install
+pnpm dev
+```
+
+Use `--help` on the CLI to see starter flags when we add them.
+
+## Monorepo users
+
+If you cloned [github.com/renzoreyn/kumooo](https://github.com/renzoreyn/kumooo) directly:
+
+```bash
+pnpm install
+pnpm dev:blank
+```
+
+You can also run `pnpm dev:blog` or `pnpm dev:shop`. Each starter lives under `starters/`.
+
+## Verify
+
+When `pnpm dev` prints "Ready", your site is running. No extra env vars are required for local dev on the blank starter.

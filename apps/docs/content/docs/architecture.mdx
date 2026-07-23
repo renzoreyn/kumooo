@@ -1,0 +1,35 @@
+---
+title: Architecture
+description: How kumooo.js pieces fit together on top of Next.js.
+---
+
+kumooo.js is conventions plus kits on **Next.js**. It is not a fork of Next.
+
+```
+create-kumooo
+  -> starters/blank|blog|shop
+       -> @kumooo/ui
+       -> @kumooo/framework
+       -> next
+```
+
+| Piece | Role |
+| --- | --- |
+| `create-kumooo` | Scaffolds a starter |
+| `@kumooo/ui` | Design system (Button, Dialog, FadeIn, Radix Icons, and more) |
+| `@kumooo/framework` | Shared site meta and env helpers |
+| Starters | Opinionated App Router apps |
+
+## What ships today
+
+The monorepo holds the marketing site (`apps/www`), this docs app (`apps/docs`), shared packages, and the starters the CLI copies out.
+
+You deploy your own repo. We are not running hosted multi-tenant manage yet.
+
+## What is coming later
+
+- `@kumooo/cloudflare` plugin for cache and compression via the Cloudflare API
+- Hosted multi-tenant "we manage your site" care
+- A visual theme editor (the marketing playground teases the feel)
+
+Those are promises on the roadmap, not hidden features. This tree is the open source foundation.

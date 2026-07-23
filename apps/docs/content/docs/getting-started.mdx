@@ -1,0 +1,34 @@
+---
+title: Getting started
+description: Your first kumooo.js site in a few steps.
+---
+
+## You need three things
+
+1. **Node.js LTS** from [nodejs.org](https://nodejs.org). Check with `node -v`.
+2. A **code editor**. Cursor or VS Code both work fine.
+3. About **ten minutes** and a terminal you are not afraid of.
+
+## Create a project
+
+```bash
+npx create-kumooo
+```
+
+Pick a starter when prompted: blank, blog, or shop. The CLI copies a working Next.js app into a new folder.
+
+## Run it locally
+
+```bash
+cd my-site
+pnpm install
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). Change text in `app/page.tsx` and watch it update.
+
+## Deploy
+
+Push to GitHub and connect the repo to Vercel or Cloudflare. The guided setup on [kumooo.dev/setup](https://kumooo.dev/setup) walks through the clicks.
+
+Hosted "we manage your site" care is on the roadmap. Today you deploy your own repo, which keeps things honest and under your control.

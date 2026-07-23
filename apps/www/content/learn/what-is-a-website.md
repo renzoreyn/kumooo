@@ -4,9 +4,9 @@ A website is a bunch of files your computer can turn into pages, sitting on a co
 
 ## The three pieces
 
-1. **Your files** — text, images, code. In kumooo.js that starts as a Next.js project on your laptop.
-2. **A host** — for us, usually [Cloudflare Workers](https://workers.cloudflare.com). They keep a copy of your project running at the edge.
-3. **A URL** — something like `my-site.your-subdomain.workers.dev`. Later you can point your own domain at it.
+1. **Your files**: text, images, code. In kumooo.js that starts as a Next.js project on your laptop.
+2. **A host**: for us, usually [Cloudflare Workers](https://workers.cloudflare.com). They keep a copy of your project running at the edge.
+3. **A URL**: something like `my-site.your-subdomain.workers.dev`. Later you can point your own domain at it.
 
 ## What “deploy” means
 

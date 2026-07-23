@@ -16,14 +16,16 @@ export function DeployButton({
       <Button
         asChild
         size={size === "lg" ? "lg" : "default"}
-        className="bg-[var(--mint)] text-[var(--ink)] hover:bg-[var(--mint-dim)]"
+        className="rounded-full bg-[var(--mint)] font-medium text-black hover:bg-[var(--mint-dim)]"
       >
         <a href={DEPLOY_BLANK_URL} rel="noreferrer" target="_blank">
           Deploy on Cloudflare
           <ArrowRightIcon />
         </a>
       </Button>
-      {showNote ? <p className="mt-2 max-w-sm text-xs leading-relaxed text-[var(--fog)]">{DEPLOY_NOTE}</p> : null}
+      {showNote ? (
+        <p className="mt-2 max-w-sm text-xs leading-relaxed text-[var(--fog)]">{DEPLOY_NOTE}</p>
+      ) : null}
     </div>
   );
 }

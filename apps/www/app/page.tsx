@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, FadeIn } from "@kumooo/ui";
+import { Button, FadeIn } from "@kumooo/ui";
 import { BrandWordmark } from "@/components/brand-mark";
 import { DeployButton } from "@/components/deploy-button";
 import { SitePlayground } from "@/components/playground/site-playground";
@@ -8,113 +8,103 @@ import { site } from "@/lib/site";
 export default function HomePage() {
   return (
     <main>
-      <section className="relative overflow-hidden">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-10 sm:px-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center lg:gap-8 lg:pb-20 lg:pt-14">
-          <FadeIn className="relative z-10">
-            <BrandWordmark size="lg" />
-            <h1 className="font-display mt-8 max-w-xl text-3xl font-bold leading-[1.1] tracking-tight text-[var(--paper)] sm:text-4xl md:text-5xl">
-              Make a website without the babysitting.
+      <section className="relative">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-24 pt-20 sm:px-8 lg:grid-cols-2 lg:gap-16 lg:pb-28 lg:pt-24">
+          <FadeIn>
+            <BrandWordmark size="hero" />
+            <h1 className="mt-8 max-w-[13ch] text-[2.5rem] font-semibold leading-[1.05] tracking-[-0.035em] text-[var(--fg)] sm:text-5xl">
+              A website toolkit that stays out of your way.
             </h1>
-            <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--fog)] sm:text-lg">
-              {site.name} is a Next.js toolkit for beginners and builders. Deploy in one click, or follow a guided
-              setup. We help you learn. Hosted care and a dead-simple theme editor come later.
+            <p className="mt-5 max-w-md text-[17px] leading-relaxed text-[var(--fog)]">
+              Starters on Next.js. Real UI. Deploy to Cloudflare. Tutorials if you have never shipped a site. We are
+              not pretending the theme editor ships today.
             </p>
-            <div className="mt-8 flex flex-wrap items-start gap-4">
-              <DeployButton size="lg" />
-              <div className="flex flex-col gap-2">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-[var(--line)] text-[var(--paper)] hover:bg-white/5"
-                >
-                  <Link href="/setup">Guided setup</Link>
-                </Button>
-                <Link href="/learn" className="text-sm text-[var(--mint)] hover:underline">
-                  New to websites? Start learning
-                </Link>
-                <Link href="/start#cli" className="text-xs text-[var(--fog)] hover:text-[var(--paper)]">
-                  Prefer the terminal?
-                </Link>
-              </div>
+            <div className="mt-10 flex flex-wrap items-end gap-3">
+              <DeployButton size="lg" showNote={false} />
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="rounded-full border-[var(--line)] bg-transparent px-6 text-[var(--fg)] hover:bg-white/5"
+              >
+                <Link href="/setup">Guided setup</Link>
+              </Button>
             </div>
+            <p className="mt-4 text-sm text-[var(--fog)]">
+              <Link href="/learn" className="text-[var(--fg)] underline-offset-4 hover:underline">
+                Never built a site?
+              </Link>{" "}
+              Start with Learn.
+            </p>
           </FadeIn>
-          <FadeIn delay={0.12} className="min-w-0 lg:-mr-8 xl:-mr-16">
+          <FadeIn delay={0.08} className="min-w-0">
             <SitePlayground />
           </FadeIn>
         </div>
       </section>
 
       <section className="border-t border-[var(--line)]">
-        <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
+        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-24 sm:px-8 lg:grid-cols-2 lg:items-end">
           <FadeIn>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--mint)]">For beginners</p>
-            <h2 className="font-display mt-3 max-w-2xl text-3xl font-bold tracking-tight text-[var(--paper)] sm:text-4xl">
-              Never built a site? Start here.
+            <p className="text-sm font-medium text-[var(--mint)]">Beginners</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
+              Four short lessons. Then a live URL.
             </h2>
-            <p className="mt-3 max-w-xl text-[var(--fog)]">
-              Short tutorials in plain language. No assumed CS degree. Just the path from blank laptop to a live URL.
+          </FadeIn>
+          <FadeIn delay={0.05}>
+            <p className="text-[17px] leading-relaxed text-[var(--fog)]">
+              What a website is. How to install tools. How to run{" "}
+              <code className="font-mono text-[15px] text-[var(--fg)]">create-kumooo</code>. How to edit and deploy.
             </p>
-            <Button asChild className="mt-8 bg-[var(--mint)] text-[var(--ink)] hover:bg-[var(--mint-dim)]">
-              <Link href="/learn">Open the Learn path</Link>
+            <Button
+              asChild
+              className="mt-6 rounded-full bg-[var(--mint)] px-6 text-black hover:bg-[var(--mint-dim)]"
+            >
+              <Link href="/learn">Open Learn</Link>
             </Button>
           </FadeIn>
         </div>
       </section>
 
-      <section className="border-t border-[var(--line)] bg-black/20">
-        <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
+      <section className="border-t border-[var(--line)]">
+        <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8">
           <FadeIn>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--mint)]">The kit</p>
-            <h2 className="font-display mt-3 max-w-2xl text-3xl font-bold tracking-tight text-[var(--paper)] sm:text-4xl">
-              Power without the plugin graveyard.
+            <p className="text-sm font-medium text-[var(--mint)]">What you get</p>
+            <h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
+              Blank, blog, or shop. Same kit underneath.
             </h2>
-            <p className="mt-3 max-w-xl text-[var(--fog)]">
-              Serious React UI with motion baked in. Same components your starters use.
-            </p>
           </FadeIn>
-          <FadeIn delay={0.1} className="mt-10 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-[var(--line)] bg-[var(--ink-elevated)]/60 p-5">
-              <p className="font-display text-lg font-semibold text-[var(--paper)]">Motion</p>
-              <p className="mt-2 text-sm text-[var(--fog)]">FadeIn, Stagger, and friends. Respect reduced motion.</p>
-            </div>
-            <div className="rounded-2xl border border-[var(--line)] bg-[var(--ink-elevated)]/60 p-5">
-              <p className="font-display text-lg font-semibold text-[var(--paper)]">Primitives</p>
-              <p className="mt-2 text-sm text-[var(--fog)]">Buttons, dialogs, inputs. shadcn-style, Kibo-ready.</p>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm" className="mt-4 border-[var(--line)]">
-                    Try a dialog
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="border-[var(--line)] bg-[var(--ink-elevated)] text-[var(--paper)]">
-                  <DialogHeader>
-                    <DialogTitle>Yep, it works</DialogTitle>
-                    <DialogDescription className="text-[var(--fog)]">
-                      This is the same Dialog from @kumooo/ui that starters ship with.
-                    </DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-            </div>
-            <div className="rounded-2xl border border-[var(--line)] bg-[var(--ink-elevated)]/60 p-5">
-              <p className="font-display text-lg font-semibold text-[var(--paper)]">Starters</p>
-              <p className="mt-2 text-sm text-[var(--fog)]">Blank, blog, or shop. Pick a shape and ship.</p>
-            </div>
-          </FadeIn>
+          <div className="mt-14 grid gap-10 sm:grid-cols-3">
+            {[
+              { title: "UI", body: "Buttons, dialogs, motion. Same package the starters use." },
+              { title: "CLI", body: "npx create-kumooo and you are in a running Next app." },
+              { title: "Docs", body: "Reference on docs.kumooo.dev. Learn path stays here." },
+            ].map((item) => (
+              <div key={item.title}>
+                <p className="text-xl font-semibold tracking-[-0.02em] text-[var(--fg)]">{item.title}</p>
+                <p className="mt-2 text-[15px] leading-relaxed text-[var(--fog)]">{item.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-12 text-sm text-[var(--fog)]">
+            Reference:{" "}
+            <a href={site.docs} className="text-[var(--fg)] underline-offset-4 hover:underline" rel="noreferrer" target="_blank">
+              docs.kumooo.dev
+            </a>
+          </p>
         </div>
       </section>
 
       <section className="border-t border-[var(--line)]">
-        <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
+        <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8">
           <FadeIn>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--mint)]">What&apos;s coming</p>
-            <h2 className="font-display mt-3 max-w-2xl text-3xl font-bold tracking-tight text-[var(--paper)] sm:text-4xl">
-              We&apos;ll help manage it. The editor will be obvious.
+            <p className="text-sm font-medium text-[var(--mint)]">Later</p>
+            <h2 className="mt-3 max-w-lg text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
+              Hosted care. An editor that does not feel like 2009.
             </h2>
-            <p className="mt-3 max-w-xl text-[var(--fog)]">
-              Open source you run today. Later: hosted care so you are not alone with DNS at 1am, and a theme editor
-              that feels like the playground above. Not shipping those yet. We won&apos;t pretend otherwise.
+            <p className="mt-4 max-w-lg text-[17px] leading-relaxed text-[var(--fog)]">
+              Open source you run today. Manage and theme tools when they are actually good. We will say so when they
+              ship.
             </p>
           </FadeIn>
         </div>

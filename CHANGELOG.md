@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.3
+
+- Revamp marketing site: real geometric k mark, Instrument Serif + IBM Plex, anti-slop copy (no em dashes).
+- Add Fumadocs app at `apps/docs` on docs.kumooo.dev.
+- Marketing `/docs` redirects to the Fumadocs site.
+
 ## 0.3.2
 
 - Host marketing site on Cloudflare Workers via OpenNext (`kumooo-www`).
@@ -18,7 +24,7 @@
 
 ## 0.2.0
 
-- Framework-first pivot: Next starters, UI kit, CMS marked sunset.
+- Framework-first pivot: Next starters, UI kit, CMS sunset.
 
 ## 0.1.x
 
