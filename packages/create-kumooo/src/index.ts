@@ -118,7 +118,6 @@ async function main() {
       "  pnpm dev",
       "",
       pc.dim("Built on Next.js. Kumooo adds kits, UI, and (soon) Cloudflare + hosting."),
-      pc.dim("Legacy CMS is sunset — see LEGACY.md in the monorepo."),
     ].join("\n"),
   );
 }

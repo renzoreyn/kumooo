@@ -1,13 +1,14 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
-### kumooo.js pivot (hard cut)
+- Remove the Cloudflare CMS from the repo. kumooo.js only.
+- Active tree: `@kumooo/ui`, `@kumooo/framework`, `create-kumooo`, `starters/*`.
 
-- Framework-first product on Next.js: `@kumooo/ui`, `@kumooo/framework`, `starters/{blank,blog,shop}`, rewritten `create-kumooo`.
-- UI kit: shadcn-style primitives, Kibo-ready `components.json`, Radix Icons, Framer Motion helpers.
-- Legacy Cloudflare CMS marked sunset (`LEGACY.md`). No new CMS features.
+## 0.2.0
+
+- Framework-first pivot: Next starters, UI kit, CMS marked sunset.
 
 ## 0.1.x
 
-- Cloudflare CMS platform (API, renderer, dashboard, seasons, Yukino, self-host CLI).
+- Former Cloudflare CMS platform (removed in 0.3.0).

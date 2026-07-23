@@ -13,7 +13,7 @@ pnpm dev
 
 ```bash
 pnpm install
-pnpm --filter @kumooo/starter-blank dev
+pnpm dev
 ```
 
 ## Requirements
@@ -23,4 +23,4 @@ pnpm --filter @kumooo/starter-blank dev
 | Node.js | 20+ |
 | pnpm | 9+ |
 
-No VPS required to build or run starters locally. Deploy to Vercel, Node, or your own host. Cloudflare plugin and hosted fleet are later phases.
+No VPS required locally. Deploy anywhere Next.js runs (Vercel, Node host, etc.).

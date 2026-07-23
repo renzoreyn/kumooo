@@ -1,8 +1,8 @@
 {
   "name": "kumooo",
   "private": true,
-  "version": "0.2.0",
-  "description": "kumooo.js — Next.js framework toolkit (UI, starters, CLI). Legacy CMS sunset.",
+  "version": "0.3.0",
+  "description": "kumooo.js — Next.js framework toolkit (UI, starters, CLI)",
   "license": "MIT",
   "packageManager": "pnpm@9.15.0",
   "engines": {
@@ -13,10 +13,9 @@
     "dev": "pnpm --filter @kumooo/starter-blank dev",
     "dev:blog": "pnpm --filter @kumooo/starter-blog dev",
     "dev:shop": "pnpm --filter @kumooo/starter-shop dev",
-    "dev:cms": "pnpm --filter @kumooo/cli exec kumooo dev",
     "test": "pnpm -r run test",
     "typecheck": "pnpm -r run typecheck",
-    "lint": "oxlint packages apps starters",
+    "lint": "oxlint packages starters",
     "ci": "pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {

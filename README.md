@@ -1,8 +1,8 @@
-# Kumooo / kumooo.js
+# kumooo.js
 
 **Websites shouldn't need babysitting.**
 
-Kumooo is becoming **kumooo.js**: a framework-first toolkit on **Next.js** for any kind of site (blank app, blog, shop), with a serious React UI kit and (soon) Cloudflare controls + hosted multi-tenant.
+**kumooo.js** is a framework toolkit on **Next.js** for any kind of site: blank app, blog, shop, or your own shape. Serious React UI. Open source first. Hosted multi-tenant and Cloudflare controls come later.
 
 ```bash
 npx create-kumooo
@@ -10,39 +10,31 @@ npx create-kumooo
 
 Pick **blank**, **blog**, or **shop**.
 
-## What you get (now)
+## What you get
 
-- **Built on Next.js App Router** — not a literal Next fork. Kumooo owns conventions, starters, CLI, and UI.
+- **Built on Next.js App Router** — not a Next fork. Kumooo owns conventions, starters, CLI, and UI.
 - **`@kumooo/ui`** — shadcn-style primitives, Kibo-ready registry, Radix Icons, Framer Motion (`FadeIn`, `Stagger`, …).
-- **Starters** that prove versatility — blank / blog / shop.
-- **Open source first** (WP.org path). Hosted WP.com-style multi-tenant is a later phase.
-
-## Legacy CMS (sunset)
-
-The Cloudflare Workers + D1 publishing CMS is **frozen**. See [LEGACY.md](./LEGACY.md).
-
-No new CMS themes or CMS features. Existing `*.kumooo.dev` CMS sites may stay up during a short sunset window.
+- **Starters** — blank / blog / shop.
+- **Open source** you run yourself. Hosted WP.com-style is a later phase.
 
 ## Repository
 
 | Path | What |
 |---|---|
-| `packages/ui` | `@kumooo/ui` design system |
-| `packages/framework` | Shared kumooo.js conventions |
+| `packages/ui` | `@kumooo/ui` |
+| `packages/framework` | Shared conventions |
 | `packages/create-kumooo` | `npx create-kumooo` |
 | `starters/blank` | Minimal starter |
 | `starters/blog` | Blog starter |
 | `starters/shop` | Shop starter (demo bag) |
-| `apps/*`, `packages/theme-*`, `packages/db`, `packages/core` | **Legacy CMS** (frozen) |
+| `content/docs` | Product docs source |
 
 ## Development
 
 ```bash
 pnpm install
-pnpm --filter @kumooo/starter-blank dev
+pnpm dev
 ```
-
-Build the create CLI (syncs starter templates):
 
 ```bash
 pnpm --filter create-kumooo build
