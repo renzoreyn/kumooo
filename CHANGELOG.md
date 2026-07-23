@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1
+
+- Add `apps/www` marketing site: ink+mint playground hero, Deploy to Vercel, guided `/setup`, Learn tutorials, docs stubs.
+- Default `pnpm dev` runs the marketing site.
+
 ## 0.3.0
 
 - Remove the Cloudflare CMS from the repo. kumooo.js only.

@@ -1,8 +1,8 @@
 {
   "name": "kumooo",
   "private": true,
-  "version": "0.3.0",
-  "description": "kumooo.js — Next.js framework toolkit (UI, starters, CLI)",
+  "version": "0.3.1",
+  "description": "kumooo.js — Next.js framework toolkit (UI, starters, CLI, marketing)",
   "license": "MIT",
   "packageManager": "pnpm@9.15.0",
   "engines": {
@@ -10,12 +10,14 @@
   },
   "scripts": {
     "build": "pnpm -r run build",
-    "dev": "pnpm --filter @kumooo/starter-blank dev",
+    "dev": "pnpm --filter @kumooo/www dev",
+    "dev:www": "pnpm --filter @kumooo/www dev",
+    "dev:blank": "pnpm --filter @kumooo/starter-blank dev",
     "dev:blog": "pnpm --filter @kumooo/starter-blog dev",
     "dev:shop": "pnpm --filter @kumooo/starter-shop dev",
     "test": "pnpm -r run test",
     "typecheck": "pnpm -r run typecheck",
-    "lint": "oxlint packages starters",
+    "lint": "oxlint apps packages starters",
     "ci": "pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {
