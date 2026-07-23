@@ -72,7 +72,7 @@ export function ThemesPage() {
         }
       />
       <p className="muted" style={{ marginTop: 0 }}>
-        Season themes below. For HTML/CSS/JS of your own, use{" "}
+        Season and showcase themes below. For HTML/CSS/JS of your own, use{" "}
         <Link to={`/sites/${siteId}/design/studio`}>Theme Studio</Link>.
       </p>
       {error ? <div className="error">{error}</div> : null}

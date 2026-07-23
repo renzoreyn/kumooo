@@ -15,7 +15,7 @@ You do not run Wrangler for day-to-day publishing.
 
 ## Path B: Self-host on your Cloudflare
 
-Your account. Your Workers. Your site.
+Your account. Full multi-org stack: orgs, many sites, one dashboard launcher.
 
 ```bash
 npx create-kumooo
@@ -26,7 +26,7 @@ Pick **Self-host on my Cloudflare**. The installer will:
 1. Clone the repo and install deps
 2. `wrangler login` if needed
 3. Create D1, KV, and R2 under a name prefix you choose
-4. Write wrangler configs (no kumooo.dev routes)
+4. Write wrangler configs (no kumooo.dev routes; `MAX_SITES_PER_ORG=0` = unlimited)
 5. Migrate, deploy API + renderer Workers
 6. Build and deploy the dashboard to Cloudflare Pages
 
@@ -34,21 +34,20 @@ Then:
 
 1. Open the Pages dashboard URL it prints
 2. Sign up
-3. Create **one site** (that is your site)
-4. Open the renderer `*.workers.dev` URL (it serves your first site)
-5. Attach your own domain in Cloudflare when you want it
+3. Create orgs and sites as you need
+4. Open the renderer `*.workers.dev` URL (it routes by host / site)
+5. Attach your own domains in Cloudflare when you want them
 
 You pay Cloudflare for usage. There is no Kumooo tax on top.
 
-### What self-host is not
+### What self-host is
 
-It is not "run the managed multi-tenant Kumooo cloud on your account."  
-It is your publishing stack on Cloudflare for the site you create.
+Same product shape as managed Kumooo: multi-tenant orgs and sites, one launcher. You own the Workers and the bill. Managed free still caps at 2 sites; self-host does not.
 
 ## Which one?
 
-- Ship tonight with zero Wrangler → Path A.
-- Want the bill and the Workers under your Cloudflare → Path B.
+- Ship tonight with zero Wrangler → Path A (2 sites free).
+- Want unlimited sites / your own SaaS on Cloudflare → Path B.
 - Tired of PHP and plugin roulette → either path. That is the point.
 
 ## CF Deploy from marketing

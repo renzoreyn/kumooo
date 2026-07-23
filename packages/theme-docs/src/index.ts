@@ -40,6 +40,7 @@ const NAV_MAP: NavItem[] = [
   { slug: "authentication", title: "Authentication", group: "Guides", order: 14, icon: I.key },
   { slug: "custom-domains", title: "Custom domains", group: "Guides", order: 15, icon: I.globe },
   { slug: "drafts-and-revisions", title: "Drafts & revisions", group: "Guides", order: 16, icon: I.history },
+  { slug: "plans-and-limits", title: "Plans & limits", group: "Guides", order: 17, icon: I.layers },
   { slug: "publishing-your-first-post", title: "Your first post", group: "Tutorials", order: 20, icon: I.pen },
   { slug: "building-a-theme", title: "Building a theme", group: "Tutorials", order: 21, icon: I.code },
   { slug: "media-and-branding", title: "Media & branding", group: "Tutorials", order: 22, icon: I.image },

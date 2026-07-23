@@ -11,6 +11,8 @@ Open these before you pick one in the dashboard:
 - [aki.kumooo.dev](https://aki.kumooo.dev) : chapter essays
 - [fuyu.kumooo.dev](https://fuyu.kumooo.dev) : cold status log
 
+Want a full lookbook flex? See [yukino.kumooo.dev](https://yukino.kumooo.dev) (Yukino theme).
+
 Each site is real content on the real theme. Not a screenshot.
 
 ## What each one is for

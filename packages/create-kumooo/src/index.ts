@@ -1,21 +1,129 @@
 #!/usr/bin/env node
-import { spawn } from "node:child_process";
-import { createRequire } from "node:module";
-import { dirname, join } from "node:path";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
+import * as p from "@clack/prompts";
+import pc from "picocolors";
 
-const require = createRequire(import.meta.url);
+const STARTERS = ["blank", "blog", "shop"] as const;
+type Starter = (typeof STARTERS)[number];
+
 const here = dirname(fileURLToPath(import.meta.url));
 
-let cliEntry: string;
-try {
-  const pkgJson = require.resolve("@kumooo/cli/package.json");
-  cliEntry = join(dirname(pkgJson), "dist", "index.js");
-} catch {
-  cliEntry = join(here, "..", "..", "cli", "dist", "index.js");
+function templatesRoot(): string {
+  const bundled = join(here, "..", "templates");
+  if (existsSync(bundled)) return bundled;
+  // Monorepo fallback: ../../starters
+  return join(here, "..", "..", "..", "starters");
 }
 
-const child = spawn(process.execPath, [cliEntry, "create", ...process.argv.slice(2)], {
-  stdio: "inherit",
+function copyDir(src: string, dest: string) {
+  mkdirSync(dest, { recursive: true });
+  for (const name of readdirSync(src)) {
+    if (name === "node_modules" || name === ".next" || name === "dist") continue;
+    const from = join(src, name);
+    const to = join(dest, name);
+    if (statSync(from).isDirectory()) copyDir(from, to);
+    else cpSync(from, to);
+  }
+}
+
+function rewritePackageName(pkgPath: string, name: string) {
+  const pkg = JSON.parse(readFileSync(pkgPath, "utf8")) as {
+    name: string;
+    dependencies?: Record<string, string>;
+  };
+  pkg.name = name;
+  // Published apps should depend on registry versions later; for now keep workspace protocol
+  // only when creating inside this monorepo. Outside, point at * and document linking.
+  if (pkg.dependencies) {
+    for (const key of Object.keys(pkg.dependencies)) {
+      if (key.startsWith("@kumooo/") && pkg.dependencies[key]?.startsWith("workspace:")) {
+        pkg.dependencies[key] = "workspace:*";
+      }
+    }
+  }
+  writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
+}
+
+async function main() {
+  console.log();
+  p.intro(pc.cyan("create-kumooo") + pc.dim(" — kumooo.js on Next.js"));
+
+  const argName = process.argv[2] && !process.argv[2].startsWith("-") ? process.argv[2] : undefined;
+
+  const name = argName
+    ? argName
+    : await p.text({
+        message: "Project name",
+        placeholder: "my-app",
+        defaultValue: "my-app",
+        validate: (v) => (!v || !/^[a-z0-9-_]+$/i.test(v) ? "Use letters, numbers, - or _" : undefined),
+      });
+
+  if (p.isCancel(name)) {
+    p.cancel("Cancelled.");
+    process.exit(1);
+  }
+
+  const starter = await p.select({
+    message: "Starter",
+    options: [
+      { value: "blank", label: "Blank", hint: "Minimal App Router + @kumooo/ui" },
+      { value: "blog", label: "Blog", hint: "Posts list + detail" },
+      { value: "shop", label: "Shop", hint: "Catalog + demo bag" },
+    ],
+  });
+
+  if (p.isCancel(starter)) {
+    p.cancel("Cancelled.");
+    process.exit(1);
+  }
+
+  const target = resolve(process.cwd(), String(name));
+  if (existsSync(target) && readdirSync(target).length > 0) {
+    p.cancel(`Directory ${name} is not empty.`);
+    process.exit(1);
+  }
+
+  const src = join(templatesRoot(), starter as Starter);
+  if (!existsSync(src)) {
+    p.cancel(`Starter template missing: ${src}`);
+    process.exit(1);
+  }
+
+  const spin = p.spinner();
+  spin.start(`Scaffolding ${starter} → ${name}`);
+  copyDir(src, target);
+  rewritePackageName(join(target, "package.json"), String(name));
+  spin.stop("Files ready");
+
+  const install = await p.confirm({
+    message: "Install dependencies with pnpm?",
+    initialValue: true,
+  });
+
+  if (!p.isCancel(install) && install) {
+    spin.start("pnpm install");
+    const r = spawnSync("pnpm", ["install"], { cwd: target, stdio: "inherit", shell: true });
+    spin.stop(r.status === 0 ? "Installed" : "Install finished with errors");
+  }
+
+  p.outro(
+    [
+      pc.green("Done."),
+      "",
+      `  cd ${name}`,
+      "  pnpm dev",
+      "",
+      pc.dim("Built on Next.js. Kumooo adds kits, UI, and (soon) Cloudflare + hosting."),
+      pc.dim("Legacy CMS is sunset — see LEGACY.md in the monorepo."),
+    ].join("\n"),
+  );
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
 });
-child.on("exit", (code) => process.exit(code ?? 1));

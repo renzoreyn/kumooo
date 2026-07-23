@@ -7,7 +7,7 @@ import { Badge, Button, EmptyState, Input, PageHeader, Select } from "../../comp
 import { Dialog } from "../../components/ui/Dialog";
 import { useToast } from "../../components/ui/Toast";
 import { overviewApi, type RoutingHealth } from "../../lib/api/overview";
-import { sitesApi, type Site } from "../../lib/api/sites";
+import { sitesApi, type Site, type SitePlanLimits } from "../../lib/api/sites";
 import { CreateSiteDialog } from "./CreateSiteDialog";
 
 type SiteCard = Site & { routing?: RoutingHealth };
@@ -17,6 +17,7 @@ export function AllSitesPage() {
   const toast = useToast();
   const org = orgs[0];
   const [sites, setSites] = useState<SiteCard[]>([]);
+  const [limits, setLimits] = useState<SitePlanLimits | null>(null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"active" | "archived" | "all">("active");
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +29,8 @@ export function AllSitesPage() {
   async function load() {
     if (!org) return;
     const status = filter === "active" ? undefined : filter;
-    const { sites: listed } = await sitesApi.list(org.id, status);
+    const { sites: listed, limits: plan } = await sitesApi.list(org.id, status);
+    setLimits(plan);
     const withHealth = await Promise.all(
       listed.map(async (site) => {
         try {
@@ -102,6 +104,14 @@ export function AllSitesPage() {
     }
   }
 
+  const atLimit = limits?.remainingSites !== null && limits?.remainingSites !== undefined && limits.remainingSites <= 0;
+  const limitsLabel =
+    limits?.maxSites === null
+      ? `Self-host: ${limits.usedSites} site${limits.usedSites === 1 ? "" : "s"} (no cap).`
+      : limits
+        ? `Free plan: ${limits.usedSites} / ${limits.maxSites} sites used.`
+        : undefined;
+
   if (!org) {
     return (
       <SimpleShell title="Sites">
@@ -114,9 +124,19 @@ export function AllSitesPage() {
     <SimpleShell title="Sites">
       <PageHeader
         title="Sites"
-        description="Open a site dashboard or visit it when routing is live."
+        description={
+          limits
+            ? `Open a site dashboard or visit it when routing is live. ${limitsLabel}`
+            : "Open a site dashboard or visit it when routing is live."
+        }
         actions={
-          <Button type="button" variant="primary" onClick={() => setOpen(true)}>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={() => setOpen(true)}
+            disabled={atLimit}
+            title={atLimit ? "Site limit reached for this plan." : undefined}
+          >
             <Plus size={16} /> New site
           </Button>
         }
@@ -165,9 +185,9 @@ export function AllSitesPage() {
       {filtered.length === 0 ? (
         <EmptyState
           title="No sites yet"
-          body="Create a site to start publishing."
+          body="Create a site to start publishing. Free plan includes 2 sites."
           action={
-            <Button type="button" variant="primary" onClick={() => setOpen(true)}>
+            <Button type="button" variant="primary" onClick={() => setOpen(true)} disabled={atLimit}>
               <Plus size={16} /> Create site
             </Button>
           }
@@ -234,9 +254,11 @@ export function AllSitesPage() {
       <CreateSiteDialog
         open={open}
         orgId={org.id}
+        atLimit={atLimit}
+        limitsLabel={limitsLabel}
         onClose={() => setOpen(false)}
-        onCreated={(site) => {
-          setSites((prev) => [...prev, site]);
+        onCreated={() => {
+          void load();
           void refresh();
         }}
       />

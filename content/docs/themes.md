@@ -1,8 +1,12 @@
+# Themes (legacy CMS)
+
+> **Sunset:** First-party CMS themes below are frozen with the Cloudflare CMS. New projects should use [kumooo.js starters](/getting-started) and `@kumooo/ui`.
+
 A theme is either a first-party TypeScript package or a Theme Studio file tree.
 
-## Free tenant themes
+## Free tenant themes (legacy)
 
-Tenants pick from four first-party season themes:
+Tenants pick from first-party themes:
 
 | Id | Name | Feel |
 | --- | --- | --- |
@@ -10,6 +14,7 @@ Tenants pick from four first-party season themes:
 | `natsu` | Natsu | Summer. Coastal light, wider measure, high energy. |
 | `aki` | Aki | Autumn. Warm cream, editorial serif, ochre accent. |
 | `fuyu` | Fuyu | Winter. Cool ink, crisp type, quiet chrome. |
+| `yukino` | Yukino | Glacial luxury lookbook. Ice accent, drop grid, demo bag. Live: [yukino.kumooo.dev](https://yukino.kumooo.dev). |
 
 The legacy id `default` aliases to `haru` at render time.
 
@@ -39,7 +44,7 @@ Publishing sets `sites.theme` to `custom:{siteId}`. Switch back to a season them
 - `{{title}}` and `{{post.title}}` are HTML-escaped.
 - `{{{bodyHtml}}}` and `{{{head}}}` are trusted platform HTML only.
 - `{{{styles}}}` / `{{{clientScript}}}` are filled by the compiler from your CSS/JS.
-- Loops: `{{#posts}}Ö{{/posts}}`.
+- Loops: `{{#posts}}ù{{/posts}}`.
 - No JS expressions inside tags. No remote imports in `client.js`.
 
 ### Limits

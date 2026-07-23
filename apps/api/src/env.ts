@@ -5,6 +5,8 @@ export interface Env {
   ENVIRONMENT: string;
   PUBLIC_SITE_SUFFIX: string;
   DASHBOARD_ORIGIN: string;
+  /** Site cap per org. 0 or negative = unlimited (self-host). Default free = 2. */
+  MAX_SITES_PER_ORG?: string;
   TURNSTILE_SECRET_KEY?: string;
   CF_API_TOKEN?: string;
   CF_ZONE_ID?: string;

@@ -1,8 +1,8 @@
 {
   "name": "kumooo",
   "private": true,
-  "version": "0.1.0",
-  "description": "Kumooo — Cloudflare-native publishing platform",
+  "version": "0.2.0",
+  "description": "kumooo.js — Next.js framework toolkit (UI, starters, CLI). Legacy CMS sunset.",
   "license": "MIT",
   "packageManager": "pnpm@9.15.0",
   "engines": {
@@ -10,10 +10,13 @@
   },
   "scripts": {
     "build": "pnpm -r run build",
-    "dev": "pnpm --filter @kumooo/cli exec kumooo dev",
+    "dev": "pnpm --filter @kumooo/starter-blank dev",
+    "dev:blog": "pnpm --filter @kumooo/starter-blog dev",
+    "dev:shop": "pnpm --filter @kumooo/starter-shop dev",
+    "dev:cms": "pnpm --filter @kumooo/cli exec kumooo dev",
     "test": "pnpm -r run test",
     "typecheck": "pnpm -r run typecheck",
-    "lint": "oxlint packages apps",
+    "lint": "oxlint packages apps starters",
     "ci": "pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {

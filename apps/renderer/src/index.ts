@@ -16,6 +16,7 @@ import { createDb, media, type Db } from "@kumooo/db";
 import { docsTheme } from "@kumooo/theme-docs";
 import { marketingTheme } from "@kumooo/theme-marketing";
 import { akiTheme, fuyuTheme, haruTheme, natsuTheme } from "@kumooo/theme-seasons";
+import { yukinoTheme } from "@kumooo/theme-yukino";
 import type { ThemeSiteContext } from "@kumooo/theme-kit";
 import { and, eq } from "drizzle-orm";
 import { cachedResponse, cacheKeyFor, getSiteVersion, storeInCache } from "./cache.js";
@@ -85,6 +86,7 @@ registerTheme(haruTheme);
 registerTheme(natsuTheme);
 registerTheme(akiTheme);
 registerTheme(fuyuTheme);
+registerTheme(yukinoTheme);
 registerTheme(marketingTheme);
 registerTheme(docsTheme);
 

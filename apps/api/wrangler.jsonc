@@ -21,6 +21,7 @@
   "vars": {
     "ENVIRONMENT": "production",
     "PUBLIC_SITE_SUFFIX": "kumooo.dev",
-    "DASHBOARD_ORIGIN": "https://dash.kumooo.dev"
+    "DASHBOARD_ORIGIN": "https://dash.kumooo.dev",
+    "MAX_SITES_PER_ORG": "2"
   }
 }

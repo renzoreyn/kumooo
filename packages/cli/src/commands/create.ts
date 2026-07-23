@@ -13,7 +13,7 @@ import {
 const REPO = "https://github.com/renzoreyn/kumooo.git";
 
 /**
- * Guided installer. Local dev or deploy one site to your Cloudflare.
+ * Guided installer. Local dev or self-host the full stack on your Cloudflare.
  */
 export async function create(nameArg?: string): Promise<void> {
   p.intro("kumooo create: a website without the babysitting");
@@ -55,7 +55,7 @@ export async function create(nameArg?: string): Promise<void> {
       {
         value: "cloudflare",
         label: "Self-host on my Cloudflare",
-        hint: "Workers + D1 + KV + R2 + dashboard. One site.",
+        hint: "Full stack: orgs, multiple sites, Workers + D1 + KV + R2 + dashboard",
       },
       {
         value: "local",
@@ -153,5 +153,5 @@ export async function create(nameArg?: string): Promise<void> {
     siteUrl: urls.siteUrl,
     dashboardUrl: urls.dashboardUrl,
   });
-  p.outro("No PHP. No plugin roulette. Your Cloudflare. Your site.");
+  p.outro("No PHP. No plugin roulette. Your Cloudflare. Multiple sites, one launcher.");
 }

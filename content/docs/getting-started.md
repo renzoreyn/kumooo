@@ -1,46 +1,27 @@
-Ten minutes from nothing to a published page.
-
-You need Node 20+, pnpm, and a terminal you're not afraid of.
-
-## Fastest: Host on Kumooo
-
-1. Sign up at [dash.kumooo.dev](https://dash.kumooo.dev)
-2. Create a site
-3. Publish
-
-No Wrangler. `{slug}.kumooo.dev` is live when you are.
-
-## Self-host on your Cloudflare
+# Getting started with kumooo.js
 
 ```bash
 npx create-kumooo
 ```
 
-Choose **Self-host on my Cloudflare**. Follow the prompts.
-Details: [Deploy on Cloudflare](/deploy-on-cloudflare) and [Installation](/installation).
-
-## Local playground
+Choose **blank**, **blog**, or **shop**. Then:
 
 ```bash
-npx create-kumooo
-# pick Local first
-cd your-folder
-kumooo migrate --local
-kumooo dev
+cd your-app
+pnpm install
+pnpm dev
 ```
 
-That starts:
+## What this is
 
-- API on `:8787`
-- your site on `:8788`
-- dashboard on `:5173`
+kumooo.js is a framework toolkit on **Next.js App Router**. You get:
 
-Open the dashboard, sign up, create a site, publish. Refresh `:8788`.
+- `@kumooo/ui` — shadcn-style UI, Kibo-ready components, Radix Icons, Framer Motion
+- Starters for different site shapes
+- Open source you can host yourself
 
-## When something misbehaves
+Hosted multi-tenant (WP.com-style) and a Cloudflare cache/Brotli plugin come later.
 
-```bash
-kumooo doctor
-```
+## Legacy CMS
 
-It tells you what's wrong in English.
+The old Cloudflare D1/Workers CMS is sunset. See the monorepo `LEGACY.md`. Do not start new projects on the CMS path.

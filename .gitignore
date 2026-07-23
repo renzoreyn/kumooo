@@ -20,3 +20,8 @@ patch.json
 .worktrees/
 
 docs/superpowers/
+
+# Next / TS build
+**/.next/
+**/*.tsbuildinfo
+

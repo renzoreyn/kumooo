@@ -109,6 +109,7 @@ export async function writeSelfHostConfigs(
       ENVIRONMENT: "production",
       PUBLIC_SITE_SUFFIX: "workers.dev",
       DASHBOARD_ORIGIN: dashboardOrigin,
+      MAX_SITES_PER_ORG: "0",
     },
   };
 
@@ -229,15 +230,15 @@ export function printSelfHostNextSteps(opts: {
       cyan("Self-host is live. Next:"),
       `  1. Open ${opts.dashboardUrl}`,
       "  2. Sign up",
-      "  3. Create one site (that's your site)",
-      `  4. Visit ${opts.siteUrl} (serves your first site on workers.dev)`,
-      "  5. Attach your own domain in the Cloudflare dashboard when you want it",
+      "  3. Create orgs and sites (full multi-site launcher on your Cloudflare)",
+      `  4. Visit ${opts.siteUrl} (workers.dev serves your first site until you attach domains)`,
+      "  5. Attach your own domains in Cloudflare when you want them",
       "",
       `API: ${opts.apiUrl}`,
       `Project: cd ${opts.folder}`,
       "",
-      "This is your site on your Cloudflare account.",
-      "It is not a clone of the managed multi-tenant Kumooo cloud.",
+      "Same product as managed Kumooo: orgs, multiple sites, one dashboard.",
+      "You run the Workers. Cloudflare bills you for usage.",
     ].join("\n"),
   );
 }

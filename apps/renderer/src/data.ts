@@ -112,7 +112,7 @@ export async function listPublishedPosts(db: Db, siteId: string, page: number, p
   const posts: PostListItem[] = rows.map((r) => ({
     title: r.title,
     slug: r.slug,
-    excerpt: r.excerpt,
+    excerpt: r.excerpt || excerptFromBody(r.bodyMarkdown),
     publishedAt: r.publishedAt,
     authorName: null,
     featuredImage: r.featuredImage,
@@ -120,6 +120,17 @@ export async function listPublishedPosts(db: Db, siteId: string, page: number, p
     url: `/${r.slug}`,
   }));
   return { posts, total };
+}
+
+function excerptFromBody(markdown: string | null | undefined): string | null {
+  if (!markdown) return null;
+  const text = markdown
+    .replace(/^#\s+.+$/m, "")
+    .replace(/[#>*_`\[\]!()\-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text) return null;
+  return text.length > 180 ? `${text.slice(0, 177)}...` : text;
 }
 
 export async function getContentById(

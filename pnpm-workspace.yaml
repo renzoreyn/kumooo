@@ -1,6 +1,7 @@
 packages:
   - "apps/*"
   - "packages/*"
+  - "starters/*"
 allowBuilds:
   esbuild: true
   workerd: true

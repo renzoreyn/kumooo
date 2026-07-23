@@ -13,12 +13,13 @@ import {
   siteEvents,
   sites,
 } from "@kumooo/db";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, ne, sql } from "drizzle-orm";
 import type { AppEnv } from "../env.js";
 import { ApiError } from "../errors.js";
 import { requireOrgRole, requireSiteAccess } from "../lib/authz.js";
 import { bumpCacheVersion } from "../lib/cachever.js";
 import { recordSiteEvent } from "../lib/events.js";
+import { isAtSiteLimit, parseMaxSitesEnv, siteLimitMessage, sitePlanLimits } from "../lib/plans.js";
 import { requireUser } from "../middleware/auth.js";
 
 export const orgRoutes = new Hono<AppEnv>();
@@ -47,6 +48,8 @@ orgRoutes.get("/:orgId/sites", async (c) => {
   await requireOrgRole(c.get("db"), orgId, user.id, "viewer");
   const status = c.req.query("status");
   const rows = await c.get("db").select().from(sites).where(eq(sites.orgId, orgId));
+  const activeCount = rows.filter((s) => s.status !== "archived").length;
+  const limits = sitePlanLimits(activeCount, parseMaxSitesEnv(c.env.MAX_SITES_PER_ORG));
   const filtered =
     status === "archived"
       ? rows.filter((s) => s.status === "archived")
@@ -59,6 +62,7 @@ orgRoutes.get("/:orgId/sites", async (c) => {
       settings: safeJson(s.settings),
       url: `https://${s.slug}.${c.env.PUBLIC_SITE_SUFFIX}`,
     })),
+    limits,
   });
 });
 
@@ -73,6 +77,17 @@ orgRoutes.post("/:orgId/sites", async (c) => {
   }
   const existing = (await c.get("db").select().from(sites).where(eq(sites.slug, slug)))[0];
   if (existing) throw ApiError.conflict("That site slug is taken.");
+
+  const active = await c
+    .get("db")
+    .select({ n: sql<number>`count(*)` })
+    .from(sites)
+    .where(and(eq(sites.orgId, orgId), ne(sites.status, "archived")));
+  const used = Number(active[0]?.n ?? 0);
+  const limits = sitePlanLimits(used, parseMaxSitesEnv(c.env.MAX_SITES_PER_ORG));
+  if (isAtSiteLimit(limits)) {
+    throw ApiError.forbidden(siteLimitMessage(limits));
+  }
 
   const id = newId("site");
   const settings = siteSettingsSchema.parse({
@@ -104,6 +119,7 @@ orgRoutes.post("/:orgId/sites", async (c) => {
         settings,
         url: `https://${slug}.${c.env.PUBLIC_SITE_SUFFIX}`,
       },
+      limits: sitePlanLimits(used + 1, parseMaxSitesEnv(c.env.MAX_SITES_PER_ORG)),
     },
     201,
   );
@@ -203,6 +219,18 @@ siteRoutes.post("/sites/:siteId/restore", async (c) => {
   const user = requireUser(c);
   const { site } = await requireSiteAccess(c.get("db"), c.req.param("siteId"), user.id, "admin");
   if (site.status !== "archived") throw ApiError.badRequest("Only archived sites can be restored.");
+
+  const active = await c
+    .get("db")
+    .select({ n: sql<number>`count(*)` })
+    .from(sites)
+    .where(and(eq(sites.orgId, site.orgId), ne(sites.status, "archived")));
+  const used = Number(active[0]?.n ?? 0);
+  const limits = sitePlanLimits(used, parseMaxSitesEnv(c.env.MAX_SITES_PER_ORG));
+  if (isAtSiteLimit(limits)) {
+    throw ApiError.forbidden(siteLimitMessage(limits));
+  }
+
   await c
     .get("db")
     .update(sites)
@@ -215,7 +243,11 @@ siteRoutes.post("/sites/:siteId/restore", async (c) => {
     resourceType: "site",
     resourceId: site.id,
   });
-  return c.json({ ok: true, status: "active" });
+  return c.json({
+    ok: true,
+    status: "active",
+    limits: sitePlanLimits(used + 1, parseMaxSitesEnv(c.env.MAX_SITES_PER_ORG)),
+  });
 });
 
 siteRoutes.delete("/sites/:siteId", async (c) => {

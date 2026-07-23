@@ -48,12 +48,23 @@ function bodyWithoutH1(markdown) {
   return markdown.replace(/^#\s+.+\r?\n+/, "");
 }
 
+function excerptFromMarkdown(markdown) {
+  const text = String(markdown || "")
+    .replace(/^#\s+.+$/m, "")
+    .replace(/[#>*_`\[\]!()]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text) return undefined;
+  return text.length > 180 ? `${text.slice(0, 177)}...` : text;
+}
+
 async function upsertContent(siteId, { slug, title, bodyMarkdown, type }) {
   const list = await req("GET", `/v1/sites/${siteId}/content?type=${type}&perPage=100`);
   const existing = (list.data.content ?? []).find((c) => c.slug === slug);
   const payload = {
     title,
     bodyMarkdown,
+    excerpt: excerptFromMarkdown(bodyMarkdown),
     status: "published",
     type,
   };
@@ -209,6 +220,7 @@ const DOC_TITLES = {
   authentication: "Authentication",
   "custom-domains": "Custom domains",
   "drafts-and-revisions": "Drafts & revisions",
+  "plans-and-limits": "Plans & limits",
   "publishing-your-first-post": "Your first post",
   "building-a-theme": "Building a theme",
   "media-and-branding": "Media & branding",
@@ -286,6 +298,37 @@ for (const season of SEASONS) {
   }
 }
 
+const yukino = await ensureSite(
+  "yukino",
+  "Yukino",
+  "yukino",
+  "Glacial luxury lookbook. Drops, journal, demo bag.",
+  [
+    { title: "Shop", url: "/shop" },
+    { title: "Journal", url: "/whiteout-notes" },
+    { title: "About", url: "/about" },
+  ],
+);
+const yukinoDir = join(ROOT, "content", "yukino");
+for (const [file, type] of [
+  ["about.md", "page"],
+  ["shop.md", "page"],
+  ["drift-parka.md", "post"],
+  ["rime-shell.md", "post"],
+  ["glacier-knit.md", "post"],
+  ["whiteout-notes.md", "post"],
+  ["cold-start.md", "post"],
+]) {
+  const markdown = await readFile(join(yukinoDir, file), "utf8");
+  const slug = file.replace(/\.md$/, "");
+  await upsertContent(yukino.id, {
+    slug,
+    title: titleFromMarkdown(markdown, slug),
+    bodyMarkdown: bodyWithoutH1(markdown),
+    type,
+  });
+}
+
 for (const [site, host] of [
   [marketing, "kumooo.dev"],
   [docs, "docs.kumooo.dev"],
@@ -303,4 +346,5 @@ Done.
   Marketing: site ${marketing.id} (theme marketing) → https://kumooo.dev
   Docs:      site ${docs.id} (theme docs) → https://docs.kumooo.dev
   Seasons:   ${seasonSites.map((s, i) => `${SEASONS[i].slug}.kumooo.dev`).join(", ")}
+  Yukino:    site ${yukino.id} → https://yukino.kumooo.dev
 `);

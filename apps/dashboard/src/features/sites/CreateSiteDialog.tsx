@@ -9,11 +9,15 @@ export function CreateSiteDialog({
   orgId,
   onClose,
   onCreated,
+  atLimit,
+  limitsLabel,
 }: {
   open: boolean;
   orgId: string;
   onClose: () => void;
   onCreated: (site: Site) => void;
+  atLimit?: boolean;
+  limitsLabel?: string;
 }) {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -24,6 +28,7 @@ export function CreateSiteDialog({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (atLimit) return;
     setBusy(true);
     setError(null);
     try {
@@ -50,11 +55,27 @@ export function CreateSiteDialog({
     <Dialog open={open} title="Create site" onClose={onClose}>
       <form onSubmit={(e) => void submit(e)}>
         {error ? <div className="error">{error}</div> : null}
+        {atLimit ? (
+          <div className="error" style={{ marginBottom: "0.75rem" }}>
+            {limitsLabel ??
+              "Free plan includes 2 sites. Archive or delete one to create another. Paid plans with more sites come later."}
+          </div>
+        ) : limitsLabel ? (
+          <p className="muted" style={{ marginTop: 0 }}>
+            {limitsLabel}
+          </p>
+        ) : null}
         <div className="field">
           <label className="label" htmlFor="create-name">
             Name
           </label>
-          <Input id="create-name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <Input
+            id="create-name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            disabled={atLimit}
+          />
         </div>
         <div className="field">
           <label className="label" htmlFor="create-slug">
@@ -65,6 +86,7 @@ export function CreateSiteDialog({
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             placeholder="my-blog"
+            disabled={atLimit}
           />
         </div>
         <div className="field">
@@ -75,13 +97,19 @@ export function CreateSiteDialog({
             id="create-desc"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            disabled={atLimit}
           />
         </div>
         <div className="field">
           <label className="label" htmlFor="create-theme">
             Theme
           </label>
-          <Select id="create-theme" value={theme} onChange={(e) => setTheme(e.target.value)}>
+          <Select
+            id="create-theme"
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            disabled={atLimit}
+          >
             {TENANT_THEMES.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.name}
@@ -93,7 +121,7 @@ export function CreateSiteDialog({
           <Button type="button" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" variant="primary" disabled={busy}>
+          <Button type="submit" variant="primary" disabled={busy || atLimit}>
             {busy ? "Creating…" : "Create site"}
           </Button>
         </div>

@@ -598,15 +598,15 @@ function cfDeployDialog(): Html {
   return html`<dialog class="cf-deploy-dialog" data-cf-deploy>
   <div class="cf-deploy-inner">
     <h2>Deploy on Cloudflare</h2>
-    <p>Two paths. Managed on Kumooo, or self-host your site on your Cloudflare account.</p>
+    <p>Two paths. Managed on Kumooo (2 sites free), or self-host the full multi-org stack on your Cloudflare.</p>
     <div class="cf-deploy-choices">
       <a class="cf-deploy-choice" href="https://dash.kumooo.dev/signup">
         <strong>Host on Kumooo</strong>
-        <span>We run the platform. Orgs, multiple sites, {slug}.kumooo.dev. Sign up and publish.</span>
+        <span>We run the platform. Free plan: 2 sites, {slug}.kumooo.dev. Sign up and publish.</span>
       </a>
       <a class="cf-deploy-choice" href="https://docs.kumooo.dev/deploy-on-cloudflare">
         <strong>Self-host on Cloudflare</strong>
-        <span>npx create-kumooo → your Workers, D1, KV, R2. One site on your account.</span>
+        <span>npx create-kumooo → full stack on your account. Orgs, multiple sites, one dashboard.</span>
       </a>
     </div>
     <div class="cf-deploy-actions">
@@ -637,12 +637,12 @@ function marketingHome(site: ThemeSiteContext): Html {
   <div class="hero-inner">
   <div class="hero-copy">
   <div class="hero-brand" data-hero-bit>kumooo<span>.</span></div>
-  <h1 data-hero-bit>Publish on <em>Cloudflare</em>. Keep your evenings.</h1>
-  <p class="lead" data-hero-bit>Markdown in. HTML out at the edge. Themes, media, and a dashboard that does not need babysitting.</p>
+  <h1 data-hero-bit>kumooo.js on <em>Next.js</em>. Any site shape.</h1>
+  <p class="lead" data-hero-bit>Blank, blog, or shop starters. @kumooo/ui with Kibo, Radix Icons, and motion. The Cloudflare CMS is sunset. Open source first; hosted later.</p>
   <div class="install" data-hero-bit data-copy="npx create-kumooo">npx create-kumooo <button type="button">copy</button></div>
   <div class="hero-actions" data-hero-bit>
-    <button type="button" class="btn primary" data-cf-deploy-open>Deploy on Cloudflare</button>
-    <a class="btn" href="https://docs.kumooo.dev">Read the docs</a>
+    <a class="btn primary" href="https://docs.kumooo.dev/getting-started">Get started</a>
+    <a class="btn" href="https://github.com/renzoreyn/kumooo">GitHub</a>
   </div>
   </div>
   <div class="hero-stage" data-hero-mock>
@@ -711,7 +711,7 @@ x-kumooo-cache: miss → hit</pre>
     <article class="bento-card">
       <p class="kicker">CF Deploy</p>
       <h3>Managed or self-host</h3>
-      <p>Host on Kumooo for orgs and multiple sites, or run create-kumooo on your Cloudflare for your own site.</p>
+      <p>Host on Kumooo (2 sites free), or run create-kumooo on your Cloudflare for unlimited sites on your bill.</p>
     </article>
     <article class="bento-card">
       <p class="kicker">Media</p>
@@ -875,24 +875,24 @@ function marketingPricing(site: ThemeSiteContext): Html {
   <div class="price-grid">
     <div class="price-card featured" data-motion-card>
       <div class="kicker">Host on Kumooo</div>
-      <div class="amount">$0 <span>/ Kumooo</span></div>
-      <p class="muted" style="margin:0">We run the platform. Orgs, multiple sites, {slug}.kumooo.dev.</p>
+      <div class="amount">$0 <span>/ free</span></div>
+      <p class="muted" style="margin:0">We run the platform. Orgs, up to 2 sites, {slug}.kumooo.dev. More sites and storage come with paid plans later.</p>
       <ul>
-        <li>Managed multi-site SaaS</li>
+        <li>2 sites on the free plan</li>
         <li>Dashboard, editor, media, themes</li>
         <li>Four free season themes</li>
-        <li>Custom domains when you need them</li>
+        <li>150 MB media per site</li>
       </ul>
       <a class="btn primary" href="https://dash.kumooo.dev/signup">Open the dashboard</a>
     </div>
     <div class="price-card" data-motion-card>
       <div class="kicker">Self-host on Cloudflare</div>
       <div class="amount" style="font-size:1.6rem">Your account</div>
-      <p class="muted" style="margin:0 0 1rem">npx create-kumooo. Workers, D1, KV, R2, dashboard on your Cloudflare. Your site. No PHP tax.</p>
+      <p class="muted" style="margin:0 0 1rem">npx create-kumooo. Full multi-org stack on your Cloudflare: orgs, many sites, one dashboard. Your bill, no Kumooo SaaS fee.</p>
       <ul>
         <li>Guided create → deploy</li>
+        <li>Orgs + unlimited sites (default)</li>
         <li>Your D1, R2, KV</li>
-        <li>Your domain when you attach it</li>
         <li>No Kumooo SaaS fee</li>
       </ul>
       <a class="btn" href="https://docs.kumooo.dev/deploy-on-cloudflare">Self-host guide</a>
@@ -909,7 +909,7 @@ function marketingPricing(site: ThemeSiteContext): Html {
       <tr><th>Capability</th><th>Kumooo hosted</th><th>Self-host (your CF)</th></tr>
     </thead>
     <tbody>
-      <tr><td>Sites &amp; content</td><td class="yes">Many sites</td><td class="yes">Your site</td></tr>
+      <tr><td>Sites &amp; content</td><td class="yes">2 on free</td><td class="yes">Unlimited orgs/sites</td></tr>
       <tr><td>Media library</td><td class="yes">Yes</td><td class="yes">Your R2</td></tr>
       <tr><td>Managed *.kumooo.dev</td><td class="yes">Yes</td><td>Your domain / workers.dev</td></tr>
       <tr><td>Who runs Workers</td><td>Kumooo</td><td class="yes">You</td></tr>
