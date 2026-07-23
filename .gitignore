@@ -23,5 +23,6 @@ docs/superpowers/
 
 # Next / TS build
 **/.next/
+**/.open-next/
 **/*.tsbuildinfo
 

@@ -1,7 +1,7 @@
 {
   "name": "kumooo",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "kumooo.js — Next.js framework toolkit (UI, starters, CLI, marketing)",
   "license": "MIT",
   "packageManager": "pnpm@9.15.0",
@@ -12,6 +12,7 @@
     "build": "pnpm -r run build",
     "dev": "pnpm --filter @kumooo/www dev",
     "dev:www": "pnpm --filter @kumooo/www dev",
+    "deploy:www": "pnpm --filter @kumooo/www run deploy",
     "dev:blank": "pnpm --filter @kumooo/starter-blank dev",
     "dev:blog": "pnpm --filter @kumooo/starter-blog dev",
     "dev:shop": "pnpm --filter @kumooo/starter-shop dev",

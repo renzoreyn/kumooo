@@ -31,7 +31,7 @@ export const LEARN_PATH: LearnMeta[] = [
   {
     slug: "edit-and-deploy",
     title: "Edit text and deploy",
-    outcome: "Change a page, push to GitHub, publish on Vercel.",
+    outcome: "Change a page, push to GitHub, publish on Cloudflare.",
     minutes: 20,
     order: 4,
   },

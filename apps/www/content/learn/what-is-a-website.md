@@ -5,8 +5,8 @@ A website is a bunch of files your computer can turn into pages, sitting on a co
 ## The three pieces
 
 1. **Your files** — text, images, code. In kumooo.js that starts as a Next.js project on your laptop.
-2. **A host** — for us, usually [Vercel](https://vercel.com). They keep a copy of your project running.
-3. **A URL** — something like `my-site.vercel.app`. Later you can point your own domain at it.
+2. **A host** — for us, usually [Cloudflare Workers](https://workers.cloudflare.com). They keep a copy of your project running at the edge.
+3. **A URL** — something like `my-site.your-subdomain.workers.dev`. Later you can point your own domain at it.
 
 ## What “deploy” means
 
@@ -18,7 +18,7 @@ You are not “uploading a Word doc.” You are publishing an app. That sounds s
 
 kumooo.js is not a mysterious new internet. It is starters, UI, and conventions on top of Next.js so you are not starting from a blank abyss.
 
-- **Today:** you build and deploy yourself (with our guides).
+- **Today:** you build and deploy yourself (with our guides) on Cloudflare.
 - **Later:** we want to help manage sites and ship a theme editor that feels obvious. Those are not live yet.
 
 ## Next

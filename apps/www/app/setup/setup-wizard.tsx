@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { Button, CodeBlock, cn } from "@kumooo/ui";
 import { DeployButton } from "@/components/deploy-button";
 import { createCommand } from "@/lib/site";
@@ -160,16 +159,13 @@ export function SetupWizard() {
         <section className="space-y-5">
           <h2 className="font-display text-2xl font-bold text-[var(--paper)]">Put it on the internet</h2>
           <p className="text-[var(--fog)]">
-            Vercel hosts Next.js for free on a starter plan. Click Deploy, sign in or register on their site, and
-            follow the prompts. They&apos;ll give you a live URL.
+            Cloudflare Workers runs Next.js via OpenNext. Click Deploy, sign in or register on their site, and
+            follow the prompts. They&apos;ll give you a workers.dev URL (custom domain later).
           </p>
           <DeployButton size="lg" />
           <p className="text-sm text-[var(--fog)]">
-            Want the long version with screenshots of the ideas?{" "}
-            <Link href="/learn/edit-and-deploy" className="text-[var(--mint)] underline">
-              Edit and deploy tutorial
-            </Link>
-            .
+            Prefer CLI after create-kumooo? We&apos;ll keep expanding CF deploy docs. For now Guided setup plus the
+            Deploy button is the happy path.
           </p>
           <Button variant="outline" className="border-[var(--line)]" onClick={() => setStep("preview")}>
             Back

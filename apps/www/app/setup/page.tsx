@@ -4,7 +4,7 @@ import { SetupWizard } from "./setup-wizard";
 
 export const metadata: Metadata = {
   title: "Guided setup",
-  description: "Install tools, create a kumooo.js site, preview locally, deploy on Vercel.",
+  description: "Install tools, create a kumooo.js site, preview locally, deploy on Cloudflare.",
 };
 
 export default function SetupPage() {

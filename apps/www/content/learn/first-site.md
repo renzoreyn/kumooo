@@ -37,7 +37,7 @@ A starter page using `@kumooo/ui`. Change text in `app/page.tsx`, save, and the 
 
 - `npx` not found → Node is not installed or the terminal is old. See [Set up your computer](/learn/setup-your-computer).
 - Port in use → something else is on 3000. Stop it, or start Next on another port.
-- Prefer one-click hosting first → [Deploy on Vercel from the homepage](/) or use [Guided setup](/setup).
+- Prefer one-click hosting first → [Deploy on Cloudflare from the homepage](/) or use [Guided setup](/setup).
 
 ## Next
 

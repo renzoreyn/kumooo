@@ -16,7 +16,7 @@ export default function GettingStartedDoc() {
         <h1 className="font-display text-4xl font-bold text-[var(--paper)]">Getting started</h1>
         <p>
           Fastest doors:{" "}
-          <Link href="/">Deploy on Vercel</Link>, <Link href="/setup">Guided setup</Link>, or{" "}
+          <Link href="/">Deploy on Cloudflare</Link>, <Link href="/setup">Guided setup</Link>, or{" "}
           <code>npx create-kumooo</code>.
         </p>
         <p>

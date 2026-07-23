@@ -6,7 +6,7 @@ import { createCommand, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Start",
-  description: "Deploy on Vercel, follow guided setup, or use the terminal.",
+  description: "Deploy on Cloudflare, follow guided setup, or use the terminal.",
 };
 
 export default function StartPage() {
@@ -23,7 +23,7 @@ export default function StartPage() {
       <div className="mt-12 grid gap-6 md:grid-cols-3">
         <FadeIn className="rounded-2xl border border-[var(--line)] bg-[var(--ink-elevated)]/50 p-6">
           <h2 className="font-display text-xl font-semibold text-[var(--paper)]">Deploy</h2>
-          <p className="mt-2 text-sm text-[var(--fog)]">One click. Account on Vercel, not here.</p>
+          <p className="mt-2 text-sm text-[var(--fog)]">One click. Account on Cloudflare, not here.</p>
           <DeployButton className="mt-5" />
         </FadeIn>
         <FadeIn delay={0.06} className="rounded-2xl border border-[var(--line)] bg-[var(--ink-elevated)]/50 p-6">

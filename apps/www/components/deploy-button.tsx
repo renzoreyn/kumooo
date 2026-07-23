@@ -19,7 +19,7 @@ export function DeployButton({
         className="bg-[var(--mint)] text-[var(--ink)] hover:bg-[var(--mint-dim)]"
       >
         <a href={DEPLOY_BLANK_URL} rel="noreferrer" target="_blank">
-          Deploy on Vercel
+          Deploy on Cloudflare
           <ArrowRightIcon />
         </a>
       </Button>

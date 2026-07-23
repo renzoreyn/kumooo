@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+- Host marketing site on Cloudflare Workers via OpenNext (`kumooo-www`).
+- Retarget Deploy / Learn / Setup copy from Vercel to Cloudflare.
+- pnpm hoist (`.npmrc`) so OpenNext bundles correctly.
+
 ## 0.3.1
 
 - Add `apps/www` marketing site: ink+mint playground hero, Deploy to Vercel, guided `/setup`, Learn tutorials, docs stubs.

@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kumooo-www",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "kumooo-www"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "workers_dev": true,
+  "preview_urls": true,
+  "routes": [
+    { "pattern": "kumooo.dev", "custom_domain": true },
+    { "pattern": "www.kumooo.dev", "custom_domain": true }
+  ]
+}
