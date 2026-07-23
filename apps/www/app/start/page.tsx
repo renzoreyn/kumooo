@@ -11,50 +11,52 @@ export const metadata: Metadata = {
 
 export default function StartPage() {
   return (
-    <main className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
-      <FadeIn>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--mint)]">Start</p>
-        <h1 className="font-display mt-3 text-4xl font-bold tracking-tight text-[var(--paper)]">Pick a door</h1>
-        <p className="mt-3 max-w-xl text-[var(--fog)]">
-          Same destination. Different comfort levels. If you&apos;ve never shipped a site, Guided setup or Learn first.
+    <main className="mx-auto max-w-5xl px-5 py-16 sm:px-8">
+      <FadeIn className="mx-auto max-w-2xl text-center">
+        <p className="text-sm font-medium text-[var(--mint)]">Start</p>
+        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-[var(--fg)]">Pick a door</h1>
+        <p className="mt-3 text-[17px] leading-relaxed text-[var(--fog)]">
+          Same destination. Different comfort levels. Never shipped a site? Guided setup or Learn first.
         </p>
       </FadeIn>
 
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
-        <FadeIn className="rounded-2xl border border-[var(--line)] bg-[var(--ink-elevated)]/50 p-6">
-          <h2 className="font-display text-xl font-semibold text-[var(--paper)]">Deploy</h2>
-          <p className="mt-2 text-sm text-[var(--fog)]">One click. Account on Cloudflare, not here.</p>
-          <DeployButton className="mt-5" />
+      <div className="mt-14 grid gap-5 md:grid-cols-3">
+        <FadeIn className="rounded-3xl border border-[var(--line)] bg-white p-7 shadow-sm">
+          <h2 className="text-xl font-semibold text-[var(--fg)]">Deploy</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--fog)]">One click. Account on Cloudflare, not here.</p>
+          <DeployButton className="mt-6" showNote={false} />
         </FadeIn>
-        <FadeIn delay={0.06} className="rounded-2xl border border-[var(--line)] bg-[var(--ink-elevated)]/50 p-6">
-          <h2 className="font-display text-xl font-semibold text-[var(--paper)]">Guided setup</h2>
-          <p className="mt-2 text-sm text-[var(--fog)]">Tools → create → preview → deploy, step by step.</p>
-          <Button asChild className="mt-5 bg-[var(--mint)] text-[var(--ink)]">
+        <FadeIn delay={0.05} className="rounded-3xl border border-[var(--line)] bg-white p-7 shadow-sm">
+          <h2 className="text-xl font-semibold text-[var(--fg)]">Guided setup</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--fog)]">Tools, create, preview, deploy. Step by step.</p>
+          <Button asChild className="mt-6 rounded-full bg-[var(--fg)] text-white hover:bg-black">
             <Link href="/setup">Open setup</Link>
           </Button>
         </FadeIn>
-        <FadeIn delay={0.12} className="rounded-2xl border border-[var(--line)] bg-[var(--ink-elevated)]/50 p-6">
-          <h2 className="font-display text-xl font-semibold text-[var(--paper)]">Learn</h2>
-          <p className="mt-2 text-sm text-[var(--fog)]">Absolute beginner path. Four short tutorials.</p>
-          <Button asChild variant="outline" className="mt-5 border-[var(--line)]">
+        <FadeIn delay={0.1} className="rounded-3xl border border-[var(--line)] bg-white p-7 shadow-sm">
+          <h2 className="text-xl font-semibold text-[var(--fg)]">Learn</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--fog)]">Absolute beginner path. Four short tutorials.</p>
+          <Button
+            asChild
+            variant="outline"
+            className="mt-6 rounded-full border-[var(--line)] text-[var(--fg)] hover:bg-[var(--bg)]"
+          >
             <Link href="/learn">Open Learn</Link>
           </Button>
         </FadeIn>
       </div>
 
-      <div className="mt-16 scroll-mt-24" id="cli">
-        <FadeIn delay={0.1}>
-          <h2 className="font-display text-2xl font-bold text-[var(--paper)]">Prefer the terminal?</h2>
-          <p className="mt-2 max-w-xl text-[var(--fog)]">
-            Fine. This is the whole onboarding for people who already live in a shell.
-          </p>
-          <div className="mt-5 max-w-xl">
+      <div className="mx-auto mt-20 max-w-xl scroll-mt-24" id="cli">
+        <FadeIn>
+          <h2 className="text-2xl font-semibold tracking-[-0.02em] text-[var(--fg)]">Prefer the terminal?</h2>
+          <p className="mt-2 text-[var(--fog)]">Fine. This is the whole onboarding for people who already live in a shell.</p>
+          <div className="mt-5">
             <CodeBlock language="bash" code={`${createCommand}\ncd my-site\npnpm dev`} />
           </div>
           <p className="mt-4 text-sm text-[var(--fog)]">
             Source:{" "}
-            <a href={site.github} className="text-[var(--mint)] underline" rel="noreferrer" target="_blank">
-              {site.github}
+            <a href={site.github} className="font-medium text-[var(--fg)] underline" rel="noreferrer" target="_blank">
+              GitHub
             </a>
           </p>
         </FadeIn>

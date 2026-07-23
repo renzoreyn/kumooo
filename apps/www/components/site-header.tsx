@@ -11,10 +11,10 @@ const links = [
 
 export function SiteHeader() {
   return (
-    <header className="relative z-20 border-b border-[var(--line)]">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-4 sm:px-8">
+    <header className="sticky top-0 z-20 border-b border-[var(--line)] bg-[rgba(245,245,247,0.8)] backdrop-blur-xl">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-6 px-5 py-3.5 sm:px-8">
         <BrandWordmark />
-        <nav className="flex flex-wrap items-center justify-end gap-x-6 gap-y-2 text-[13px] text-[var(--fog)]">
+        <nav className="flex flex-wrap items-center justify-end gap-x-6 gap-y-2 text-[13px] font-medium text-[var(--fog)]">
           {links.map((link) =>
             link.external ? (
               <a

@@ -29,39 +29,37 @@ export default async function LearnTutorialPage({ params }: Props) {
   const next = idx >= 0 && idx < LEARN_PATH.length - 1 ? LEARN_PATH[idx + 1] : null;
 
   return (
-    <main className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
+    <main className="mx-auto max-w-3xl px-5 py-16 sm:px-8">
       <FadeIn>
-        <p className="text-xs text-[var(--fog)]">
-          <Link href="/learn" className="text-[var(--mint)] hover:underline">
+        <p className="text-sm text-[var(--fog)]">
+          <Link href="/learn" className="font-medium text-[var(--mint-dim)] hover:underline">
             Learn
           </Link>
           <span className="mx-2">/</span>
           Step {tutorial.meta.order}
         </p>
-        <h1 className="font-display mt-3 text-4xl font-bold tracking-tight text-[var(--paper)]">
-          {tutorial.meta.title}
-        </h1>
+        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-[var(--fg)]">{tutorial.meta.title}</h1>
         <p className="mt-2 text-sm text-[var(--fog)]">
           {tutorial.meta.outcome} · ~{tutorial.meta.minutes} min
         </p>
       </FadeIn>
-      <FadeIn delay={0.08} className="prose-learn mt-10">
+      <FadeIn delay={0.06} className="prose-learn mt-10">
         <ReactMarkdown>{tutorial.body}</ReactMarkdown>
       </FadeIn>
-      <nav className="mt-14 flex flex-wrap justify-between gap-4 border-t border-[var(--line)] pt-8 text-sm">
+      <nav className="mt-14 flex flex-wrap justify-between gap-4 border-t border-[var(--line)] pt-8 text-sm font-medium">
         {prev ? (
-          <Link href={`/learn/${prev.slug}`} className="text-[var(--fog)] hover:text-[var(--mint)]">
+          <Link href={`/learn/${prev.slug}`} className="text-[var(--fog)] hover:text-[var(--fg)]">
             ← {prev.title}
           </Link>
         ) : (
           <span />
         )}
         {next ? (
-          <Link href={`/learn/${next.slug}`} className="text-[var(--mint)] hover:underline">
+          <Link href={`/learn/${next.slug}`} className="text-[var(--mint-dim)] hover:underline">
             {next.title} →
           </Link>
         ) : (
-          <Link href="/start" className="text-[var(--mint)] hover:underline">
+          <Link href="/start" className="text-[var(--mint-dim)] hover:underline">
             Done? Pick a door on Start →
           </Link>
         )}

@@ -23,11 +23,10 @@ export function BrandMark({ className = "h-8 w-8" }: { className?: string }) {
 }
 
 export function BrandWordmark({ size = "md" }: { size?: "md" | "lg" | "hero" }) {
-  const mark =
-    size === "hero" ? "h-11 w-11 sm:h-12 sm:w-12" : size === "lg" ? "h-9 w-9" : "h-7 w-7";
+  const mark = size === "hero" ? "h-12 w-12 sm:h-14 sm:w-14" : size === "lg" ? "h-9 w-9" : "h-7 w-7";
   const text =
     size === "hero"
-      ? "text-[2.75rem] sm:text-5xl md:text-[3.5rem] font-semibold tracking-[-0.04em]"
+      ? "text-4xl sm:text-5xl font-semibold tracking-[-0.04em]"
       : size === "lg"
         ? "text-xl font-semibold tracking-[-0.03em]"
         : "text-[15px] font-semibold tracking-[-0.02em]";

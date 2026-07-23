@@ -1,5 +1,4 @@
-import { ArrowRightIcon } from "@kumooo/ui";
-import { Button } from "@kumooo/ui";
+import { ArrowRightIcon, Button } from "@kumooo/ui";
 import { DEPLOY_BLANK_URL, DEPLOY_NOTE } from "@/lib/deploy";
 
 export function DeployButton({
@@ -16,7 +15,7 @@ export function DeployButton({
       <Button
         asChild
         size={size === "lg" ? "lg" : "default"}
-        className="rounded-full bg-[var(--mint)] font-medium text-black hover:bg-[var(--mint-dim)]"
+        className="rounded-full bg-[var(--fg)] px-7 font-medium text-white hover:bg-black"
       >
         <a href={DEPLOY_BLANK_URL} rel="noreferrer" target="_blank">
           Deploy on Cloudflare

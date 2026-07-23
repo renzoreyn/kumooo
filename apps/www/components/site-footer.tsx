@@ -4,16 +4,16 @@ import { site } from "@/lib/site";
 
 export function SiteFooter() {
   return (
-    <footer className="relative z-10 mt-28 border-t border-[var(--line)]">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-12 sm:flex-row sm:items-start sm:justify-between sm:px-8">
+    <footer className="border-t border-[var(--line)] bg-white">
+      <div className="mx-auto flex max-w-5xl flex-col gap-8 px-5 py-14 sm:flex-row sm:items-start sm:justify-between sm:px-8">
         <div className="flex items-start gap-3">
           <BrandMark className="h-8 w-8 shrink-0" />
           <div>
-            <p className="font-display text-xl font-semibold tracking-[-0.02em] text-[var(--fg)]">{site.name}</p>
-            <p className="mt-1 max-w-xs text-sm text-[var(--fog)]">{site.tagline}</p>
+            <p className="text-lg font-semibold tracking-[-0.02em] text-[var(--fg)]">{site.name}</p>
+            <p className="mt-1 max-w-xs text-sm leading-relaxed text-[var(--fog)]">{site.tagline}</p>
           </div>
         </div>
-        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--fog)]">
+        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-[var(--fog)]">
           <Link href="/learn" className="hover:text-[var(--fg)]">
             Learn
           </Link>
