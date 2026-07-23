@@ -34,7 +34,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
       <body className="flex min-h-screen flex-col font-[family-name:var(--font-sans)] antialiased">
-        <RootProvider>{children}</RootProvider>
+        <RootProvider
+          theme={{
+            defaultTheme: "dark",
+            attribute: "class",
+            enableSystem: true,
+          }}
+        >
+          {children}
+        </RootProvider>
       </body>
     </html>
   );

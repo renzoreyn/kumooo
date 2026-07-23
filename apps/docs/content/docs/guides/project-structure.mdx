@@ -1,0 +1,27 @@
+---
+title: Project structure
+description: What lives where in a kumooo.js starter.
+---
+
+A blank starter is a normal Next.js App Router app with a few kumooo conventions.
+
+## Top level
+
+| Path | Role |
+| --- | --- |
+| `app/` | Routes, layouts, pages |
+| `app/page.tsx` | Home page |
+| `app/layout.tsx` | Root layout, fonts, metadata |
+| `public/` | Static files (favicon, images) |
+| `package.json` | Scripts and dependencies |
+
+## Packages you import
+
+- `@kumooo/ui` — buttons, inputs, motion helpers
+- Next.js, React — the platform
+
+Monorepo contributors will also see `packages/`, `apps/www`, `apps/docs`, and `starters/` in the main kumooo repo. End-user projects from `create-kumooo` are usually a single app folder.
+
+## Mental model
+
+Edit files under `app/`. Preview with `pnpm dev`. Deploy when it looks right. That loop is the whole product for self-host users.

@@ -2,13 +2,37 @@ import Link from "next/link";
 import { Button, FadeIn } from "@kumooo/ui";
 import { BrandWordmark } from "@/components/brand-mark";
 import { DeployButton } from "@/components/deploy-button";
+import { HeroAtmosphere } from "@/components/hero-atmosphere";
+import { getChangelog } from "@/lib/changelog";
 import { createCommand, site } from "@/lib/site";
 
+const flexes = [
+  {
+    title: "Next.js. Not a fork. Not a cult.",
+    body: "App Router, the boring reliable kind. We add starters, UI, and opinions so you ship instead of rearranging folders for sport.",
+  },
+  {
+    title: "Cloudflare if you want. Us if you don't.",
+    body: "Self-host on your account, or park it on {slug}.kumooo.site. Free means two sites and 150 MB. We counted.",
+  },
+  {
+    title: "UI that does not apologize",
+    body: "@kumooo/ui is primitives, motion, and enough taste that your blank starter does not look like a CS homework drop.",
+  },
+  {
+    title: "Docs for humans who just got here",
+    body: "Learn path, guided setup, guides. If you have never deployed anything, we still talk to you like an adult.",
+  },
+];
+
 export default function HomePage() {
+  const changelog = getChangelog().slice(0, 4);
+
   return (
     <main>
-      <section className="px-5 pb-28 pt-16 sm:px-8 sm:pt-24">
-        <div className="mx-auto max-w-3xl text-center">
+      <section className="relative min-h-[88vh] overflow-hidden px-5 pb-28 pt-16 sm:px-8 sm:pt-24">
+        <HeroAtmosphere />
+        <div className="relative mx-auto max-w-3xl text-center">
           <FadeIn>
             <div className="flex justify-center">
               <BrandWordmark size="hero" />
@@ -17,8 +41,8 @@ export default function HomePage() {
               Websites without the babysitting.
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-[19px] leading-relaxed text-[var(--fog)]">
-              Open source starters on Next.js. Deploy on Cloudflare. Learn from zero if you need to. Hosted manage
-              comes later, when it is actually good.
+              Open source starters on Next.js. Deploy on Cloudflare yourself, or host with us. Either way, the site
+              stops being a part-time job.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <DeployButton size="lg" showNote={false} />
@@ -26,37 +50,48 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="rounded-full border-[var(--line)] bg-white px-7 text-[var(--fg)] shadow-sm hover:bg-[var(--bg)]"
+                className="rounded-full border-[var(--line)] bg-transparent px-7 text-[var(--fg)] hover:bg-white/5"
               >
-                <Link href="/setup">Guided setup</Link>
+                <a href={site.app}>Dashboard</a>
               </Button>
             </div>
             <p className="mt-6 text-[15px] text-[var(--fog)]">
-              New here?{" "}
-              <Link href="/learn" className="font-medium text-[var(--fg)] underline-offset-4 hover:underline">
+              Never shipped a site?{" "}
+              <a
+                href={site.docsLearn}
+                className="font-medium text-[var(--fg)] underline-offset-4 hover:underline"
+                rel="noreferrer"
+                target="_blank"
+              >
                 Start with Learn
-              </Link>
+              </a>
+              . We will not make it weird.
             </p>
           </FadeIn>
         </div>
       </section>
 
-      <section className="border-t border-[var(--line)] bg-white">
+      <section className="border-t border-[var(--line)] bg-[var(--bg-2)]">
         <div className="mx-auto max-w-3xl px-5 py-24 text-center sm:px-8">
           <FadeIn>
-            <p className="text-sm font-medium text-[var(--mint)]">One command</p>
+            <p className="text-sm font-medium text-[var(--mint)]">One command. Dramatic pause optional.</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
               From blank laptop to local preview.
             </h2>
-            <pre className="mx-auto mt-10 max-w-lg overflow-x-auto rounded-2xl border border-[var(--line)] bg-[var(--bg)] px-5 py-4 text-left font-mono text-[14px] text-[var(--fg)] shadow-sm">
+            <pre className="mx-auto mt-10 max-w-lg overflow-x-auto rounded-2xl border border-[var(--line)] bg-[var(--bg)] px-5 py-4 text-left font-mono text-[14px] text-[var(--fg)]">
               <code>{`${createCommand}\ncd my-site\npnpm dev`}</code>
             </pre>
             <p className="mt-6 text-[15px] text-[var(--fog)]">
-              Or use{" "}
-              <Link href="/setup" className="font-medium text-[var(--fg)] underline-offset-4 hover:underline">
+              Terminal scary?{" "}
+              <a
+                href={site.docsSetup}
+                className="font-medium text-[var(--fg)] underline-offset-4 hover:underline"
+                rel="noreferrer"
+                target="_blank"
+              >
                 Guided setup
-              </Link>{" "}
-              if the terminal is new to you.
+              </a>{" "}
+              exists. We are not monsters.
             </p>
           </FadeIn>
         </div>
@@ -65,73 +100,133 @@ export default function HomePage() {
       <section className="border-t border-[var(--line)]">
         <div className="mx-auto max-w-5xl px-5 py-24 sm:px-8">
           <FadeIn className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-medium text-[var(--mint)]">What you get</p>
+            <p className="text-sm font-medium text-[var(--mint)]">Flexes</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
-              Three starters. One kit.
+              Why people stop fighting their stack.
             </h2>
+            <p className="mt-4 text-[16px] leading-relaxed text-[var(--fog)]">
+              Not magic. Just fewer moving parts and less theater.
+            </p>
           </FadeIn>
-          <div className="mt-16 grid gap-8 sm:grid-cols-3">
-            {[
-              { title: "Blank", body: "A clean App Router app with @kumooo/ui ready." },
-              { title: "Blog", body: "Posts and an index. Write, then ship." },
-              { title: "Shop", body: "Lookbook pages with a demo bag. No payments." },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-3xl border border-[var(--line)] bg-white px-6 py-8 text-center shadow-sm"
-              >
-                <p className="text-xl font-semibold tracking-[-0.02em] text-[var(--fg)]">{item.title}</p>
-                <p className="mt-3 text-[15px] leading-relaxed text-[var(--fog)]">{item.body}</p>
-              </div>
+          <div className="mt-14 grid gap-8 sm:grid-cols-2">
+            {flexes.map((item, i) => (
+              <FadeIn key={item.title} delay={i * 0.04}>
+                <div className="h-full border-l border-[var(--mint)]/40 pl-5">
+                  <h3 className="text-xl font-semibold tracking-[-0.02em] text-[var(--fg)]">{item.title}</h3>
+                  <p className="mt-3 text-[15px] leading-relaxed text-[var(--fog)]">{item.body}</p>
+                </div>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-t border-[var(--line)] bg-white">
-        <div className="mx-auto grid max-w-5xl gap-10 px-5 py-24 sm:px-8 lg:grid-cols-2 lg:items-center">
-          <FadeIn>
-            <p className="text-sm font-medium text-[var(--mint)]">Learn</p>
+      <section className="border-t border-[var(--line)] bg-[var(--bg-2)]">
+        <div className="mx-auto max-w-5xl px-5 py-24 sm:px-8">
+          <FadeIn className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-medium text-[var(--mint)]">Starters</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
-              Four short lessons if you have never shipped a site.
+              Three shapes. Pick one and stop shopping.
             </h2>
           </FadeIn>
-          <FadeIn delay={0.05}>
-            <p className="text-[17px] leading-relaxed text-[var(--fog)]">
-              Pages, tools, create-kumooo, then deploy. Plain language. No CS degree required.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button
-                asChild
-                className="rounded-full bg-[var(--fg)] px-6 text-white hover:bg-black"
+          <div className="mt-16 grid gap-8 sm:grid-cols-3">
+            {[
+              {
+                title: "Blank",
+                body: "App Router + @kumooo/ui. The tasteful empty canvas.",
+                href: site.demos.blank,
+              },
+              {
+                title: "Blog",
+                body: "Posts and an index. Write things. Shocking, we know.",
+                href: site.demos.blog,
+              },
+              {
+                title: "Shop",
+                body: "Lookbook pages and a demo bag. Payments are your problem later.",
+                href: site.demos.shop,
+              },
+            ].map((item) => (
+              <a
+                key={item.title}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                className="group rounded-2xl border border-[var(--line)] bg-[var(--bg)]/40 px-6 py-8 text-center no-underline transition-colors hover:border-[var(--mint)]/50 hover:bg-[var(--bg)]"
               >
-                <Link href="/learn">Open Learn</Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-full border-[var(--line)] bg-transparent px-6 text-[var(--fg)] hover:bg-[var(--bg)]"
-              >
-                <a href={site.docs} rel="noreferrer" target="_blank">
-                  Docs
-                </a>
-              </Button>
-            </div>
-          </FadeIn>
+                <p className="text-xl font-semibold tracking-[-0.02em] text-[var(--fg)]">{item.title}</p>
+                <p className="mt-3 text-[15px] leading-relaxed text-[var(--fog)] group-hover:text-[var(--fg)]">
+                  {item.body}
+                </p>
+                <p className="mt-5 text-sm font-medium text-[var(--mint)]">Open live demo ?</p>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="border-t border-[var(--line)]">
+        <div className="mx-auto max-w-3xl px-5 py-24 sm:px-8">
+          <FadeIn>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-[var(--mint)]">Changelog</p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)]">
+                  We ship. Then we write it down.
+                </h2>
+              </div>
+              <Link
+                href="/changelog"
+                className="text-sm font-medium text-[var(--fog)] underline-offset-4 hover:text-[var(--fg)] hover:underline"
+              >
+                Full log
+              </Link>
+            </div>
+            <ul className="mt-10 divide-y divide-[var(--line)] border-y border-[var(--line)]">
+              {changelog.map((entry) => (
+                <li key={entry.slug}>
+                  <Link
+                    href={`/changelog/${entry.slug}`}
+                    className="group flex items-start justify-between gap-6 py-5 no-underline"
+                  >
+                    <div>
+                      <p className="font-mono text-sm text-[var(--mint)]">{entry.version}</p>
+                      <p className="mt-1 text-[15px] leading-relaxed text-[var(--fog)] group-hover:text-[var(--fg)]">
+                        {entry.bullets[0] ?? "Release notes"}
+                      </p>
+                    </div>
+                    <span className="shrink-0 text-sm text-[var(--fog)] group-hover:text-[var(--fg)]">Open ?/span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </FadeIn>
+        </div>
+      </section>
+
+      <section className="border-t border-[var(--line)] bg-[var(--bg-2)]">
         <div className="mx-auto max-w-3xl px-5 py-24 text-center sm:px-8">
           <FadeIn>
-            <p className="text-sm font-medium text-[var(--mint)]">Later</p>
+            <p className="text-sm font-medium text-[var(--mint)]">Hosting</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
-              Hosted care when it is ready. Not before.
+              Free on kumooo.site. Paid when you get ambitious.
             </h2>
             <p className="mx-auto mt-5 max-w-lg text-[17px] leading-relaxed text-[var(--fog)]">
-              Today you own the repo and Cloudflare runs it. Theme editor and manage tools will ship when they feel
-              obvious, not when a roadmap needs a checkbox.
+              Magic-link dashboard. Two sites on Free. Pro and Team are cheap on purpose. Or keep your own Cloudflare
+              account. We will not cry.
             </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Button asChild className="rounded-full bg-[var(--fg)] px-7 text-[var(--bg)] hover:opacity-90">
+                <a href={site.app}>Open dashboard</a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full border-[var(--line)] bg-transparent px-7 text-[var(--fg)] hover:bg-white/5"
+              >
+                <Link href="/pricing">See plans</Link>
+              </Button>
+            </div>
           </FadeIn>
         </div>
       </section>

@@ -1,0 +1,39 @@
+---
+title: Hosting
+description: Deploy to {slug}.kumooo.site with Free quotas and plans.
+---
+
+kumooo hosting runs your site as a Worker on **our** Cloudflare account and serves it at:
+
+```text
+https://{slug}.kumooo.site
+```
+
+You can still deploy to your own Cloudflare account anytime. Hosting is optional.
+
+## Free (live quotas)
+
+| Limit | Value |
+| --- | --- |
+| Sites | 2 per account |
+| Media | 150 MB |
+| URL | `{slug}.kumooo.site` |
+| Custom domains | Not on Free |
+| Builds / day | 20 |
+
+## Coming soon
+
+Prices match [kumooo.dev/pricing](https://kumooo.dev/pricing) (monthly / annual):
+
+- **Pro ($7/mo, or $5/mo billed yearly):** 10 sites, 5 GB media, 1 custom domain
+- **Team ($12/mo, or $10/mo billed yearly):** 50 sites, 50 GB media, 10 custom domains, 5 seats
+- **Scale:** custom limits, Slack + SLA
+
+## How it works (technical)
+
+1. A **dispatch Worker** receives requests for `*.kumooo.site`.
+2. It looks up the slug and calls your **user Worker** in a Workers for Platforms dispatch namespace (when that path is live).
+3. Until a site is deployed, visitors see a branded “not live yet” page.
+4. Media uploads go to **R2** with per-account quotas from `@kumooo/plans`.
+
+Sign in at [app.kumooo.dev](https://app.kumooo.dev) with an email code to reserve a slug.

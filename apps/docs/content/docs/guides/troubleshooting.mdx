@@ -1,0 +1,32 @@
+---
+title: Troubleshooting
+description: Common bumps and how to get unstuck.
+---
+
+## `npx` / `node` not found
+
+Node is missing or the terminal session is stale. Reinstall [Node LTS](https://nodejs.org), close the terminal, open a new one, run `node -v`.
+
+## Port 3000 in use
+
+Something else is already serving on 3000. Stop it, or start Next on another port:
+
+```bash
+pnpm dev -- --port 3001
+```
+
+## Workspace dependency errors
+
+If you cloned the monorepo and a starter cannot resolve `@kumooo/ui`, run `pnpm install` from the **repo root**, not only inside the starter.
+
+## Deploy button failed
+
+The Cloudflare Deploy flow needs a public GitHub tree. Monorepo `workspace:*` packages can break one-click clones until packages are published. Use [Guided setup](/docs/setup) or deploy from a published starter when available.
+
+## Magic link never arrives
+
+Check spam. Request a new link after a minute. In early dashboard builds, if email sending is not enabled yet, the API may show a one-time **dev link** on localhost only.
+
+## Still stuck
+
+Open an issue on [GitHub](https://github.com/renzoreyn/kumooo) or email [contact@renzoreyn.dev](mailto:contact@renzoreyn.dev).

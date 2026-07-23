@@ -15,12 +15,12 @@ export default function HomePage() {
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button asChild>
-            <a href="https://github.com/renzoreyn/kumooo">
-              Get started <ArrowRightIcon />
+            <a href="https://docs.kumooo.dev/docs/setup">
+              Guided setup <ArrowRightIcon />
             </a>
           </Button>
           <Button variant="outline" asChild>
-            <a href="https://www.kibo-ui.com">Kibo UI</a>
+            <a href="https://kumooo.dev">kumooo.dev</a>
           </Button>
         </div>
       </FadeIn>

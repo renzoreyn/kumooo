@@ -15,6 +15,83 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  apps/api:
+    dependencies:
+      '@kumooo/plans':
+        specifier: workspace:*
+        version: link:../../packages/plans
+      hono:
+        specifier: ^4.7.2
+        version: 4.12.31
+    devDependencies:
+      '@cloudflare/workers-types':
+        specifier: ^4.20241218.0
+        version: 4.20260702.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      wrangler:
+        specifier: ^4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
+
+  apps/dashboard:
+    dependencies:
+      '@kumooo/plans':
+        specifier: workspace:*
+        version: link:../../packages/plans
+      '@kumooo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@opennextjs/cloudflare':
+        specifier: ^1.20.2
+        version: 1.20.2(next@15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(wrangler@4.113.0)
+      framer-motion:
+        specifier: ^11.15.0
+        version: 11.18.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      next:
+        specifier: ^15.1.0
+        version: 15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.0.0
+        version: 4.3.3
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.1
+      '@types/react':
+        specifier: ^19.0.2
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.0.2
+        version: 19.2.3(@types/react@19.2.17)
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.3.3
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      wrangler:
+        specifier: ^4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
+
+  apps/dispatch:
+    devDependencies:
+      '@cloudflare/workers-types':
+        specifier: ^4.20241218.0
+        version: 4.20260702.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      wrangler:
+        specifier: ^4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
+
   apps/docs:
     dependencies:
       '@opennextjs/cloudflare':
@@ -62,10 +139,13 @@ importers:
         version: 5.9.3
       wrangler:
         specifier: ^4.113.0
-        version: 4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
 
   apps/www:
     dependencies:
+      '@kumooo/plans':
+        specifier: workspace:*
+        version: link:../../packages/plans
       '@kumooo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -78,6 +158,9 @@ importers:
       next:
         specifier: ^15.1.0
         version: 15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react:
         specifier: ^19.0.0
         version: 19.2.7
@@ -108,7 +191,7 @@ importers:
         version: 5.9.3
       wrangler:
         specifier: ^4.113.0
-        version: 4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
 
   packages/create-kumooo:
     dependencies:
@@ -131,6 +214,12 @@ importers:
       zod:
         specifier: ^3.24.1
         version: 3.25.76
+    devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/plans:
     devDependencies:
       typescript:
         specifier: ^5.7.2
@@ -187,6 +276,9 @@ importers:
       '@kumooo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@opennextjs/cloudflare':
+        specifier: ^1.20.2
+        version: 1.20.2(next@15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(wrangler@4.113.0)
       next:
         specifier: ^15.1.0
         version: 15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -215,6 +307,9 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+      wrangler:
+        specifier: ^4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
 
   starters/blog:
     dependencies:
@@ -224,6 +319,9 @@ importers:
       '@kumooo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@opennextjs/cloudflare':
+        specifier: ^1.20.2
+        version: 1.20.2(next@15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(wrangler@4.113.0)
       next:
         specifier: ^15.1.0
         version: 15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -252,6 +350,9 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+      wrangler:
+        specifier: ^4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
 
   starters/shop:
     dependencies:
@@ -261,6 +362,9 @@ importers:
       '@kumooo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@opennextjs/cloudflare':
+        specifier: ^1.20.2
+        version: 1.20.2(next@15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(wrangler@4.113.0)
       next:
         specifier: ^15.1.0
         version: 15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -289,6 +393,9 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+      wrangler:
+        specifier: ^4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
 
 packages:
 
@@ -581,6 +688,9 @@ packages:
     engines: {node: '>=16'}
     cpu: [x64]
     os: [win32]
+
+  '@cloudflare/workers-types@4.20260702.1':
+    resolution: {integrity: sha512-mOhf5TUEB1m2vPrxtqoIGfz0fUC9xyxRDx5gWHy5s+OCo6dcV+g7wI1R7gYCMFohhqF/2y2xeKVwMwCJjfn/WA==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -2813,6 +2923,10 @@ packages:
   hastscript@9.0.1:
     resolution: {integrity: sha512-g7df9rMFX/SPi34tyGCyUBREQoKkapwdY/T04Qn9TDWfHhAYt4/I0gMVirzK5wEzeUqIjEB+LXC/ypb7Aqno5w==}
 
+  hono@4.12.31:
+    resolution: {integrity: sha512-zJIHFrl6bq3RDd2YusFNCDlM8qUprxKswyi/OPzPyzKDdyBXDqWx8bZlZ7R+saTdSTatUmb3O7K4SspGPaEOQg==}
+    engines: {node: '>=16.9.0'}
+
   html-url-attributes@3.0.1:
     resolution: {integrity: sha512-ol6UPyBWqsrO6EJySPz2O7ZSr856WDrEzM5zMqp+FJJLGMW35cLYmmZnl0vztAZxRUoNZJFTCohfjuIJ8I4QBQ==}
 
@@ -4453,6 +4567,8 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20260721.1':
     optional: true
 
+  '@cloudflare/workers-types@4.20260702.1': {}
+
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
@@ -4900,7 +5016,7 @@ snapshots:
       glob: 12.0.0
       next: 15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       ts-tqdm: 0.8.6
-      wrangler: 4.113.0
+      wrangler: 4.113.0(@cloudflare/workers-types@4.20260702.1)
       yargs: 18.0.0
     transitivePeerDependencies:
       - encoding
@@ -6572,6 +6688,8 @@ snapshots:
       property-information: 7.2.0
       space-separated-tokens: 2.0.2
 
+  hono@4.12.31: {}
+
   html-url-attributes@3.0.1: {}
 
   html-void-elements@3.0.0: {}
@@ -7845,7 +7963,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20260721.1
       '@cloudflare/workerd-windows-64': 1.20260721.1
 
-  wrangler@4.113.0:
+  wrangler@4.113.0(@cloudflare/workers-types@4.20260702.1):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.5.0
       '@cloudflare/unenv-preset': 2.16.1(unenv@2.0.0-rc.24)(workerd@1.20260721.1)
@@ -7856,6 +7974,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       workerd: 1.20260721.1
     optionalDependencies:
+      '@cloudflare/workers-types': 4.20260702.1
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil

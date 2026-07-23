@@ -1,6 +1,6 @@
 {
   "name": "@kumooo/www",
-  "version": "0.1.0",
+  "version": "0.5.5",
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
@@ -12,10 +12,12 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@kumooo/plans": "workspace:*",
     "@kumooo/ui": "workspace:*",
     "@opennextjs/cloudflare": "^1.20.2",
     "framer-motion": "^11.15.0",
     "next": "^15.1.0",
+    "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^9.0.1"

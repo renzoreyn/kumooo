@@ -1,0 +1,12 @@
+{
+  "title": "Guides",
+  "pages": [
+    "index",
+    "project-structure",
+    "using-ui",
+    "env-and-secrets",
+    "opennext-cloudflare",
+    "custom-domains",
+    "troubleshooting"
+  ]
+}

@@ -1,4 +1,16 @@
 {
   "title": "Guide",
-  "pages": ["index", "getting-started", "installation", "architecture"]
+  "pages": [
+    "index",
+    "getting-started",
+    "installation",
+    "setup",
+    "---",
+    "learn",
+    "---",
+    "guides",
+    "---",
+    "architecture",
+    "hosting"
+  ]
 }

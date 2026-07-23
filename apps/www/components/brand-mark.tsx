@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/** Real geometric k: white stem + diagonal leg + mint dot. */
+/** Flat geometric k: currentColor stem + diagonal + mint dot (no plate). */
 export function BrandMark({ className = "h-8 w-8" }: { className?: string }) {
   return (
     <svg
@@ -8,14 +8,11 @@ export function BrandMark({ className = "h-8 w-8" }: { className?: string }) {
       viewBox="0 0 32 32"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
+      fill="currentColor"
     >
-      <rect width="32" height="32" rx="7.04" fill="#0a0a0a" />
       <g transform="translate(6.811 3.2) scale(0.071508)">
-        <rect x="0" y="0" width="85" height="358" fill="#f5f5f5" />
-        <polygon
-          points="85,252 133,185 134,185 147,204 161,223 174,242 187,261 201,280 214,299 228,318 241,337 255,356 256,357 156,357 155,356 142,337 129,318 116,299 103,280 90,261 90,252"
-          fill="#f5f5f5"
-        />
+        <rect x="0" y="0" width="85" height="358" />
+        <polygon points="85,252 133,185 134,185 147,204 161,223 174,242 187,261 201,280 214,299 228,318 241,337 255,356 256,357 156,357 155,356 142,337 129,318 116,299 103,280 90,261 90,252" />
         <circle cx="191.65" cy="155.3" r="42" fill="#6ee7b7" />
       </g>
     </svg>

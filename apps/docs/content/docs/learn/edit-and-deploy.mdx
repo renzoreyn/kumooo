@@ -1,0 +1,50 @@
+---
+title: Edit text and deploy
+description: Change a page, push to GitHub, and put it on the internet.
+---
+
+You have a local site. Now make it yours and put it on the internet.
+
+## Edit something
+
+Open the project in your editor. Find `app/page.tsx`. Change a heading. Save. Confirm localhost updates.
+
+That is the whole game: edit files, preview, deploy.
+
+## Get it onto GitHub
+
+If the project is not a git repo yet:
+
+```bash
+git init
+git add .
+git commit -m "my first kumooo site"
+```
+
+Create an empty repository on [GitHub](https://github.com/new). Then connect and push (GitHub shows you the exact commands for a new repo).
+
+## Deploy
+
+### Path A: Your Cloudflare account
+
+From [kumooo.dev](https://kumooo.dev) or [Guided setup](/docs/setup), click **Deploy on Cloudflare**. Sign in or create a free Cloudflare account on their site. Follow the clone flow. They build and host it on Workers.
+
+### Path B: kumooo hosting (Free)
+
+We are shipping `{slug}.kumooo.site` for Free accounts (2 sites, 150 MB media). See [Hosting](/docs/hosting) and [Pricing](https://kumooo.dev/pricing). The deploy-to-us flow lands right after the dispatch gateway is live.
+
+### Path C: CLI (when your app is Workers-ready)
+
+For the official site we use OpenNext (`@opennextjs/cloudflare`) and:
+
+```bash
+pnpm deploy
+```
+
+When it finishes, Cloudflare gives you a `workers.dev` URL (or a `kumooo.site` URL on our host). That is your site on the public internet.
+
+## You made it
+
+You went from idea â†?local preview â†?live URL. That is a real website.
+
+â†?Back to [Learn](/docs/learn) Â· [Pricing](https://kumooo.dev/pricing)

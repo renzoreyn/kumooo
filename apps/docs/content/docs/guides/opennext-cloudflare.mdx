@@ -1,0 +1,29 @@
+---
+title: OpenNext on Cloudflare
+description: How kumooo ships Next.js on Workers.
+---
+
+We run Next.js on Cloudflare Workers with [OpenNext](https://opennext.js.org/cloudflare) (`@opennextjs/cloudflare`).
+
+## Why
+
+Workers give you a global edge. OpenNext adapts the Next.js build so App Router apps can run there.
+
+## Maintainer flow (marketing / docs)
+
+From the monorepo:
+
+```bash
+pnpm deploy:www
+pnpm deploy:docs
+```
+
+That builds with OpenNext and deploys the Worker named in each app's `wrangler.jsonc`.
+
+## Starter flow
+
+Starters are catching up to the same path. Until `@kumooo/ui` is on npm, the Cloudflare Deploy button + Guided setup is the beginner-friendly self-host route.
+
+## Hosted path
+
+When you deploy through the kumooo dashboard, we place your Worker in our dispatch namespace and serve `{slug}.kumooo.site`. You do not need your own Cloudflare account for that path.

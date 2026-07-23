@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kumooo-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-07-01",
+  "workers_dev": true,
+  "vars": {
+    "APP_ORIGIN": "https://app.kumooo.dev",
+    "API_ORIGIN": "https://api.kumooo.dev",
+    "FROM_EMAIL": "verification@kumooo.dev",
+    "FROM_NAME": "kumooo",
+    "REPLY_TO_EMAIL": "contact@kumooo.dev"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kumooo-hosting",
+      "database_id": "7a3d9562-b693-424a-912d-b797ebd4b683",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Secret: RESEND_API_KEY via `pnpm --filter @kumooo/api exec wrangler secret put RESEND_API_KEY`
+  "routes": [{ "pattern": "api.kumooo.dev", "custom_domain": true }]
+}

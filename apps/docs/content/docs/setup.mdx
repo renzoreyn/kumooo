@@ -1,0 +1,47 @@
+---
+title: Guided setup
+description: Checklist from tools to local preview to deploy.
+---
+
+Follow these steps in order. Check each box mentally. About twenty minutes the first time.
+
+## 1. Tools
+
+You need Node, a package manager, and a place to edit files.
+
+1. Install [Node.js LTS](https://nodejs.org). Then run `node -v`.
+2. Package manager: npm ships with Node. Or install [pnpm](https://pnpm.io).
+3. Editor: [Cursor](https://cursor.com) or [VS Code](https://code.visualstudio.com).
+
+More detail: [Set up your computer](/docs/learn/setup-your-computer).
+
+## 2. Create
+
+```bash
+npx create-kumooo
+```
+
+Pick **blank**, **blog**, or **shop**.
+
+Prefer one click? Use **Deploy on Cloudflare** from [kumooo.dev](https://kumooo.dev).
+
+## 3. Preview
+
+```bash
+cd my-site
+pnpm install
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). Edit a file, save, watch it update.
+
+## 4. Deploy
+
+- **Self-host:** Deploy on Cloudflare from the homepage. You get a `workers.dev` URL.
+- **Host with us:** Free plan â†?`{slug}.kumooo.site` (2 sites, 150 MB media). See [Hosting](/docs/hosting) and [Pricing](https://kumooo.dev/pricing).
+
+## Next
+
+- [Learn path](/docs/learn) if you want the longer beginner track
+- [Installation](/docs/installation) for command reference
+- [Architecture](/docs/architecture) for how the monorepo fits

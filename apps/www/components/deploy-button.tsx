@@ -15,7 +15,7 @@ export function DeployButton({
       <Button
         asChild
         size={size === "lg" ? "lg" : "default"}
-        className="rounded-full bg-[var(--fg)] px-7 font-medium text-white hover:bg-black"
+        className="rounded-full bg-[var(--fg)] px-7 font-medium text-[var(--bg)] hover:opacity-90"
       >
         <a href={DEPLOY_BLANK_URL} rel="noreferrer" target="_blank">
           Deploy on Cloudflare

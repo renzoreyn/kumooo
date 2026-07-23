@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kumooo-dispatch",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-07-01",
+  "workers_dev": true,
+  "vars": {
+    "SITE_SUFFIX": "kumooo.site"
+  },
+  // Enable Workers for Platforms later: create namespace "kumooo-sites", then uncomment:
+  // "dispatch_namespaces": [
+  //   { "binding": "DISPATCHER", "namespace": "kumooo-sites" }
+  // ],
+  "routes": [
+    { "pattern": "*kumooo.site/*", "zone_name": "kumooo.site" }
+  ]
+}

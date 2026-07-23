@@ -1,0 +1,42 @@
+@import "@kumooo/ui/globals.css";
+
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "./**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
+
+:root {
+  --bg: #0c0c0e;
+  --bg-2: #161618;
+  --fg: #f5f5f7;
+  --fog: #a1a1a6;
+  --mint: #6ee7b7;
+  --line: rgba(245, 245, 247, 0.12);
+
+  --background: 240 6% 5%;
+  --foreground: 240 5% 96%;
+  --card: 240 5% 9%;
+  --card-foreground: 240 5% 96%;
+  --primary: 158 64% 62%;
+  --primary-foreground: 240 6% 5%;
+  --secondary: 240 5% 12%;
+  --secondary-foreground: 240 5% 96%;
+  --muted: 240 5% 12%;
+  --muted-foreground: 240 4% 64%;
+  --accent: 240 5% 12%;
+  --accent-foreground: 240 5% 96%;
+  --border: 240 5% 18%;
+  --input: 240 5% 18%;
+  --ring: 158 64% 62%;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

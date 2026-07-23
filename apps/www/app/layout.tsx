@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Providers } from "@/components/providers";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { site } from "@/lib/site";
@@ -31,11 +32,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <body className="relative antialiased">
-        <SiteHeader />
-        <div className="relative z-10">{children}</div>
-        <SiteFooter />
+        <Providers>
+          <SiteHeader />
+          <div className="relative z-10">{children}</div>
+          <SiteFooter />
+        </Providers>
       </body>
     </html>
   );

@@ -1,0 +1,28 @@
+---
+title: Using @kumooo/ui
+description: Import primitives and keep the look consistent.
+---
+
+`@kumooo/ui` is a small set of React components styled for kumooo.js. Starters already depend on it.
+
+## Import
+
+```tsx
+import { Button, FadeIn, CodeBlock } from "@kumooo/ui";
+```
+
+Import the shared stylesheet once in your root layout (starters do this for you):
+
+```tsx
+import "@kumooo/ui/globals.css";
+```
+
+## Patterns
+
+- Prefer `Button` over raw `<button>` for primary actions.
+- Use `FadeIn` sparingly for page entrance, not every list item.
+- `CodeBlock` is for docs-style snippets in your own UI.
+
+## Workspace note
+
+In the kumooo monorepo, `@kumooo/ui` is `workspace:*`. Published npm versions will replace that for standalone apps. Until then, Guided setup and monorepo starters are the reliable path.
