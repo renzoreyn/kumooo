@@ -13,12 +13,25 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://app.kumooo.dev"),
   title: {
     default: "kumooo dashboard",
     template: "%s · kumooo",
   },
   description: "Host sites on kumooo.site",
   icons: { icon: "/favicon.svg" },
+  openGraph: {
+    title: "kumooo dashboard",
+    description: "Host sites on kumooo.site",
+    type: "website",
+    url: "https://app.kumooo.dev",
+    siteName: "kumooo.js",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "kumooo dashboard",
+    description: "Host sites on kumooo.site",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -9,8 +9,21 @@ const kumoooSans = Figtree({ subsets: ["latin"], variable: "--font-kumooo-sans" 
 const kumoooDisplay = Outfit({ subsets: ["latin"], variable: "--font-kumooo-display" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://blog.kumooo.site"),
   title: "Blog · kumooo.js",
   description: "Blog demo with y2k / kumooo / glass skins. Admin: admin / admin. Resets daily at 00:00 UTC.",
+  openGraph: {
+    title: "Blog · kumooo.js",
+    description: "Blog demo with y2k / kumooo / glass skins. Resets daily at 00:00 UTC.",
+    type: "website",
+    url: "https://blog.kumooo.site",
+    siteName: "kumooo.js",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog · kumooo.js",
+    description: "Blog demo with y2k / kumooo / glass skins.",
+  },
 };
 
 const fontVars = `${y2kSans.variable} ${y2kDisplay.variable} ${kumoooSans.variable} ${kumoooDisplay.variable}`;

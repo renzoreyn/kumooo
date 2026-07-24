@@ -7,12 +7,29 @@ Free sites live at `{slug}.kumooo.site`. Custom domains are a **Pro** (and highe
 
 ## Self-host
 
-If you deploy on your own Cloudflare account, attach a custom domain in the Workers dashboard the usual way (Workers custom domains or DNS routes).
+If you deploy on your own Cloudflare account, attach a domain the usual way:
 
-## Hosted on kumooo
+- **Workers custom domains** (recommended for one-off sites), or
+- DNS routes / zone routes pointing at your Worker
+
+That is *your* zone and *your* certificates. kumooo is not in the path.
+
+## Hosted on kumooo (Pro+)
+
+Customer sites on our account do **not** get a one-off Workers custom domain per brand (that does not scale). The plan is:
+
+1. **Fallback / SaaS origin** — your site already runs as a user Worker behind `kumooo-dispatch` (Workers for Platforms).
+2. **Cloudflare for SaaS (Custom Hostnames)** — you add `www.example.com` in the dashboard; we create a **Custom Hostname** on our zone and issue TLS for it.
+3. **Your DNS** — you CNAME `www` (or apex via CNAME flattening / ALIAS) to our SaaS target (e.g. `sites.kumooo.dev` or similar — exact hostname ships with Pro).
+4. **Routing** — the hostname maps to your site slug / Worker so the same renderer answers `example.com` and `{slug}.kumooo.site`.
+
+So: **yes — Custom Hostnames (SSL for SaaS)**, not “add every customer domain as a Workers custom domain in wrangler.”
+
+### Flow (when live)
 
 1. Upgrade to Pro when billing is live (see [Pricing](https://kumooo.dev/pricing)).
-2. In the dashboard, open your site �?Domains.
+2. In the dashboard, open your site → Domains.
 3. Add the hostname and follow the DNS instructions (usually a CNAME to our SaaS target).
+4. Wait for hostname status `active` (TXT ownership + certificate).
 
 Until Pro billing ships, use self-host custom domains or the Free `kumooo.site` URL.

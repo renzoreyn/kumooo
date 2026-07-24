@@ -3,11 +3,11 @@
 kumooo.js is a Next.js toolkit plus optional hosted edge URLs.
 
 ```
-editors ??�?app.kumooo.dev (dashboard) ??�?api.kumooo.dev ??�?D1 / email
-         ??�?create-kumooo / GitHub ??�?self-host Workers
-                                     ??�?kumooo-dispatch ??�?user Worker (*.kumooo.site)
+editors → app.kumooo.dev (dashboard) → api.kumooo.dev → D1 / email
+         → create-kumooo / GitHub → self-host Workers
+                                  → kumooo-dispatch → user Worker (*.kumooo.site)
 
-readers ??�?kumooo.dev / docs.kumooo.dev
+readers → kumooo.dev / docs.kumooo.dev
 ```
 
 | Piece | Role |

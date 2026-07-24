@@ -17,6 +17,7 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kumooo.dev"),
   title: {
     default: site.name,
     template: `%s · ${site.name}`,
@@ -27,6 +28,13 @@ export const metadata: Metadata = {
     title: site.name,
     description: site.description,
     type: "website",
+    url: "https://kumooo.dev",
+    siteName: site.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.name,
+    description: site.description,
   },
 };
 

@@ -33,7 +33,8 @@ Prices match [kumooo.dev/pricing](https://kumooo.dev/pricing) (monthly / annual)
 
 1. A **dispatch Worker** receives requests for `*.kumooo.site`.
 2. It looks up the slug and calls your **user Worker** in a Workers for Platforms dispatch namespace (when that path is live).
-3. Until a site is deployed, visitors see a branded “not live yet” page.
+3. Until a site is deployed, visitors see a branded "not live yet" page.
 4. Media uploads go to **R2** with per-account quotas from `@kumooo/plans`.
+5. **Custom domains (Pro+):** Cloudflare for SaaS **Custom Hostnames** CNAME to our fallback origin — see [Custom domains](/docs/guides/custom-domains).
 
 Sign in at [app.kumooo.dev](https://app.kumooo.dev) with an email code to reserve a slug.
