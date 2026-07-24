@@ -7,6 +7,7 @@ import { SKIN_LABELS, SKINS, isSkinId, type SkinId } from "@kumooo/theme-packs";
 import { Button } from "@kumooo/ui";
 import { Shell } from "@/components/shell";
 import { SiteMedia } from "@/components/site-media";
+import { SitePosts } from "@/components/site-posts";
 import { client, type Me, type SiteItem } from "@/lib/api";
 
 export default function SiteDetailPage() {
@@ -107,6 +108,8 @@ export default function SiteDetailPage() {
       </section>
 
       <SiteMedia siteId={siteRow.id} />
+
+      <SitePosts siteId={siteRow.id} />
 
       <p className="mt-8 max-w-lg text-sm leading-relaxed text-[var(--fog)]">
         {siteRow.deployHint ??

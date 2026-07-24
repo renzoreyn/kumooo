@@ -1,8 +1,16 @@
 # Changelog
 
+## 0.5.7
+
+- Dashboard CMS: per-site **posts** (Markdown CRUD) plus public `GET /public/sites/:slug/posts`.
+- Dashboard media library: upload to R2 with plan quota, edge-cached public URLs.
+- Theme packs (Y2K / kumooo / Glass), demo blog/shop admins, site skins via public API.
+- Platform Open Graph images (`next/og`) on www, docs, dashboard, and demos.
+- Docs: custom domains via Cloudflare for SaaS Custom Hostnames; stripped em dashes; fixed mojibake.
+
 ## 0.5.6
 
-- Plans: renamed Free/Pro/Team/Scale ? Nimbus/Cumulus/Stratus/Cumulonimbus (IDs and prices unchanged).
+- Plans: renamed Free/Pro/Team/Scale to Nimbus/Cumulus/Stratus/Cumulonimbus (IDs and prices unchanged).
 - Blank starter: kit playground theme with light/dark (live at blank.kumooo.site).
 
 ## 0.5.5

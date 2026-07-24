@@ -11,8 +11,11 @@ import {
   extFor,
   mediaPublicUrl,
 } from "./media";
+import { sitePostsRoutes } from "./site-posts";
 
 export const sitesRoutes = new Hono<AppEnv>();
+
+sitesRoutes.route("/:id/posts", sitePostsRoutes);
 
 type MediaRow = {
   id: string;

@@ -112,7 +112,7 @@ export const SEED_POSTS = [
 
 ## Try the editor
 
-Sign into **Admin** with \`admin\` / \`admin\`, publish a post, leave a comment. Body text supports Markdown — headings, lists, links, and image URLs.
+Sign into **Admin** with \`admin\` / \`admin\`, publish a post, leave a comment. Body text supports Markdown - headings, lists, links, and image URLs.
 
 Content resets every day at 00:00 UTC.`,
   },
@@ -162,7 +162,7 @@ function mapPost(p: PostRow) {
   };
 }
 
-// —— Public ——
+// --- Public --- 
 
 demoBlogRoutes.get("/posts", async (c) => {
   const rows = await c.env.DB.prepare(
@@ -243,7 +243,7 @@ demoBlogRoutes.post("/posts/:slug/comments", async (c) => {
   });
 });
 
-// —— Admin auth ——
+// --- Admin auth --- 
 
 demoBlogRoutes.post("/admin/login", async (c) => {
   const body = (await c.req.json().catch(() => ({}))) as {

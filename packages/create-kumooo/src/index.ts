@@ -49,7 +49,7 @@ function rewritePackageName(pkgPath: string, name: string) {
 
 async function main() {
   console.log();
-  p.intro(pc.cyan("create-kumooo") + pc.dim(" — kumooo.js on Next.js"));
+  p.intro(pc.cyan("create-kumooo") + pc.dim(" - kumooo.js on Next.js"));
 
   const argName = process.argv[2] && !process.argv[2].startsWith("-") ? process.argv[2] : undefined;
 

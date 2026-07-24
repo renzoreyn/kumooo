@@ -31,7 +31,7 @@ export default function Image() {
             Dashboard
           </div>
           <div style={{ fontSize: 30, color: "#a1a1a6", maxWidth: 900, lineHeight: 1.35 }}>
-            Host sites on kumooo.site — skins, media, and deploy controls.
+            Host sites on kumooo.site - skins, media, and deploy controls.
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24, color: "#8e8e93" }}>

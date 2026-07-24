@@ -6,7 +6,7 @@ Product: kumooo.js · Site: kumooo.dev (Vercel)
 
 ## Goal
 
-Ship a **noob-friendly** marketing + Learn site that shows how powerful kumooo.js feels (motion, interactivity) while guiding absolute beginners from zero to a deployed site. Hosted “we manage your site” and the real theme editor are teased honestly as later — not faked as shipping.
+Ship a **noob-friendly** marketing + Learn site that shows how powerful kumooo.js feels (motion, interactivity) while guiding absolute beginners from zero to a deployed site. Hosted “we manage your site” and the real theme editor are teased honestly as later - not faked as shipping.
 
 ## Decisions locked
 
@@ -23,10 +23,10 @@ Ship a **noob-friendly** marketing + Learn site that shows how powerful kumooo.j
 
 ## Product pillars (copy must reinforce)
 
-1. **Noob-friendly** — tutorials teach *making a website*, not just framework trivia.
-2. **Guided install + one-click deploy** — `/setup` steps + Vercel Deploy Button; we do not build Kumooo auth for deploy.
-3. **We help manage later** — hosted care is a promise, not a v1 feature.
-4. **Theme editor later** — playground teases the feel; labeled as preview, not the shipped editor.
+1. **Noob-friendly** - tutorials teach *making a website*, not just framework trivia.
+2. **Guided install + one-click deploy** - `/setup` steps + Vercel Deploy Button; we do not build Kumooo auth for deploy.
+3. **We help manage later** - hosted care is a promise, not a v1 feature.
+4. **Theme editor later** - playground teases the feel; labeled as preview, not the shipped editor.
 
 ## Non-goals (this ship)
 
@@ -74,7 +74,7 @@ Vercel: Root Directory = `apps/www` (documented in README). Optional repo-root `
 
 ### First viewport (one composition)
 
-- Brand: **kumooo.js** + geometric **k** — hero-level signal, not a tiny nav-only mark.
+- Brand: **kumooo.js** + geometric **k** - hero-level signal, not a tiny nav-only mark.
 - One headline, one short supporting sentence.
 - CTA group:
   - Primary: **Deploy on Vercel** (Deploy Button)
@@ -95,14 +95,14 @@ Controls (noob-safe):
 
 Preview: fake mini-site (nav + hero + one content block) updates with layout, accent, and motion. Copy affordance for `npx create-kumooo` with matching starter hint.
 
-Label: **Preview** — “the theme editor will feel this simple (coming later).”
+Label: **Preview** - “the theme editor will feel this simple (coming later).”
 
 ### Below the fold (one job per section)
 
-1. **For beginners** — never built a site → Learn  
-2. **Power without babysitting** — short motion showcase of `@kumooo/ui` primitives  
-3. **What’s coming** — hosted manage + intuitive theme editor (honest later)  
-4. Footer — GitHub, contact, docs stubs  
+1. **For beginners** - never built a site → Learn  
+2. **Power without babysitting** - short motion showcase of `@kumooo/ui` primitives  
+3. **What’s coming** - hosted manage + intuitive theme editor (honest later)  
+4. Footer - GitHub, contact, docs stubs  
 
 Motion budget: load stagger, playground transitions on control change, one scroll-triggered section. Prefer transform/opacity. Respect `prefers-reduced-motion`.
 
@@ -118,10 +118,10 @@ Motion budget: load stagger, playground transitions on control change, one scrol
 
 Stepped UI (progress indicator, one step visible):
 
-1. **Tools** — Node LTS, pnpm or npm, a code editor (links + “how to check”)  
-2. **Create** — `npx create-kumooo` with copy buttons; or jump to Deploy  
-3. **Preview** — `pnpm dev` / `npm run dev`, open localhost  
-4. **Deploy** — Deploy Button + short “what Vercel will ask” notes  
+1. **Tools** - Node LTS, pnpm or npm, a code editor (links + “how to check”)  
+2. **Create** - `npx create-kumooo` with copy buttons; or jump to Deploy  
+3. **Preview** - `pnpm dev` / `npm run dev`, open localhost  
+4. **Deploy** - Deploy Button + short “what Vercel will ask” notes  
 
 Optional checkboxes (“I installed Node”) are local-only UX sugar; no server persistence.
 
@@ -138,7 +138,7 @@ Ordered path (not a link dump):
 3. Your first site with `create-kumooo`  
 4. Change text, colors, and publish to Vercel  
 
-Each item: title, one-sentence outcome, time estimate (~10–20 min).
+Each item: title, one-sentence outcome, time estimate (~10-20 min).
 
 ### Real MDX tutorials (v1)
 
@@ -179,4 +179,4 @@ README section: “Deploy the marketing site” with those steps. Deploy Button 
 ## Open implementation notes (not blockers)
 
 - Exact Deploy Button URL params (repo vs subdirectory template) finalized during implementation against current Vercel docs.
-- Whether blank starter is published as a Vercel template or users clone the monorepo path — prefer the path that gives newcomers the fewest clicks.
+- Whether blank starter is published as a Vercel template or users clone the monorepo path - prefer the path that gives newcomers the fewest clicks.

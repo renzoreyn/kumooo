@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: "Shop demo with y2k / kumooo / glass skins. Admin: admin / admin. Resets daily at 00:00 UTC.",
   openGraph: {
     title: "Shop · kumooo.js",
-    description: "Shop demo with y2k / kumooo / glass skins. Fake bag — no payment. Resets daily.",
+    description: "Shop demo with y2k / kumooo / glass skins. Fake bag - no payment. Resets daily.",
     type: "website",
     url: "https://shop.kumooo.site",
     siteName: "kumooo.js",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Shop · kumooo.js",
-    description: "Shop demo with skins. Fake bag — no payment.",
+    description: "Shop demo with skins. Fake bag - no payment.",
   },
 };
 

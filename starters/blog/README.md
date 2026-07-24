@@ -7,7 +7,7 @@ pnpm install
 pnpm --filter @kumooo/starter-blog dev
 ```
 
-Demo: https://blog.kumooo.site — Admin `admin` / `admin`. Content resets daily at 00:00 UTC.
+Demo: https://blog.kumooo.site - Admin `admin` / `admin`. Content resets daily at 00:00 UTC.
 
 ## Skin (customer deploy)
 

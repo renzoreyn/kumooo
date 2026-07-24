@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Ship `apps/www` — ink+mint marketing site with playground hero, Deploy-to-Vercel, `/setup`, Learn tutorials, docs stubs — ready for Ren to deploy from GitHub.
+**Goal:** Ship `apps/www` - ink+mint marketing site with playground hero, Deploy-to-Vercel, `/setup`, Learn tutorials, docs stubs - ready for Ren to deploy from GitHub.
 
 **Architecture:** Next.js 15 App Router app dogfooding `@kumooo/ui`. Client playground for hero. Markdown tutorials under `content/learn`. Deploy Button clones monorepo with `root-directory=starters/blank` plus monorepo install/build commands.
 

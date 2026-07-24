@@ -24,7 +24,7 @@ function safeImgSrc(src: string | undefined): string | undefined {
   return undefined;
 }
 
-/** Renders post body Markdown (not full MDX — no JSX/components). */
+/** Renders post body Markdown (not full MDX - no JSX/components). */
 export function PostBody({ source }: { source: string }) {
   return (
     <div className="post-md text-lg leading-relaxed text-[var(--ink)]">

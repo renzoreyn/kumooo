@@ -31,7 +31,7 @@ export default function Image() {
             Shop starter
           </div>
           <div style={{ fontSize: 30, color: "#a1a1a6", maxWidth: 900, lineHeight: 1.35 }}>
-            Catalog, product pages, and skins. Fake bag — no payment. Resets daily.
+            Catalog, product pages, and skins. Fake bag - no payment. Resets daily.
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24, color: "#8e8e93" }}>

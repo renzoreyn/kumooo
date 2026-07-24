@@ -1,6 +1,6 @@
 # Dashboard media library Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans (inline — user said go). Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans (inline - user said go). Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Per-site media upload/list/delete in the dashboard with R2 + quota, public cacheable URLs.
 
@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Max file **5 MB**; types jpeg/png/webp/gif only  
-- R2 keys `sites/{siteId}/{mediaId}.{ext}` — never wiped by demo cron  
+- R2 keys `sites/{siteId}/{mediaId}.{ext}` - never wiped by demo cron  
 - Enforce plan `mediaBytes` on upload (`413 quota_exceeded`)  
 - Public media responses: `Cache-Control: public, max-age=31536000, immutable` (+ Cloudflare-friendly headers)  
 - Demo admin stays sandbox-only  

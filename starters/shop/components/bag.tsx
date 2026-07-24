@@ -93,7 +93,7 @@ export function BagButton() {
       <DialogContent className="border-[var(--ink)]/20 bg-[var(--surface)] text-[var(--ink)]">
         <DialogHeader>
           <DialogTitle className="skin-heading text-xl">Bag</DialogTitle>
-          <DialogDescription className="text-[var(--fog)]">Demo only — no payment.</DialogDescription>
+          <DialogDescription className="text-[var(--fog)]">Demo only - no payment.</DialogDescription>
         </DialogHeader>
         {bag.length === 0 ? (
           <p className="text-sm text-[var(--fog)]">Empty.</p>
@@ -119,7 +119,7 @@ export function BagButton() {
           <Button
             disabled={!bag.length}
             className="skin-btn flex-1 border-0"
-            onClick={() => alert("Demo only — no payment.")}
+            onClick={() => alert("Demo only - no payment.")}
           >
             Checkout
           </Button>

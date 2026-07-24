@@ -1,8 +1,14 @@
 # Changelog
 
+## 0.5.7
+
+- Dashboard CMS: per-site posts (Markdown) and media library with R2 + quotas.
+- Theme packs, demo blog/shop, site skins, platform Open Graph images.
+- Docs: Custom Hostnames for brand domains; cleaner punctuation (no em dashes).
+
 ## 0.5.6
 
-- Plans: renamed Free/Pro/Team/Scale ? Nimbus/Cumulus/Stratus/Cumulonimbus (IDs and prices unchanged).
+- Plans: renamed Free/Pro/Team/Scale to Nimbus/Cumulus/Stratus/Cumulonimbus (IDs and prices unchanged).
 - Blank starter: kit playground theme with light/dark (live at blank.kumooo.site).
 
 ## 0.5.5

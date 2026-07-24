@@ -4,7 +4,7 @@
 
 ## Docs
 
-- [Getting started](/getting-started) — `npx create-kumooo`
+- [Getting started](/getting-started) - `npx create-kumooo`
 - [Installation](/installation)
 - [Architecture](/architecture)
 
@@ -12,4 +12,4 @@
 
 Next.js App Router, `@kumooo/ui` (shadcn-style + Kibo-ready + Radix Icons + Framer Motion), open-source starters.
 
-Hosted multi-tenant and a Cloudflare cache plugin are planned later — not required to build today.
+Hosted multi-tenant and a Cloudflare cache plugin are planned later - not required to build today.

@@ -1,7 +1,7 @@
 # Dashboard media library (real sites)
 
 **Date:** 2026-07-24  
-**Status:** Approved direction — awaiting plan  
+**Status:** Approved direction - awaiting plan  
 **Slice:** First real CMS vertical. Demo `/demo/media` stays sandbox-only.
 
 ## Goal
@@ -50,7 +50,7 @@ Existing `media_objects` (0001):
 - `filename TEXT` (original name, optional display)
 - index `media_site ON media_objects (site_id)`
 
-On site delete: keep `ON DELETE SET NULL` for rows, but **delete R2 objects** for that site’s keys in the same request (or mark orphaned and GC later — prefer delete R2 + rows when deleting a site so quota frees immediately). Prefer: when deleting a site, `DELETE FROM media_objects WHERE site_id = ?` after R2 deletes (override SET NULL by deleting rows explicitly first).
+On site delete: keep `ON DELETE SET NULL` for rows, but **delete R2 objects** for that site’s keys in the same request (or mark orphaned and GC later - prefer delete R2 + rows when deleting a site so quota frees immediately). Prefer: when deleting a site, `DELETE FROM media_objects WHERE site_id = ?` after R2 deletes (override SET NULL by deleting rows explicitly first).
 
 ## R2 keys
 
@@ -106,18 +106,18 @@ All `/sites/:siteId/media*` require the existing dashboard session and site owne
 - Reject if missing, contains `..`, or does **not** start with `sites/`  
 - Stream object with content-type + long cache (`immutable` when keyed by id)
 
-CORS: same as existing authenticated routes for upload/list/delete; public GET for `/media/*` should allow any origin for `<img>` (or rely on no CORS needed for simple image GET — still set cache headers). Prefer mounting public CORS like `/public/*` for `/media/*`.
+CORS: same as existing authenticated routes for upload/list/delete; public GET for `/media/*` should allow any origin for `<img>` (or rely on no CORS needed for simple image GET - still set cache headers). Prefer mounting public CORS like `/public/*` for `/media/*`.
 
 ## Dashboard UI
 
 On `/sites/[id]`, add a **Media** section below skin:
 
 1. Quota line: `used / plan` (from list response or `/me`)  
-2. Dropzone (reuse `@kumooo/ui` Dropzone) — upload → refresh grid  
+2. Dropzone (reuse `@kumooo/ui` Dropzone) - upload → refresh grid  
 3. Grid of thumbnails (newest first): image preview, filename, bytes, **Copy URL**, **Delete**  
 4. Empty state: one short line + dropzone  
 
-No separate `/sites/[id]/media` route in v1 — keep one site page. Preserve existing skin + delete site controls.
+No separate `/sites/[id]/media` route in v1 - keep one site page. Preserve existing skin + delete site controls.
 
 Dashboard `lib/api.ts`: `listMedia`, `uploadMedia`, `deleteMedia`.
 

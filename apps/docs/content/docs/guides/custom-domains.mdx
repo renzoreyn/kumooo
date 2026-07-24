@@ -18,12 +18,12 @@ That is *your* zone and *your* certificates. kumooo is not in the path.
 
 Customer sites on our account do **not** get a one-off Workers custom domain per brand (that does not scale). The plan is:
 
-1. **Fallback / SaaS origin** — your site already runs as a user Worker behind `kumooo-dispatch` (Workers for Platforms).
-2. **Cloudflare for SaaS (Custom Hostnames)** — you add `www.example.com` in the dashboard; we create a **Custom Hostname** on our zone and issue TLS for it.
-3. **Your DNS** — you CNAME `www` (or apex via CNAME flattening / ALIAS) to our SaaS target (e.g. `sites.kumooo.dev` or similar — exact hostname ships with Pro).
-4. **Routing** — the hostname maps to your site slug / Worker so the same renderer answers `example.com` and `{slug}.kumooo.site`.
+1. **Fallback / SaaS origin** - your site already runs as a user Worker behind `kumooo-dispatch` (Workers for Platforms).
+2. **Cloudflare for SaaS (Custom Hostnames)** - you add `www.example.com` in the dashboard; we create a **Custom Hostname** on our zone and issue TLS for it.
+3. **Your DNS** - you CNAME `www` (or apex via CNAME flattening / ALIAS) to our SaaS target (e.g. `sites.kumooo.dev` or similar - exact hostname ships with Pro).
+4. **Routing** - the hostname maps to your site slug / Worker so the same renderer answers `example.com` and `{slug}.kumooo.site`.
 
-So: **yes — Custom Hostnames (SSL for SaaS)**, not “add every customer domain as a Workers custom domain in wrangler.”
+So: **yes - Custom Hostnames (SSL for SaaS)**, not “add every customer domain as a Workers custom domain in wrangler.”
 
 ### Flow (when live)
 

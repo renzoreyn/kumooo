@@ -7,7 +7,7 @@ pnpm install
 pnpm --filter @kumooo/starter-shop dev
 ```
 
-Demo: https://shop.kumooo.site — Admin `admin` / `admin`. Products reset daily at 00:00 UTC.
+Demo: https://shop.kumooo.site - Admin `admin` / `admin`. Products reset daily at 00:00 UTC.
 
 ## Skin (customer deploy)
 

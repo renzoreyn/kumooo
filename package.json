@@ -1,7 +1,7 @@
 {
   "name": "kumooo",
   "private": true,
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "kumooo.js: Next.js framework toolkit (UI, starters, CLI, marketing, docs, hosting)",
   "license": "MIT",
   "packageManager": "pnpm@9.15.0",

@@ -40,7 +40,7 @@ export default function ShopHome() {
             <span className="text-[var(--hot)]">.</span>
           </h1>
           <p className="mt-4 max-w-xl text-lg font-medium text-[var(--fog)]">
-            Live product feed from the shop demo. Open a product for sizes, colors, and full description. Bag is local —
+            Live product feed from the shop demo. Open a product for sizes, colors, and full description. Bag is local  - 
             no payment. Resets daily at 00:00 UTC.
           </p>
         </FadeIn>

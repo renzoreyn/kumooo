@@ -243,7 +243,7 @@ function mapProduct(p: ProductRow) {
   };
 }
 
-// —— Public ——
+// --- Public --- 
 
 demoShopRoutes.get("/products", async (c) => {
   const rows = await c.env.DB.prepare(
@@ -263,7 +263,7 @@ demoShopRoutes.get("/products/:slug", async (c) => {
   return c.json({ product: mapProduct(row) });
 });
 
-// —— Admin auth ——
+// --- Admin auth --- 
 
 demoShopRoutes.post("/admin/login", async (c) => {
   const body = (await c.req.json().catch(() => ({}))) as {

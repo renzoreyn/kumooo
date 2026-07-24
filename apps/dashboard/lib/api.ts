@@ -48,6 +48,27 @@ export type MediaList = {
   quotaLabel: string;
 };
 
+export type PostItem = {
+  id: string;
+  siteId: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  status: string;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PostInput = {
+  title: string;
+  slug?: string;
+  excerpt?: string;
+  body: string;
+  status?: "published" | "draft";
+};
+
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   const isForm = typeof FormData !== "undefined" && init?.body instanceof FormData;
@@ -97,4 +118,14 @@ export const client = {
   },
   deleteMedia: (siteId: string, mediaId: string) =>
     api<{ ok: true }>(`/sites/${siteId}/media/${mediaId}`, { method: "DELETE" }),
+  listPosts: (siteId: string) => api<{ posts: PostItem[] }>(`/sites/${siteId}/posts`),
+  createPost: (siteId: string, input: PostInput) =>
+    api<PostItem>(`/sites/${siteId}/posts`, { method: "POST", body: JSON.stringify(input) }),
+  updatePost: (siteId: string, postId: string, input: Partial<PostInput>) =>
+    api<PostItem>(`/sites/${siteId}/posts/${postId}`, {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    }),
+  deletePost: (siteId: string, postId: string) =>
+    api<{ ok: true }>(`/sites/${siteId}/posts/${postId}`, { method: "DELETE" }),
 };

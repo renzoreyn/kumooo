@@ -19,7 +19,7 @@ export function FormattingGuide() {
       {open ? (
         <div className="space-y-3 border-t border-[var(--ink)]/10 px-4 py-3 text-xs leading-relaxed text-[var(--fog)]">
           <p>
-            Body text is <strong className="text-[var(--ink)]">Markdown</strong> (not full MDX — no JSX). It renders on
+            Body text is <strong className="text-[var(--ink)]">Markdown</strong> (not full MDX - no JSX). It renders on
             the public post page.
           </p>
           <ul className="space-y-1.5 font-mono text-[11px] text-[var(--ink)]">

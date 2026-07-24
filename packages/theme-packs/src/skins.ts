@@ -24,7 +24,7 @@ export function isSkinId(value: string | null | undefined): value is SkinId {
   return value === "y2k" || value === "kumooo" || value === "glass";
 }
 
-/** SVG data-URL favicon — white k, skin-colored dot */
+/** SVG data-URL favicon - white k, skin-colored dot */
 export function faviconDataUrl(skin: SkinId): string {
   const accent = SKIN_ACCENTS[skin];
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g fill="#ffffff" transform="translate(6.811 3.2) scale(0.071508)"><rect width="85" height="358"/><polygon points="85,252 133,185 134,185 147,204 161,223 174,242 187,261 201,280 214,299 228,318 241,337 255,356 256,357 156,357 155,356 142,337 129,318 116,299 103,280 90,261 90,252"/><circle cx="191.65" cy="155.3" r="42" fill="${accent}"/></g></svg>`;
@@ -68,7 +68,7 @@ export type ThemeBootOptions = {
   preferStored?: boolean;
 };
 
-/** Inline script for <head> — applies skin + color mode + favicon before paint. */
+/** Inline script for <head> - applies skin + color mode + favicon before paint. */
 export function themeBootScript(
   defaultSkin: SkinId = DEFAULT_SKIN,
   opts: ThemeBootOptions = {},

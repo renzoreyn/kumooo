@@ -1,7 +1,7 @@
 {
   "name": "@kumooo/ui",
   "version": "0.1.0",
-  "description": "kumooo.js UI kit — shadcn-style primitives, Kibo-ready patterns, Radix Icons, Framer Motion",
+  "description": "kumooo.js UI kit: shadcn-style primitives, Kibo-ready patterns, Radix Icons, Framer Motion",
   "type": "module",
   "license": "MIT",
   "sideEffects": [
