@@ -26,3 +26,10 @@ docs/superpowers/
 **/.open-next/
 **/*.tsbuildinfo
 
+# Local debug / curl scratch
+**/tmp-*.json
+**/tail.err
+**/tail-err.txt
+**/tail.json
+**/tail.log
+

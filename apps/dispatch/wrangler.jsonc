@@ -7,6 +7,11 @@
   "vars": {
     "SITE_SUFFIX": "kumooo.site"
   },
+  "services": [
+    { "binding": "DEMO_BLANK", "service": "kumooo-demo-blank" },
+    { "binding": "DEMO_BLOG", "service": "kumooo-demo-blog" },
+    { "binding": "DEMO_SHOP", "service": "kumooo-demo-shop" }
+  ],
   // Enable Workers for Platforms later: create namespace "kumooo-sites", then uncomment:
   // "dispatch_namespaces": [
   //   { "binding": "DISPATCHER", "namespace": "kumooo-sites" }

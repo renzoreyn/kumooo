@@ -12,6 +12,7 @@ export type SiteItem = {
   name: string;
   slug: string;
   status: string;
+  skin: string;
   url: string;
   lastDeployAt: string | null;
   createdAt: string;
@@ -65,5 +66,7 @@ export const client = {
   createSite: (input: { name: string; slug: string }) =>
     api<SiteItem>("/sites", { method: "POST", body: JSON.stringify(input) }),
   getSite: (id: string) => api<SiteItem & { deployHint?: string }>(`/sites/${id}`),
+  updateSite: (id: string, input: { name?: string; skin?: string; status?: string }) =>
+    api<SiteItem>(`/sites/${id}`, { method: "PATCH", body: JSON.stringify(input) }),
   deleteSite: (id: string) => api<{ ok: true }>(`/sites/${id}`, { method: "DELETE" }),
 };

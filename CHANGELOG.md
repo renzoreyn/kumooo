@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.6
+
+- Plans: renamed Free/Pro/Team/Scale ? Nimbus/Cumulus/Stratus/Cumulonimbus (IDs and prices unchanged).
+- Blank starter: kit playground theme with light/dark (live at blank.kumooo.site).
+
 ## 0.5.5
 
 - Auth: 6-digit email OTP replaces magic links; remember this device for 30 days (else 12 hours).

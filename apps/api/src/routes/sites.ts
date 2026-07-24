@@ -7,10 +7,30 @@ import { isValidSlug, newId, siteUrl } from "../lib/crypto";
 
 export const sitesRoutes = new Hono<AppEnv>();
 
+const SKINS = new Set(["y2k", "kumooo", "glass"]);
+
+function isSkin(value: string): boolean {
+  return SKINS.has(value);
+}
+
+function mapSite(s: SiteRow) {
+  return {
+    id: s.id,
+    name: s.name,
+    slug: s.slug,
+    status: s.status,
+    skin: isSkin(s.skin) ? s.skin : "kumooo",
+    url: siteUrl(s.slug),
+    lastDeployAt: s.last_deploy_at,
+    createdAt: s.created_at,
+    updatedAt: s.updated_at,
+  };
+}
+
 sitesRoutes.get("/", async (c) => {
   const user = requireUser(c);
   const { results } = await c.env.DB.prepare(
-    `SELECT id, user_id, name, slug, status, last_deploy_at, created_at, updated_at
+    `SELECT id, user_id, name, slug, status, skin, last_deploy_at, created_at, updated_at
      FROM sites WHERE user_id = ? ORDER BY created_at DESC`,
   )
     .bind(user.id)
@@ -26,16 +46,7 @@ sitesRoutes.get("/", async (c) => {
   const mediaLimit = mediaLimitBytes(user.plan_id as PlanId);
 
   return c.json({
-    sites: (results ?? []).map((s) => ({
-      id: s.id,
-      name: s.name,
-      slug: s.slug,
-      status: s.status,
-      url: siteUrl(s.slug),
-      lastDeployAt: s.last_deploy_at,
-      createdAt: s.created_at,
-      updatedAt: s.updated_at,
-    })),
+    sites: (results ?? []).map(mapSite),
     quota: {
       planId: plan.id,
       planName: plan.name,
@@ -51,11 +62,16 @@ sitesRoutes.get("/", async (c) => {
 
 sitesRoutes.post("/", async (c) => {
   const user = requireUser(c);
-  const body = (await c.req.json().catch(() => ({}))) as { name?: string; slug?: string };
+  const body = (await c.req.json().catch(() => ({}))) as {
+    name?: string;
+    slug?: string;
+    skin?: string;
+  };
   const name = String(body.name ?? "").trim().slice(0, 80);
   const slug = String(body.slug ?? "")
     .trim()
     .toLowerCase();
+  const skin = isSkin(String(body.skin ?? "kumooo")) ? String(body.skin ?? "kumooo") : "kumooo";
 
   if (!name) return c.json({ error: "name_required" }, 400);
   if (!isValidSlug(slug)) return c.json({ error: "invalid_slug" }, 400);
@@ -71,10 +87,12 @@ sitesRoutes.post("/", async (c) => {
   if (existing) return c.json({ error: "slug_taken" }, 409);
 
   const id = newId("site");
+  const now = new Date().toISOString();
   await c.env.DB.prepare(
-    `INSERT INTO sites (id, user_id, name, slug, status) VALUES (?, ?, ?, ?, 'draft')`,
+    `INSERT INTO sites (id, user_id, name, slug, status, skin, created_at, updated_at)
+     VALUES (?, ?, ?, ?, 'draft', ?, ?, ?)`,
   )
-    .bind(id, user.id, name, slug)
+    .bind(id, user.id, name, slug, skin, now, now)
     .run();
 
   return c.json(
@@ -83,10 +101,11 @@ sitesRoutes.post("/", async (c) => {
       name,
       slug,
       status: "draft",
+      skin,
       url: siteUrl(slug),
       lastDeployAt: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: now,
+      updatedAt: now,
     },
     201,
   );
@@ -96,7 +115,7 @@ sitesRoutes.get("/:id", async (c) => {
   const user = requireUser(c);
   const id = c.req.param("id");
   const site = await c.env.DB.prepare(
-    `SELECT id, user_id, name, slug, status, last_deploy_at, created_at, updated_at
+    `SELECT id, user_id, name, slug, status, skin, last_deploy_at, created_at, updated_at
      FROM sites WHERE id = ? AND user_id = ?`,
   )
     .bind(id, user.id)
@@ -104,17 +123,60 @@ sitesRoutes.get("/:id", async (c) => {
   if (!site) return c.json({ error: "not_found" }, 404);
 
   return c.json({
-    id: site.id,
-    name: site.name,
-    slug: site.slug,
-    status: site.status,
-    url: siteUrl(site.slug),
-    lastDeployAt: site.last_deploy_at,
-    createdAt: site.created_at,
-    updatedAt: site.updated_at,
+    ...mapSite(site),
     deployHint:
-      "Deploy uploads land next. For now, reserve your slug and self-host, or wait for the dashboard deploy token flow.",
+      "Set your visual skin here. Deployed blog/shop starters read it from the public site API (or NEXT_PUBLIC_SITE_SKIN at build time).",
   });
+});
+
+sitesRoutes.patch("/:id", async (c) => {
+  const user = requireUser(c);
+  const id = c.req.param("id");
+  const existing = await c.env.DB.prepare(
+    `SELECT id, user_id, name, slug, status, skin, last_deploy_at, created_at, updated_at
+     FROM sites WHERE id = ? AND user_id = ?`,
+  )
+    .bind(id, user.id)
+    .first<SiteRow>();
+  if (!existing) return c.json({ error: "not_found" }, 404);
+
+  const body = (await c.req.json().catch(() => ({}))) as {
+    name?: string;
+    skin?: string;
+    status?: string;
+  };
+
+  const name =
+    body.name !== undefined ? String(body.name).trim().slice(0, 80) : existing.name;
+  if (!name) return c.json({ error: "name_required" }, 400);
+
+  let skin = existing.skin;
+  if (body.skin !== undefined) {
+    const next = String(body.skin);
+    if (!isSkin(next)) return c.json({ error: "invalid_skin" }, 400);
+    skin = next;
+  }
+
+  let status = existing.status;
+  if (body.status === "draft" || body.status === "live" || body.status === "published") {
+    status = body.status === "published" ? "live" : body.status;
+  }
+
+  const now = new Date().toISOString();
+  await c.env.DB.prepare(
+    `UPDATE sites SET name = ?, skin = ?, status = ?, updated_at = ? WHERE id = ? AND user_id = ?`,
+  )
+    .bind(name, skin, status, now, id, user.id)
+    .run();
+
+  const site = await c.env.DB.prepare(
+    `SELECT id, user_id, name, slug, status, skin, last_deploy_at, created_at, updated_at
+     FROM sites WHERE id = ?`,
+  )
+    .bind(id)
+    .first<SiteRow>();
+
+  return c.json(mapSite(site!));
 });
 
 sitesRoutes.delete("/:id", async (c) => {

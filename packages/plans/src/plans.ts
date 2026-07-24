@@ -28,7 +28,7 @@ const GB = 1024 * MB;
 export const PLANS: Record<PlanId, Plan> = {
   free: {
     id: "free",
-    name: "Free",
+    name: "Nimbus",
     priceMonthlyUsd: 0,
     priceAnnualMonthlyUsd: 0,
     blurb: "Learn and ship two real sites on our edge.",
@@ -49,7 +49,7 @@ export const PLANS: Record<PlanId, Plan> = {
   },
   pro: {
     id: "pro",
-    name: "Pro",
+    name: "Cumulus",
     priceMonthlyUsd: 7,
     priceAnnualMonthlyUsd: 5,
     blurb: "For solo builders who need a custom domain and room to grow.",
@@ -70,7 +70,7 @@ export const PLANS: Record<PlanId, Plan> = {
   },
   team: {
     id: "team",
-    name: "Team",
+    name: "Stratus",
     priceMonthlyUsd: 12,
     priceAnnualMonthlyUsd: 10,
     blurb: "Studios and small agencies shipping many sites together.",
@@ -92,7 +92,7 @@ export const PLANS: Record<PlanId, Plan> = {
   },
   scale: {
     id: "scale",
-    name: "Scale",
+    name: "Cumulonimbus",
     priceMonthlyUsd: null,
     priceAnnualMonthlyUsd: null,
     blurb: "When hosting is part of your product, not a side project.",

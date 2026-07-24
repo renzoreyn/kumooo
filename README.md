@@ -13,7 +13,7 @@ Pick **blank**, **blog**, or **shop**. Or open [kumooo.dev](https://kumooo.dev).
 ## What you get
 
 - **Built on Next.js App Router**, not a Next fork.
-- **`@kumooo/ui`** and **`@kumooo/plans`** (Free: 2 sites, 150 MB; Pro/Team priced on site).
+- **`@kumooo/ui`** and **`@kumooo/plans`** (Nimbus: 2 sites, 150 MB; Cumulus/Stratus priced on site).
 - **Starters**: blank / blog / shop.
 - **`apps/www`**: marketing + pricing (kumooo.dev)
 - **`apps/docs`**: Learn, setup, guides (docs.kumooo.dev)

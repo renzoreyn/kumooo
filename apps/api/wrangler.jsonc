@@ -7,9 +7,14 @@
   "vars": {
     "APP_ORIGIN": "https://app.kumooo.dev",
     "API_ORIGIN": "https://api.kumooo.dev",
+    "BLOG_ORIGIN": "https://blog.kumooo.site",
+    "SHOP_ORIGIN": "https://shop.kumooo.site",
     "FROM_EMAIL": "verification@kumooo.dev",
     "FROM_NAME": "kumooo",
     "REPLY_TO_EMAIL": "contact@kumooo.dev"
+  },
+  "triggers": {
+    "crons": ["0 0 * * *"]
   },
   "d1_databases": [
     {
@@ -17,6 +22,12 @@
       "database_name": "kumooo-hosting",
       "database_id": "7a3d9562-b693-424a-912d-b797ebd4b683",
       "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "kumooo-media"
     }
   ],
   // Secret: RESEND_API_KEY via `pnpm --filter @kumooo/api exec wrangler secret put RESEND_API_KEY`

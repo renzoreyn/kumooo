@@ -13,7 +13,7 @@ const flexes = [
   },
   {
     title: "Cloudflare if you want. Us if you don't.",
-    body: "Self-host on your account, or park it on {slug}.kumooo.site. Free means two sites and 150 MB. We counted.",
+    body: "Self-host on your account, or park it on {slug}.kumooo.site. Nimbus means two sites and 150 MB. We counted.",
   },
   {
     title: "UI that does not apologize",
@@ -158,7 +158,7 @@ export default function HomePage() {
                 <p className="mt-3 text-[15px] leading-relaxed text-[var(--fog)] group-hover:text-[var(--fg)]">
                   {item.body}
                 </p>
-                <p className="mt-5 text-sm font-medium text-[var(--mint)]">Open live demo ?</p>
+                <p className="mt-5 text-sm font-medium text-[var(--mint)]">Open live demo{" ->"}</p>
               </a>
             ))}
           </div>
@@ -195,7 +195,7 @@ export default function HomePage() {
                         {entry.bullets[0] ?? "Release notes"}
                       </p>
                     </div>
-                    <span className="shrink-0 text-sm text-[var(--fog)] group-hover:text-[var(--fg)]">Open ?/span>
+                    <span className="shrink-0 text-sm text-[var(--fog)] group-hover:text-[var(--fg)]">Open{" ->"}</span>
                   </Link>
                 </li>
               ))}
@@ -209,10 +209,10 @@ export default function HomePage() {
           <FadeIn>
             <p className="text-sm font-medium text-[var(--mint)]">Hosting</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
-              Free on kumooo.site. Paid when you get ambitious.
+              Nimbus on kumooo.site. Paid when you get ambitious.
             </h2>
             <p className="mx-auto mt-5 max-w-lg text-[17px] leading-relaxed text-[var(--fog)]">
-              Magic-link dashboard. Two sites on Free. Pro and Team are cheap on purpose. Or keep your own Cloudflare
+              Email-code dashboard. Two sites on Nimbus. Cumulus and Stratus are cheap on purpose. Or keep your own Cloudflare
               account. We will not cry.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">

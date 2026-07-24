@@ -27,21 +27,31 @@ export function siteUrl(slug: string): string {
   return `https://${slug}.kumooo.site`;
 }
 
-export function cookieHeader(name: string, value: string, maxAgeSec: number, domain?: string): string {
+export function cookieHeader(
+  name: string,
+  value: string,
+  maxAgeSec: number,
+  domain?: string,
+  sameSite: "Lax" | "None" = "Lax",
+): string {
   const parts = [
     `${name}=${value}`,
     "Path=/",
     "HttpOnly",
     "Secure",
-    "SameSite=Lax",
+    `SameSite=${sameSite}`,
     `Max-Age=${maxAgeSec}`,
   ];
   if (domain) parts.push(`Domain=${domain}`);
   return parts.join("; ");
 }
 
-export function clearCookieHeader(name: string, domain?: string): string {
-  const parts = [`${name}=`, "Path=/", "HttpOnly", "Secure", "SameSite=Lax", "Max-Age=0"];
+export function clearCookieHeader(
+  name: string,
+  domain?: string,
+  sameSite: "Lax" | "None" = "Lax",
+): string {
+  const parts = [`${name}=`, "Path=/", "HttpOnly", "Secure", `SameSite=${sameSite}`, "Max-Age=0"];
   if (domain) parts.push(`Domain=${domain}`);
   return parts.join("; ");
 }

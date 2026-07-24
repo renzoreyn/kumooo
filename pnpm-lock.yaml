@@ -39,6 +39,9 @@ importers:
       '@kumooo/plans':
         specifier: workspace:*
         version: link:../../packages/plans
+      '@kumooo/theme-packs':
+        specifier: workspace:*
+        version: link:../../packages/theme-packs
       '@kumooo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -48,6 +51,49 @@ importers:
       framer-motion:
         specifier: ^11.15.0
         version: 11.18.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      next:
+        specifier: ^15.1.0
+        version: 15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.0.0
+        version: 4.3.3
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.1
+      '@types/react':
+        specifier: ^19.0.2
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.0.2
+        version: 19.2.3(@types/react@19.2.17)
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.3.3
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      wrangler:
+        specifier: ^4.113.0
+        version: 4.113.0(@cloudflare/workers-types@4.20260702.1)
+
+  apps/demo-blank:
+    dependencies:
+      '@kumooo/framework':
+        specifier: workspace:*
+        version: link:../../packages/framework
+      '@kumooo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@opennextjs/cloudflare':
+        specifier: ^1.20.2
+        version: 1.20.2(next@15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(wrangler@4.113.0)
       next:
         specifier: ^15.1.0
         version: 15.5.21(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -225,6 +271,22 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  packages/theme-packs:
+    dependencies:
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.2
+        version: 19.2.17
+      react:
+        specifier: ^19.0.0
+        version: 19.2.7
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   packages/ui:
     dependencies:
       '@radix-ui/react-dialog':
@@ -316,6 +378,9 @@ importers:
       '@kumooo/framework':
         specifier: workspace:*
         version: link:../../packages/framework
+      '@kumooo/theme-packs':
+        specifier: workspace:*
+        version: link:../../packages/theme-packs
       '@kumooo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -331,6 +396,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.7(react@19.2.7)
+      react-markdown:
+        specifier: ^10.1.0
+        version: 10.1.0(@types/react@19.2.17)(react@19.2.7)
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.0.0
@@ -359,6 +427,9 @@ importers:
       '@kumooo/framework':
         specifier: workspace:*
         version: link:../../packages/framework
+      '@kumooo/theme-packs':
+        specifier: workspace:*
+        version: link:../../packages/theme-packs
       '@kumooo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -3508,6 +3579,12 @@ packages:
     resolution: {integrity: sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==}
     peerDependencies:
       react: ^19.2.7
+
+  react-markdown@10.1.0:
+    resolution: {integrity: sha512-qKxVopLT/TyA6BX3Ue5NwabOsAzm0Q7kAPwq6L+wWDwisYs7R8vZ0nRXqq6rkueboxpkjvLGU9fWifiX/ZZFxQ==}
+    peerDependencies:
+      '@types/react': '>=18'
+      react: '>=18'
 
   react-markdown@9.1.0:
     resolution: {integrity: sha512-xaijuJB0kzGiUdG7nc2MOMDUDBWPyGAjZtUrow9XxUeua8IqeP+VlIfAZ3bphpcLTnSZXz6z9jcVC/TCwbfgdw==}
@@ -7475,6 +7552,24 @@ snapshots:
     dependencies:
       react: 19.2.7
       scheduler: 0.27.0
+
+  react-markdown@10.1.0(@types/react@19.2.17)(react@19.2.7):
+    dependencies:
+      '@types/hast': 3.0.5
+      '@types/mdast': 4.0.4
+      '@types/react': 19.2.17
+      devlop: 1.1.0
+      hast-util-to-jsx-runtime: 2.3.6
+      html-url-attributes: 3.0.1
+      mdast-util-to-hast: 13.2.1
+      react: 19.2.7
+      remark-parse: 11.0.0
+      remark-rehype: 11.1.2
+      unified: 11.0.5
+      unist-util-visit: 5.1.0
+      vfile: 6.0.3
+    transitivePeerDependencies:
+      - supports-color
 
   react-markdown@9.1.0(@types/react@19.2.17)(react@19.2.7):
     dependencies:

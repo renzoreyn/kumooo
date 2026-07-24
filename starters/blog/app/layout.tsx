@@ -1,21 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { DemoBanner } from "../components/demo-banner";
+import { Figtree, Orbitron, Outfit, Space_Grotesk } from "next/font/google";
+import { themeBootScript } from "@kumooo/theme-packs";
 import "./globals.css";
 
-const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const y2kSans = Space_Grotesk({ subsets: ["latin"], variable: "--font-y2k-sans" });
+const y2kDisplay = Orbitron({ subsets: ["latin"], variable: "--font-y2k-display" });
+const kumoooSans = Figtree({ subsets: ["latin"], variable: "--font-kumooo-sans" });
+const kumoooDisplay = Outfit({ subsets: ["latin"], variable: "--font-kumooo-display" });
 
 export const metadata: Metadata = {
-  title: "Blog · kumooo.js demo",
-  description: "Live blog starter demo for kumooo.js",
+  title: "Blog · kumooo.js",
+  description: "Blog demo with y2k / kumooo / glass skins. Admin: admin / admin. Resets daily at 00:00 UTC.",
 };
+
+const fontVars = `${y2kSans.variable} ${y2kDisplay.variable} ${kumoooSans.variable} ${kumoooDisplay.variable}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={fontVars} data-skin="y2k" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript("y2k") }} />
+      </head>
       <body className="min-h-screen antialiased">
-        <DemoBanner starter="blog" />
+        <div className="border-b border-[var(--ink)]/20 bg-[var(--hot)] px-4 py-1.5 text-center text-[11px] font-bold tracking-wide text-black">
+          Live blog demo · skins: Y2K / kumooo / Glass · Admin: admin / admin · resets 00:00 UTC
+        </div>
         {children}
       </body>
     </html>

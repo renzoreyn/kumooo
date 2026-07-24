@@ -1,99 +1,93 @@
 "use client";
 
 import * as React from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  FadeIn,
-  Stagger,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@kumooo/ui";
-import { products } from "../lib/catalog";
-
-type BagItem = { id: string; name: string; price: string; qty: number };
+import Link from "next/link";
+import { FadeIn, Stagger } from "@kumooo/ui";
+import { BagButton } from "../components/bag";
+import { Masthead } from "../components/masthead";
+import { shopApi, type Product } from "../lib/api";
 
 export default function ShopHome() {
-  const [bag, setBag] = React.useState<BagItem[]>([]);
+  const [products, setProducts] = React.useState<Product[]>([]);
+  const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState(true);
 
-  function add(p: (typeof products)[number]) {
-    setBag((prev) => {
-      const hit = prev.find((i) => i.id === p.id);
-      if (hit) return prev.map((i) => (i.id === p.id ? { ...i, qty: i.qty + 1 } : i));
-      return [...prev, { id: p.id, name: p.name, price: p.price, qty: 1 }];
-    });
-  }
-
-  const count = bag.reduce((n, i) => n + i.qty, 0);
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await shopApi.listProducts();
+        if (!cancelled) setProducts(data.products);
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : "failed");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-16">
-      <FadeIn className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <Badge>Shop starter</Badge>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight">Drop catalog</h1>
-          <p className="mt-2 max-w-lg text-[hsl(var(--muted-foreground))]">
-            Commerce-adjacent UI with a demo bag. Wire Stripe when you are ready. Demo only - no payment.
+    <>
+      <Masthead bagSlot={<BagButton />} />
+      <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+        <FadeIn>
+          <p className="skin-badge mb-4">Drop</p>
+          <h1 className="font-display skin-title text-5xl leading-[0.95] sm:text-7xl">
+            Catalog
+            <span className="text-[var(--hot)]">.</span>
+          </h1>
+          <p className="mt-4 max-w-xl text-lg font-medium text-[var(--fog)]">
+            Live product feed from the shop demo. Open a product for sizes, colors, and full description. Bag is local —
+            no payment. Resets daily at 00:00 UTC.
           </p>
-        </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Bag ({count})</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Bag</DialogTitle>
-              <DialogDescription>Demo only - no payment.</DialogDescription>
-            </DialogHeader>
-            {bag.length === 0 ? (
-              <p className="text-sm text-[hsl(var(--muted-foreground))]">Empty.</p>
-            ) : (
-              <ul className="space-y-2 text-sm">
-                {bag.map((i) => (
-                  <li key={i.id} className="flex justify-between gap-4">
-                    <span>
-                      {i.name} × {i.qty}
-                    </span>
-                    <span>{i.price}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <Button
-              disabled={!bag.length}
-              onClick={() => alert("Demo only - no payment.")}
-            >
-              Checkout
-            </Button>
-          </DialogContent>
-        </Dialog>
-      </FadeIn>
+        </FadeIn>
 
-      <Stagger className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((p) => (
-          <Card key={p.id}>
-            <CardHeader>
-              <CardTitle>{p.name}</CardTitle>
-              <CardDescription>{p.blurb}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between gap-3">
-              <span className="font-semibold">{p.price}</span>
-              <Button size="sm" onClick={() => add(p)}>
-                Add to bag
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </Stagger>
-    </main>
+        {loading ? <p className="mt-12 font-display text-sm">Loading catalog...</p> : null}
+        {error ? (
+          <p className="mt-12 border-2 border-[var(--ink)] bg-[var(--hot)] px-4 py-3 text-sm font-bold text-black">
+            Could not load products ({error}). Is the API up?
+          </p>
+        ) : null}
+
+        <Stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((p) => (
+            <Link
+              key={p.id}
+              href={`/products/${p.slug}`}
+              className="skin-card flex flex-col overflow-hidden p-0 no-underline transition-transform hover:-translate-y-0.5"
+            >
+              <div className="relative aspect-[4/5] overflow-hidden bg-[var(--paper)]">
+                {p.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={p.imageUrl}
+                    alt={p.name}
+                    className="h-full w-full object-cover transition duration-500 hover:scale-[1.03]"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="grid h-full place-items-center font-display text-xs tracking-widest text-[var(--fog)] uppercase">
+                    No image
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-1 flex-col gap-3 p-5">
+                <div>
+                  <h2 className="skin-heading text-xl text-[var(--ink)]">{p.name}</h2>
+                  <p className="skin-muted mt-1 text-sm leading-relaxed">{p.blurb}</p>
+                </div>
+                <div className="mt-auto flex items-center justify-between gap-3 pt-2">
+                  <span className="font-display text-lg font-bold text-[var(--hot)]">{p.price}</span>
+                  <span className="text-xs font-bold tracking-wide text-[var(--cyan)] uppercase">View →</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </Stagger>
+      </main>
+    </>
   );
 }

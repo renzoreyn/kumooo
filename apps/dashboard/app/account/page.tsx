@@ -51,7 +51,7 @@ export default function AccountPage() {
         </div>
       </dl>
       <p className="mt-8 max-w-md text-sm leading-relaxed text-[var(--fog)]">
-        Pro and Team billing come next. See{" "}
+        Cumulus and Stratus billing come next. See{" "}
         <a href={`${site.marketing}/pricing`} className="text-[var(--mint)] underline-offset-2 hover:underline">
           pricing
         </a>

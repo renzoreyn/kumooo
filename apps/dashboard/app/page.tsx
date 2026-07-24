@@ -35,7 +35,7 @@ export default function HomePage() {
   }, [router]);
 
   if (!me || !quota) {
-    return <main className="grid min-h-screen place-items-center text-[var(--fog)]">Loading�?/main>;
+    return <main className="grid min-h-screen place-items-center text-[var(--fog)]">Loading...</main>;
   }
 
   const sitesLabel =
@@ -51,7 +51,7 @@ export default function HomePage() {
               <span className="rounded-full border border-[var(--line)] px-2.5 py-0.5 text-[var(--mint)]">
                 {quota.planName}
               </span>{" "}
-              · {sitesLabel} · {quota.mediaUsedLabel} / {quota.mediaLimitLabel} media
+               |  {sitesLabel}  |  {quota.mediaUsedLabel} / {quota.mediaLimitLabel} media
             </p>
           </div>
           <Button asChild className="rounded-full bg-[var(--fg)] text-[var(--bg)] hover:opacity-90">
@@ -65,7 +65,7 @@ export default function HomePage() {
           <div className="mt-12 rounded-2xl border border-dashed border-[var(--line)] px-6 py-14 text-center">
             <p className="text-lg font-medium tracking-[-0.02em]">No sites yet</p>
             <p className="mx-auto mt-2 max-w-sm text-sm text-[var(--fog)]">
-              Free includes two sites on {"{slug}"}.kumooo.site and 150 MB of media.
+              Nimbus includes two sites on {"{slug}"}.kumooo.site and 150 MB of media.
             </p>
             <Button asChild className="mt-6 rounded-full bg-[var(--fg)] text-[var(--bg)] hover:opacity-90">
               <Link href="/sites/new">Create your first site</Link>

@@ -1,12 +1,22 @@
 /**
  * Host gateway for `{slug}.kumooo.site`.
- * Workers for Platforms (DISPATCHER) is optional; without it every slug gets the fallback page.
+ * Known starter demos are proxied via service bindings.
+ * Workers for Platforms (DISPATCHER) is optional for user sites later.
  */
 const SITE_SUFFIX = "kumooo.site";
+
+const DEMO_SLUGS = {
+  blank: "DEMO_BLANK",
+  blog: "DEMO_BLOG",
+  shop: "DEMO_SHOP",
+} as const;
 
 export interface Env {
   DISPATCHER?: DispatchNamespace;
   SITE_SUFFIX?: string;
+  DEMO_BLANK?: Fetcher;
+  DEMO_BLOG?: Fetcher;
+  DEMO_SHOP?: Fetcher;
 }
 
 interface DispatchNamespace {
@@ -111,6 +121,14 @@ export default {
 
     if (!slug) {
       return apexPage(suffix);
+    }
+
+    const demoKey = DEMO_SLUGS[slug as keyof typeof DEMO_SLUGS];
+    if (demoKey) {
+      const demo = env[demoKey];
+      if (demo) {
+        return demo.fetch(request);
+      }
     }
 
     if (env.DISPATCHER) {

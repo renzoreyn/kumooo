@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { SKIN_LABELS, SKINS, isSkinId, type SkinId } from "@kumooo/theme-packs";
 import { Button } from "@kumooo/ui";
 import { Shell } from "@/components/shell";
 import { client, type Me, type SiteItem } from "@/lib/api";
@@ -12,6 +13,8 @@ export default function SiteDetailPage() {
   const router = useRouter();
   const [me, setMe] = React.useState<Me | null>(null);
   const [siteRow, setSiteRow] = React.useState<(SiteItem & { deployHint?: string }) | null>(null);
+  const [skinBusy, setSkinBusy] = React.useState(false);
+  const [skinMsg, setSkinMsg] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -37,9 +40,26 @@ export default function SiteDetailPage() {
     router.replace("/");
   }
 
+  async function setSkin(next: SkinId) {
+    if (!siteRow || siteRow.skin === next) return;
+    setSkinBusy(true);
+    setSkinMsg(null);
+    try {
+      const updated = await client.updateSite(id, { skin: next });
+      setSiteRow((prev) => (prev ? { ...prev, ...updated } : updated));
+      setSkinMsg("Skin saved. Deployed starters pick this up via /public/sites/" + updated.slug);
+    } catch (e) {
+      setSkinMsg(e instanceof Error ? e.message : "failed");
+    } finally {
+      setSkinBusy(false);
+    }
+  }
+
   if (!me || !siteRow) {
     return <main className="grid min-h-screen place-items-center text-[var(--fog)]">Loading…</main>;
   }
+
+  const activeSkin = isSkinId(siteRow.skin) ? siteRow.skin : "kumooo";
 
   return (
     <Shell email={me.email}>
@@ -58,9 +78,36 @@ export default function SiteDetailPage() {
           <dd className="text-[var(--fg)]">{siteRow.lastDeployAt ?? "Not yet"}</dd>
         </div>
       </dl>
+
+      <section className="mt-10 max-w-lg">
+        <h2 className="text-sm font-semibold tracking-wide text-[var(--fg)]">Visual skin</h2>
+        <p className="mt-1 text-sm text-[var(--fog)]">
+          Blog and shop starters use this skin. Live demos still let visitors preview all three onsite.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label="Site skin">
+          {SKINS.map((id) => (
+            <button
+              key={id}
+              type="button"
+              disabled={skinBusy}
+              onClick={() => setSkin(id)}
+              aria-pressed={activeSkin === id}
+              className={`rounded-full border px-4 py-2 text-xs font-semibold tracking-wide transition ${
+                activeSkin === id
+                  ? "border-[var(--mint)] bg-[var(--mint)]/15 text-[var(--mint)]"
+                  : "border-[var(--line)] text-[var(--fog)] hover:border-[var(--fog)] hover:text-[var(--fg)]"
+              }`}
+            >
+              {SKIN_LABELS[id]}
+            </button>
+          ))}
+        </div>
+        {skinMsg ? <p className="mt-3 text-xs text-[var(--fog)]">{skinMsg}</p> : null}
+      </section>
+
       <p className="mt-8 max-w-lg text-sm leading-relaxed text-[var(--fog)]">
         {siteRow.deployHint ??
-          "Deploy uploads land next. Your slug is reserved on Free."}
+          "Set your visual skin here. Deployed blog/shop starters read it from the public site API."}
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Button asChild className="rounded-full bg-[var(--fg)] text-[var(--bg)] hover:opacity-90">

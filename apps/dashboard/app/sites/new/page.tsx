@@ -37,7 +37,7 @@ export default function NewSitePage() {
       const code = err instanceof Error ? err.message : "failed";
       setError(
         code === "site_limit"
-          ? "Free plan allows 2 sites. Delete one or wait for Pro."
+          ? "Nimbus allows 2 sites. Delete one or wait for Cumulus."
           : code === "slug_taken"
             ? "That slug is taken."
             : code === "invalid_slug"
@@ -48,13 +48,13 @@ export default function NewSitePage() {
     }
   }
 
-  if (!me) return <main className="grid min-h-screen place-items-center text-[var(--fog)]">Loadingâ€?/main>;
+  if (!me) return <main className="grid min-h-screen place-items-center text-[var(--fog)]">Loading...</main>;
 
   return (
     <Shell email={me.email}>
       <h1 className="text-3xl font-semibold tracking-[-0.03em]">New site</h1>
       <p className="mt-2 text-sm text-[var(--fog)]">
-        Reserves <span className="font-mono text-[var(--fg)]">{"{slug}.kumooo.site"}</span> on Free.
+        Reserves <span className="font-mono text-[var(--fg)]">{"{slug}.kumooo.site"}</span> on Nimbus.
       </p>
       <form onSubmit={onSubmit} className="mt-8 max-w-md space-y-4">
         <div>
@@ -88,7 +88,7 @@ export default function NewSitePage() {
           disabled={busy}
           className="rounded-full bg-[var(--fg)] text-[var(--bg)] hover:opacity-90"
         >
-          {busy ? "Creatingâ€? : "Create site"}
+          {busy ? "Creating..." : "Create site"}
         </Button>
       </form>
     </Shell>

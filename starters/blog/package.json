@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@kumooo/framework": "workspace:*",
+    "@kumooo/theme-packs": "workspace:*",
     "@kumooo/ui": "workspace:*",
     "@opennextjs/cloudflare": "^1.20.2",
     "next": "^15.1.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
