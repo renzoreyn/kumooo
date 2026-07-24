@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen antialiased">
         <div className="border-b border-[var(--ink)]/20 bg-[var(--hot)] px-4 py-1.5 text-center text-[11px] font-bold tracking-wide text-black">
-          Live shop demo · skins: Y2K / kumooo / Glass · Admin: admin / admin · resets 00:00 UTC · no payment
+          Shop demo. Skins: Y2K / kumooo / Glass. Admin admin/admin. Resets 00:00 UTC. No real money.
         </div>
         <Providers>{children}</Providers>
       </body>

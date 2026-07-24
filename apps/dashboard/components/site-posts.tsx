@@ -90,7 +90,7 @@ export function SitePosts({ siteId }: { siteId: string }) {
     <section className="mt-10 max-w-2xl">
       <h2 className="text-sm font-semibold tracking-wide text-[var(--fg)]">Posts</h2>
       <p className="mt-1 text-sm text-[var(--fog)]">
-        Write Markdown posts for this site. Published posts are available at the public API for your starter.
+        Markdown. Published ones show up on the public API. Drafts stay our little secret.
       </p>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2">

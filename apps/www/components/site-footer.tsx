@@ -13,7 +13,7 @@ export function SiteFooter() {
             <div>
               <p className="text-[15px] font-semibold tracking-[-0.02em] text-[var(--fg)]">{site.name}</p>
               <p className="mt-1 max-w-md text-sm leading-relaxed text-[var(--fog)]">
-                Next.js sites. Less babysitting. More shipping. A little attitude included free of charge.
+                Next.js sites. Less babysitting. Attitude free of charge. Refunds emotionally unavailable.
               </p>
               <p className="mt-3 text-sm text-[var(--fog)]">
                 <a href={site.contact} className="hover:text-[var(--fg)]">

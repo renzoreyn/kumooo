@@ -25,6 +25,8 @@ export interface UserRow {
   email: string;
   plan_id: PlanId;
   created_at: string;
+  password_hash?: string | null;
+  email_verified_at?: string | null;
 }
 
 export interface SiteRow {

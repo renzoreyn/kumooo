@@ -9,10 +9,10 @@ export default function HomePage() {
         <section className="mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-5xl flex-col justify-center px-5 py-16 sm:px-8 sm:py-20">
           <FadeIn className="max-w-2xl">
             <h1 className="font-display text-5xl font-semibold tracking-[-0.045em] text-[hsl(var(--foreground))] sm:text-6xl md:text-7xl">
-              Playground for @kumooo/ui.
+              Blank starter.
             </h1>
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-xl">
-              The tasteful empty canvas. Clone it, poke the kit below, then ship something that is yours.
+              Empty on purpose. Poke the kit. Replace this page. Leave.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <CopyCommand />

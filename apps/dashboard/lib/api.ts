@@ -5,6 +5,8 @@ export type Me = {
   email: string;
   planId: string;
   createdAt: string;
+  hasPassword?: boolean;
+  emailVerified?: boolean;
 };
 
 export type SiteItem = {
@@ -101,6 +103,21 @@ export const client = {
     api<{ ok: true }>("/auth/otp/verify", {
       method: "POST",
       body: JSON.stringify({ email, code, remember }),
+    }),
+  signup: (email: string, password: string) =>
+    api<{ ok: true; emailed: boolean; needsVerification?: boolean; devCode?: string }>(
+      "/auth/signup",
+      { method: "POST", body: JSON.stringify({ email, password }) },
+    ),
+  loginPassword: (email: string, password: string, remember: boolean) =>
+    api<{ ok: true }>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password, remember }),
+    }),
+  setPassword: (password: string) =>
+    api<{ ok: true }>("/auth/password", {
+      method: "POST",
+      body: JSON.stringify({ password }),
     }),
   logout: () => api<{ ok: true }>("/auth/logout", { method: "POST" }),
   listSites: () => api<{ sites: SiteItem[]; quota: Quota }>("/sites"),

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.8
+
+- Auth: email + password signup (OTP to verify), password login, optional set-password on Account. OTP login stays.
+- Copy: dry deadpan voice across www, docs leads, dashboard chrome, dispatch 404/claim, and demo banners.
+
 ## 0.5.7
 
 - Dashboard CMS: per-site **posts** (Markdown CRUD) plus public `GET /public/sites/:slug/posts`.

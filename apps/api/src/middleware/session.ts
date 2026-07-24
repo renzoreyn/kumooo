@@ -27,7 +27,7 @@ export async function loadSession(c: Context<AppEnv>, next: Next) {
   }
   const hash = await sha256Hex(raw);
   const row = await c.env.DB.prepare(
-    `SELECT u.id, u.email, u.plan_id, u.created_at
+    `SELECT u.id, u.email, u.plan_id, u.created_at, u.password_hash, u.email_verified_at
      FROM sessions s
      JOIN users u ON u.id = s.user_id
      WHERE s.token_hash = ? AND s.expires_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now')`,

@@ -8,19 +8,19 @@ import { createCommand, site } from "@/lib/site";
 
 const flexes = [
   {
-    title: "Next.js. Not a fork. Not a cult.",
-    body: "App Router, the boring reliable kind. We add starters, UI, and opinions so you ship instead of rearranging folders for sport.",
+    title: "Next.js. Not a religion.",
+    body: "App Router. We add starters, UI, and enough opinions that you stop rearranging folders for sport.",
   },
   {
-    title: "Cloudflare if you want. Us if you don't.",
-    body: "Self-host on your account, or park it on {slug}.kumooo.site. Nimbus means two sites and 150 MB. We counted.",
+    title: "Your Cloudflare. Or ours.",
+    body: "Self-host on your account, or park it on {slug}.kumooo.site. Nimbus: two sites, 150 MB. We counted.",
   },
   {
     title: "UI that does not apologize",
-    body: "@kumooo/ui is primitives, motion, and enough taste that your blank starter does not look like a CS homework drop.",
+    body: "@kumooo/ui is primitives and motion. Your blank starter should not look like abandoned coursework.",
   },
   {
-    title: "Docs for humans who just got here",
+    title: "Docs that assume you can read",
     body: "Learn path, guided setup, guides. If you have never deployed anything, we still talk to you like an adult.",
   },
 ];
@@ -41,8 +41,8 @@ export default function HomePage() {
               Websites without the babysitting.
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-[19px] leading-relaxed text-[var(--fog)]">
-              Open source starters on Next.js. Deploy on Cloudflare yourself, or host with us. Either way, the site
-              stops being a part-time job.
+              Next.js starters. Deploy on Cloudflare yourself, or host with us. Either way, the site stops being a
+              side quest.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <DeployButton size="lg" showNote={false} />
@@ -65,7 +65,7 @@ export default function HomePage() {
               >
                 Start with Learn
               </a>
-              . We will not make it weird.
+              . Short. Blunt. No pep talk.
             </p>
           </FadeIn>
         </div>
@@ -74,15 +74,15 @@ export default function HomePage() {
       <section className="border-t border-[var(--line)] bg-[var(--bg-2)]">
         <div className="mx-auto max-w-3xl px-5 py-24 text-center sm:px-8">
           <FadeIn>
-            <p className="text-sm font-medium text-[var(--mint)]">One command. Dramatic pause optional.</p>
+            <p className="text-sm font-medium text-[var(--mint)]">One command. Applause optional.</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
-              From blank laptop to local preview.
+              Laptop to localhost.
             </h2>
             <pre className="mx-auto mt-10 max-w-lg overflow-x-auto rounded-2xl border border-[var(--line)] bg-[var(--bg)] px-5 py-4 text-left font-mono text-[14px] text-[var(--fg)]">
               <code>{`${createCommand}\ncd my-site\npnpm dev`}</code>
             </pre>
             <p className="mt-6 text-[15px] text-[var(--fog)]">
-              Terminal scary?{" "}
+              Terminal feels hostile?{" "}
               <a
                 href={site.docsSetup}
                 className="font-medium text-[var(--fg)] underline-offset-4 hover:underline"
@@ -90,8 +90,8 @@ export default function HomePage() {
                 target="_blank"
               >
                 Guided setup
-              </a>{" "}
-              exists. We are not monsters.
+              </a>
+              . Still no pep talk.
             </p>
           </FadeIn>
         </div>
@@ -105,7 +105,7 @@ export default function HomePage() {
               Why people stop fighting their stack.
             </h2>
             <p className="mt-4 text-[16px] leading-relaxed text-[var(--fog)]">
-              Not magic. Just fewer moving parts and less theater.
+              Not magic. Fewer toys. Less theater.
             </p>
           </FadeIn>
           <div className="mt-14 grid gap-8 sm:grid-cols-2">
@@ -126,24 +126,24 @@ export default function HomePage() {
           <FadeIn className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-medium text-[var(--mint)]">Starters</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
-              Three shapes. Pick one and stop shopping.
+              Three shapes. Pick one. Stop browsing.
             </h2>
           </FadeIn>
           <div className="mt-16 grid gap-8 sm:grid-cols-3">
             {[
               {
                 title: "Blank",
-                body: "App Router + @kumooo/ui. The tasteful empty canvas.",
+                body: "App Router + @kumooo/ui. Empty on purpose.",
                 href: site.demos.blank,
               },
               {
                 title: "Blog",
-                body: "Posts and an index. Write things. Shocking, we know.",
+                body: "Posts and an index. You type words. Wild.",
                 href: site.demos.blog,
               },
               {
                 title: "Shop",
-                body: "Lookbook pages and a demo bag. Payments are your problem later.",
+                body: "Catalog and a fake bag. Real payments are homework.",
                 href: site.demos.shop,
               },
             ].map((item) => (
@@ -172,7 +172,7 @@ export default function HomePage() {
               <div>
                 <p className="text-sm font-medium text-[var(--mint)]">Changelog</p>
                 <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)]">
-                  We ship. Then we write it down.
+                  We ship. Then we document the crime.
                 </h2>
               </div>
               <Link
@@ -209,11 +209,11 @@ export default function HomePage() {
           <FadeIn>
             <p className="text-sm font-medium text-[var(--mint)]">Hosting</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
-              Nimbus on kumooo.site. Paid when you get ambitious.
+              Nimbus on kumooo.site. Ambition costs extra later.
             </h2>
             <p className="mx-auto mt-5 max-w-lg text-[17px] leading-relaxed text-[var(--fog)]">
-              Email-code dashboard. Two sites on Nimbus. Cumulus and Stratus are cheap on purpose. Or keep your own Cloudflare
-              account. We will not cry.
+              Dashboard with email code or password. Two sites on Nimbus. Paid plans when billing stops being vapor. Or
+              keep your own Cloudflare account. We will survive.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button asChild className="rounded-full bg-[var(--fg)] px-7 text-[var(--bg)] hover:opacity-90">

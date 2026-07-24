@@ -86,7 +86,7 @@ export function SiteMedia({ siteId }: { siteId: string }) {
     <section className="mt-10 max-w-2xl">
       <h2 className="text-sm font-semibold tracking-wide text-[var(--fg)]">Media</h2>
       <p className="mt-1 text-sm text-[var(--fog)]">
-        Upload images for this site. Copy the URL into posts, products, or pages. Cached on the edge.
+        Upload images. Copy the URL. Paste it somewhere. Edge-cached. Not art direction.
       </p>
       {data ? (
         <p className="mt-2 font-mono text-xs text-[var(--mint)]">

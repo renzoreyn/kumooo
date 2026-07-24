@@ -84,7 +84,7 @@ export default function SiteDetailPage() {
       <section className="mt-10 max-w-lg">
         <h2 className="text-sm font-semibold tracking-wide text-[var(--fg)]">Visual skin</h2>
         <p className="mt-1 text-sm text-[var(--fog)]">
-          Blog and shop starters use this skin. Live demos still let visitors preview all three onsite.
+          Blog and shop starters read this. Demos still let strangers poke all three. Chaos, contained.
         </p>
         <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label="Site skin">
           {SKINS.map((id) => (

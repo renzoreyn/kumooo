@@ -39,8 +39,7 @@ export default function BlogHome() {
             <span className="text-[var(--hot)]">.</span>
           </h1>
           <p className="mt-4 max-w-xl text-lg font-medium text-[var(--fog)]">
-            Sample posts from the kumooo blog starter. Open Admin to publish. Guests can comment. Content resets daily at
-            00:00 UTC.
+            Sample posts. Admin publishes. Guests comment. Resets 00:00 UTC. Do not get attached.
           </p>
         </FadeIn>
 

@@ -16,8 +16,8 @@ export default function PricingPage() {
             Host on kumooo. Start on Nimbus.
           </h1>
           <p className="mt-5 text-[17px] leading-relaxed text-[var(--fog)]">
-            Two sites and 150 MB on Nimbus. Cumulus and Stratus stay affordable when you need a domain or a small team.
-            Billing for paid plans lands next.
+            Two sites and 150 MB free. Cumulus and Stratus are cheap on purpose. Paid billing is still vapor. Enjoy the
+            prices while they are fiction.
           </p>
         </FadeIn>
         <PricingTable />

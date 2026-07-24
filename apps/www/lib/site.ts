@@ -1,8 +1,8 @@
 export const site = {
   name: "kumooo.js",
-  tagline: "Next.js sites. Less babysitting. A little attitude.",
+  tagline: "Next.js sites. Less babysitting.",
   description:
-    "Open source starters and UI for people who want a real website. Deploy on Cloudflare or host with us. Sass included.",
+    "Starters and UI for people who want a real website. Cloudflare yourself, or host with us. Sass included. Therapy not included.",
   github: "https://github.com/renzoreyn/kumooo",
   contact: "mailto:contact@renzoreyn.dev",
   authorUrl: "https://renzoreyn.dev",

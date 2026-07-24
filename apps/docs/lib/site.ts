@@ -1,7 +1,7 @@
 export const site = {
   name: "kumooo.js",
   description:
-    "Open source Next.js starters and UI for people who want a real website. No boilerplate babysitting.",
+    "Next.js starters and UI. Less babysitting. Deploy on Cloudflare or host with us.",
   url: "https://kumooo.dev",
   docs: "https://docs.kumooo.dev",
   github: "https://github.com/renzoreyn/kumooo",

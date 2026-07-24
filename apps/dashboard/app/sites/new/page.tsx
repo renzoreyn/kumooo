@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Input } from "@kumooo/ui";
 import { Shell } from "@/components/shell";
 import { client, type Me } from "@/lib/api";
 
-export default function NewSitePage() {
+function NewSiteForm() {
   const router = useRouter();
+  const params = useSearchParams();
   const [me, setMe] = React.useState<Me | null>(null);
   const [name, setName] = React.useState("");
   const [slug, setSlug] = React.useState("");
@@ -21,6 +22,15 @@ export default function NewSitePage() {
       .catch(() => router.replace("/login"));
   }, [router]);
 
+  React.useEffect(() => {
+    const q = params.get("slug");
+    if (q && /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/.test(q)) {
+      setSlug(q);
+      if (!name) setName(q);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- seed once from URL
+  }, [params]);
+
   function onName(value: string) {
     setName(value);
     setSlug(slugify(value));
@@ -32,16 +42,16 @@ export default function NewSitePage() {
     setError(null);
     try {
       const site = await client.createSite({ name, slug });
-      router.replace(`/sites/${site.id}`);
+      router.push(`/sites/${site.id}`);
     } catch (err) {
-      const code = err instanceof Error ? err.message : "failed";
+      const code = err instanceof Error ? err.message : "";
       setError(
         code === "site_limit"
-          ? "Nimbus allows 2 sites. Delete one or wait for Cumulus."
+          ? "Site limit for your plan."
           : code === "slug_taken"
-            ? "That slug is taken."
+            ? "Taken. Pick another."
             : code === "invalid_slug"
-              ? "Use lowercase letters, numbers, and hyphens."
+              ? "Lowercase letters, numbers, hyphens. Be boring."
               : "Could not create site.",
       );
       setBusy(false);
@@ -54,7 +64,8 @@ export default function NewSitePage() {
     <Shell email={me.email}>
       <h1 className="text-3xl font-semibold tracking-[-0.03em]">New site</h1>
       <p className="mt-2 text-sm text-[var(--fog)]">
-        Reserves <span className="font-mono text-[var(--fg)]">{"{slug}.kumooo.site"}</span> on Nimbus.
+        Reserves <span className="font-mono text-[var(--fg)]">{"{slug}.kumooo.site"}</span>. Deploy is a separate
+        argument for later.
       </p>
       <form onSubmit={onSubmit} className="mt-8 max-w-md space-y-4">
         <div>
@@ -92,6 +103,14 @@ export default function NewSitePage() {
         </Button>
       </form>
     </Shell>
+  );
+}
+
+export default function NewSitePage() {
+  return (
+    <React.Suspense fallback={<main className="grid min-h-screen place-items-center text-[var(--fog)]">Loading...</main>}>
+      <NewSiteForm />
+    </React.Suspense>
   );
 }
 

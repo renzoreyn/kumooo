@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.8
+
+- Password signup and login next to email codes. Set a password from Account if you started on OTP.
+- Copy pass: shorter, drier, less brochure.
+
 ## 0.5.7
 
 - Dashboard CMS: per-site posts (Markdown) and media library with R2 + quotas.

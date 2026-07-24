@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import type { Context } from "hono";
 import type { AppEnv } from "../middleware/session";
 import {
   OTP_MAX_ATTEMPTS,
@@ -10,11 +11,14 @@ import {
   clearCookieHeader,
   cookieHeader,
   generateOtpCode,
+  hashPassword,
   isValidEmail,
   isValidOtpCode,
+  isValidPassword,
   newId,
   randomToken,
   sha256Hex,
+  verifyPassword,
 } from "../lib/crypto";
 import { requireUser } from "../middleware/session";
 import { otpEmail } from "../lib/email-templates";
@@ -28,15 +32,7 @@ function cookieDomainFor(env: { APP_ORIGIN: string; API_ORIGIN: string }): strin
     : undefined;
 }
 
-authRoutes.post("/otp/request", async (c) => {
-  const body = (await c.req.json().catch(() => ({}))) as { email?: string };
-  const email = String(body.email ?? "")
-    .trim()
-    .toLowerCase();
-  if (!isValidEmail(email)) {
-    return c.json({ error: "invalid_email" }, 400);
-  }
-
+async function issueOtp(c: Context<AppEnv>, email: string) {
   const recent = await c.env.DB.prepare(
     `SELECT COUNT(*) AS n FROM otp_codes
      WHERE email = ? AND created_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-1 hour')`,
@@ -44,7 +40,7 @@ authRoutes.post("/otp/request", async (c) => {
     .bind(email)
     .first<{ n: number }>();
   if ((recent?.n ?? 0) >= OTP_REQUEST_LIMIT) {
-    return c.json({ error: "rate_limited" }, 429);
+    return { error: "rate_limited" as const };
   }
 
   await c.env.DB.prepare(
@@ -72,12 +68,127 @@ authRoutes.post("/otp/request", async (c) => {
 
   const send = await sendTransactionalEmail(c.env, { to: email, subject, text, html });
   const emailed = send.ok;
-
   const payload: { ok: true; emailed: boolean; devCode?: string } = { ok: true, emailed };
   if (!emailed && c.env.ALLOW_DEV_LINK === "1") {
     payload.devCode = code;
   }
-  return c.json(payload);
+  return payload;
+}
+
+async function createSession(c: Context<AppEnv>, userId: string, remember: boolean) {
+  const ttlMs = remember ? SESSION_TTL_MS : SESSION_SHORT_TTL_MS;
+  const sessionToken = randomToken(32);
+  const sessionHash = await sha256Hex(sessionToken);
+  const sessionId = newId("ses");
+  const expires = new Date(Date.now() + ttlMs).toISOString();
+  await c.env.DB.prepare(
+    `INSERT INTO sessions (id, user_id, token_hash, expires_at) VALUES (?, ?, ?, ?)`,
+  )
+    .bind(sessionId, userId, sessionHash, expires)
+    .run();
+
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200,
+    headers: {
+      "content-type": "application/json",
+      "Set-Cookie": cookieHeader(
+        SESSION_COOKIE,
+        sessionToken,
+        Math.floor(ttlMs / 1000),
+        cookieDomainFor(c.env),
+      ),
+    },
+  });
+}
+
+authRoutes.post("/otp/request", async (c) => {
+  const body = (await c.req.json().catch(() => ({}))) as { email?: string };
+  const email = String(body.email ?? "")
+    .trim()
+    .toLowerCase();
+  if (!isValidEmail(email)) {
+    return c.json({ error: "invalid_email" }, 400);
+  }
+
+  const result = await issueOtp(c, email);
+  if ("error" in result) return c.json({ error: result.error }, 429);
+  return c.json(result);
+});
+
+authRoutes.post("/signup", async (c) => {
+  const body = (await c.req.json().catch(() => ({}))) as {
+    email?: string;
+    password?: string;
+  };
+  const email = String(body.email ?? "")
+    .trim()
+    .toLowerCase();
+  const password = String(body.password ?? "");
+
+  if (!isValidEmail(email)) return c.json({ error: "invalid_email" }, 400);
+  if (!isValidPassword(password)) return c.json({ error: "invalid_password" }, 400);
+
+  const existing = await c.env.DB.prepare(
+    `SELECT id, password_hash, email_verified_at FROM users WHERE email = ?`,
+  )
+    .bind(email)
+    .first<{ id: string; password_hash: string | null; email_verified_at: string | null }>();
+
+  const hash = await hashPassword(password);
+
+  if (existing) {
+    if (existing.password_hash && existing.email_verified_at) {
+      return c.json({ error: "email_taken" }, 409);
+    }
+    await c.env.DB.prepare(`UPDATE users SET password_hash = ? WHERE id = ?`)
+      .bind(hash, existing.id)
+      .run();
+  } else {
+    const id = newId("usr");
+    await c.env.DB.prepare(
+      `INSERT INTO users (id, email, plan_id, password_hash) VALUES (?, ?, 'free', ?)`,
+    )
+      .bind(id, email, hash)
+      .run();
+  }
+
+  const result = await issueOtp(c, email);
+  if ("error" in result) return c.json({ error: result.error }, 429);
+  return c.json({ ...result, needsVerification: true }, 201);
+});
+
+authRoutes.post("/login", async (c) => {
+  const body = (await c.req.json().catch(() => ({}))) as {
+    email?: string;
+    password?: string;
+    remember?: boolean;
+  };
+  const email = String(body.email ?? "")
+    .trim()
+    .toLowerCase();
+  const password = String(body.password ?? "");
+  const remember = body.remember !== false;
+
+  if (!isValidEmail(email)) return c.json({ error: "invalid_email" }, 400);
+  if (!password) return c.json({ error: "invalid_password" }, 400);
+
+  const user = await c.env.DB.prepare(
+    `SELECT id, password_hash, email_verified_at FROM users WHERE email = ?`,
+  )
+    .bind(email)
+    .first<{ id: string; password_hash: string | null; email_verified_at: string | null }>();
+
+  if (!user?.password_hash) {
+    return c.json({ error: "no_password" }, 401);
+  }
+  if (!user.email_verified_at) {
+    return c.json({ error: "email_unverified" }, 401);
+  }
+
+  const ok = await verifyPassword(password, user.password_hash);
+  if (!ok) return c.json({ error: "invalid_credentials" }, 401);
+
+  return createSession(c, user.id, remember);
 });
 
 authRoutes.post("/otp/verify", async (c) => {
@@ -152,37 +263,37 @@ authRoutes.post("/otp/verify", async (c) => {
     .bind(email)
     .first<{ id: string; email: string; plan_id: string; created_at: string }>();
 
+  const now = new Date().toISOString();
   if (!user) {
     const id = newId("usr");
-    await c.env.DB.prepare(`INSERT INTO users (id, email, plan_id) VALUES (?, ?, 'free')`)
-      .bind(id, email)
+    await c.env.DB.prepare(
+      `INSERT INTO users (id, email, plan_id, email_verified_at) VALUES (?, ?, 'free', ?)`,
+    )
+      .bind(id, email, now)
       .run();
-    user = { id, email, plan_id: "free", created_at: new Date().toISOString() };
+    user = { id, email, plan_id: "free", created_at: now };
+  } else {
+    await c.env.DB.prepare(
+      `UPDATE users SET email_verified_at = COALESCE(email_verified_at, ?) WHERE id = ?`,
+    )
+      .bind(now, user.id)
+      .run();
   }
 
-  const ttlMs = remember ? SESSION_TTL_MS : SESSION_SHORT_TTL_MS;
-  const sessionToken = randomToken(32);
-  const sessionHash = await sha256Hex(sessionToken);
-  const sessionId = newId("ses");
-  const expires = new Date(Date.now() + ttlMs).toISOString();
-  await c.env.DB.prepare(
-    `INSERT INTO sessions (id, user_id, token_hash, expires_at) VALUES (?, ?, ?, ?)`,
-  )
-    .bind(sessionId, user.id, sessionHash, expires)
-    .run();
+  return createSession(c, user.id, remember);
+});
 
-  return new Response(JSON.stringify({ ok: true }), {
-    status: 200,
-    headers: {
-      "content-type": "application/json",
-      "Set-Cookie": cookieHeader(
-        SESSION_COOKIE,
-        sessionToken,
-        Math.floor(ttlMs / 1000),
-        cookieDomainFor(c.env),
-      ),
-    },
-  });
+authRoutes.post("/password", async (c) => {
+  const user = requireUser(c);
+  const body = (await c.req.json().catch(() => ({}))) as { password?: string };
+  const password = String(body.password ?? "");
+  if (!isValidPassword(password)) return c.json({ error: "invalid_password" }, 400);
+
+  const hash = await hashPassword(password);
+  await c.env.DB.prepare(`UPDATE users SET password_hash = ? WHERE id = ?`)
+    .bind(hash, user.id)
+    .run();
+  return c.json({ ok: true });
 });
 
 authRoutes.post("/logout", async (c) => {
@@ -202,5 +313,7 @@ authRoutes.get("/me", async (c) => {
     email: user.email,
     planId: user.plan_id,
     createdAt: user.created_at,
+    hasPassword: Boolean(user.password_hash),
+    emailVerified: Boolean(user.email_verified_at),
   });
 });

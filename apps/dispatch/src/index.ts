@@ -92,9 +92,9 @@ function apexPage(suffix: string): Response {
   return htmlPage(
     "kumooo hosting",
     `<h1>Sites live here</h1>
-     <p>Each project gets <code>{slug}.${suffix}</code>. Create one from the dashboard when you are ready to ship.</p>
+     <p>Each project gets <code>{slug}.${suffix}</code>. Empty apex. Nothing to see. On purpose.</p>
      <div class="actions">
-       <a class="btn btn-primary" href="https://app.kumooo.dev">Open dashboard</a>
+       <a class="btn btn-primary" href="https://app.kumooo.dev">Dashboard</a>
        <a class="btn btn-ghost" href="https://kumooo.dev">kumooo.dev</a>
      </div>`,
   );
@@ -102,12 +102,12 @@ function apexPage(suffix: string): Response {
 
 function unavailablePage(slug: string): Response {
   return htmlPage(
-    `${slug} · not live yet`,
-    `<h1><code>${slug}</code> isn’t live yet</h1>
-     <p>Nobody has deployed this site on kumooo. Claim the slug from your dashboard, or start a new site if it is still free.</p>
+    `${slug} · 404`,
+    `<h1><code>${slug}</code> is not here</h1>
+     <p>Nobody deployed this slug. It might be free. Claim it in the dashboard, or pick another name and move on.</p>
      <div class="actions">
-       <a class="btn btn-primary" href="https://app.kumooo.dev/sites/new">Claim this slug</a>
-       <a class="btn btn-ghost" href="https://kumooo.dev">Create on kumooo</a>
+       <a class="btn btn-primary" href="https://app.kumooo.dev/sites/new?slug=${encodeURIComponent(slug)}">Claim ${slug}</a>
+       <a class="btn btn-ghost" href="https://kumooo.dev">What is kumooo</a>
      </div>`,
     404,
   );

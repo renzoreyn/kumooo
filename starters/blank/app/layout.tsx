@@ -8,18 +8,18 @@ const display = Sora({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "Blank · kumooo.js",
-  description: "Playground starter for @kumooo/ui - light, dark, and ready to delete.",
+  description: "Blank starter. Empty on purpose. Ready to delete.",
   icons: { icon: "/favicon.svg" },
   openGraph: {
     title: "Blank · kumooo.js",
-    description: "Playground starter for @kumooo/ui - light, dark, and ready to delete.",
+    description: "Blank starter. Empty on purpose. Ready to delete.",
     type: "website",
     siteName: "kumooo.js",
   },
   twitter: {
     card: "summary_large_image",
     title: "Blank · kumooo.js",
-    description: "Playground starter for @kumooo/ui.",
+    description: "Blank starter. Empty on purpose.",
   },
 };
 

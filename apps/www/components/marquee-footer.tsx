@@ -1,6 +1,6 @@
 "use client";
 
-const LINE = "this site is made with kumooo.js · next.js under the hood · deployed on cloudflare · no babysitting";
+const LINE = "made with kumooo.js · next.js · cloudflare · still no babysitting";
 
 export function MarqueeFooter() {
   return (
