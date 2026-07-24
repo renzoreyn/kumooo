@@ -1,15 +1,22 @@
 # Changelog
 
+## 0.5.9
+
+- QoL: safer logout, local CORS, reserved demo slugs, site rename and skin on create.
+- Docs naming Nimbus/Cumulus; orphan stub docs removed; starters drop unused `@kumooo/framework`.
+
 ## 0.5.8
 
-- Password signup and login next to email codes. Set a password from Account if you started on OTP.
-- Copy pass: shorter, drier, less brochure.
+- Auth: email + password signup (OTP to verify), password login, optional set-password on Account. OTP login stays.
+- Copy: dry deadpan voice across www, docs leads, dashboard chrome, dispatch 404/claim, and demo banners.
 
 ## 0.5.7
 
-- Dashboard CMS: per-site posts (Markdown) and media library with R2 + quotas.
-- Theme packs, demo blog/shop, site skins, platform Open Graph images.
-- Docs: Custom Hostnames for brand domains; cleaner punctuation (no em dashes).
+- Dashboard CMS: per-site **posts** (Markdown CRUD) plus public `GET /public/sites/:slug/posts`.
+- Dashboard media library: upload to R2 with plan quota, edge-cached public URLs.
+- Theme packs (Y2K / kumooo / Glass), demo blog/shop admins, site skins via public API.
+- Platform Open Graph images (`next/og`) on www, docs, dashboard, and demos.
+- Docs: custom domains via Cloudflare for SaaS Custom Hostnames; stripped em dashes; fixed mojibake.
 
 ## 0.5.6
 

@@ -9,7 +9,7 @@ kumooo.js is conventions plus kits on **Next.js**. It is not a fork of Next.
 create-kumooo
   -> starters/blank|blog|shop
        -> @kumooo/ui
-       -> @kumooo/framework
+       -> @kumooo/theme-packs (blog/shop)
        -> next
 ```
 
@@ -17,19 +17,23 @@ create-kumooo
 | --- | --- |
 | `create-kumooo` | Scaffolds a starter |
 | `@kumooo/ui` | Design system (Button, Dialog, FadeIn, Radix Icons, and more) |
-| `@kumooo/framework` | Shared site meta and env helpers |
+| `@kumooo/plans` | Hosted quotas and pricing copy |
+| `@kumooo/theme-packs` | Shared skins for blog/shop |
 | Starters | Opinionated App Router apps |
+| `apps/dashboard` + `apps/api` | Hosting console: email code or password, sites, media, posts |
+| `apps/dispatch` | `{slug}.kumooo.site` gateway (demos live; user Workers next) |
 
 ## What ships today
 
-The monorepo holds the marketing site (`apps/www`), this docs app (`apps/docs`), shared packages, and the starters the CLI copies out.
+Marketing (`apps/www`), docs (`apps/docs`), dashboard, API, dispatch, shared packages, and the starters the CLI copies out.
 
-You deploy your own repo. We are not running hosted multi-tenant manage yet.
+You can self-host on Cloudflare, or reserve a Nimbus slug on kumooo hosting. Full deploy-to-us for arbitrary user Workers is still landing.
 
 ## What is coming later
 
 - `@kumooo/cloudflare` plugin for cache and compression via the Cloudflare API
-- Hosted multi-tenant "we manage your site" care
-- A visual theme editor (the marketing playground teases the feel)
+- Workers for Platforms dispatch for every reserved slug
+- Custom Hostnames for Cumulus+
+- Billing that is not vapor
 
-Those are promises on the roadmap, not hidden features. This tree is the open source foundation.
+Those are roadmap items. This tree is the open source foundation.

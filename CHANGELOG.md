@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.9
+
+- QoL: logout deletes the session row; CORS allows `127.0.0.1`; reserve `blank`/`blog`/`shop` slugs.
+- Dashboard: skin on create, rename site; drop orphan www docs stubs and root `content/docs`.
+- Docs: Nimbus/Cumulus naming, OTP troubleshooting; drop unused `@kumooo/framework` deps from starters.
+
 ## 0.5.8
 
 - Auth: email + password signup (OTP to verify), password login, optional set-password on Account. OTP login stays.

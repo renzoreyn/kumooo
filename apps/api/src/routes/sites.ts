@@ -39,6 +39,7 @@ function mapMedia(row: MediaRow, apiOrigin: string | undefined) {
 }
 
 const SKINS = new Set(["y2k", "kumooo", "glass"]);
+const RESERVED_SLUGS = new Set(["blank", "blog", "shop"]);
 
 function isSkin(value: string): boolean {
   return SKINS.has(value);
@@ -106,6 +107,7 @@ sitesRoutes.post("/", async (c) => {
 
   if (!name) return c.json({ error: "name_required" }, 400);
   if (!isValidSlug(slug)) return c.json({ error: "invalid_slug" }, 400);
+  if (RESERVED_SLUGS.has(slug)) return c.json({ error: "slug_reserved" }, 409);
 
   const countRow = await c.env.DB.prepare(`SELECT COUNT(*) AS n FROM sites WHERE user_id = ?`)
     .bind(user.id)

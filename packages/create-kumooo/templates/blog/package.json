@@ -9,7 +9,6 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@kumooo/framework": "workspace:*",
     "@kumooo/ui": "workspace:*",
     "next": "^15.1.0",
     "react": "^19.0.0",

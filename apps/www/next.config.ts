@@ -32,6 +32,16 @@ const nextConfig: NextConfig = {
         destination: "https://docs.kumooo.dev/docs/setup",
         permanent: true,
       },
+      {
+        source: "/docs",
+        destination: "https://docs.kumooo.dev/docs",
+        permanent: true,
+      },
+      {
+        source: "/docs/:path*",
+        destination: "https://docs.kumooo.dev/docs/:path*",
+        permanent: true,
+      },
     ];
   },
 };

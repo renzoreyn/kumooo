@@ -297,6 +297,19 @@ authRoutes.post("/password", async (c) => {
 });
 
 authRoutes.post("/logout", async (c) => {
+  const raw = (() => {
+    const header = c.req.header("cookie");
+    if (!header) return null;
+    for (const part of header.split(";")) {
+      const [k, ...rest] = part.trim().split("=");
+      if (k === SESSION_COOKIE) return rest.join("=") || null;
+    }
+    return null;
+  })();
+  if (raw) {
+    const hash = await sha256Hex(raw);
+    await c.env.DB.prepare(`DELETE FROM sessions WHERE token_hash = ?`).bind(hash).run();
+  }
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
     headers: {

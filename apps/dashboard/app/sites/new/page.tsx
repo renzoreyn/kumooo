@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SKIN_LABELS, SKINS, type SkinId } from "@kumooo/theme-packs";
 import { Button, Input } from "@kumooo/ui";
 import { Shell } from "@/components/shell";
 import { client, type Me } from "@/lib/api";
@@ -12,6 +13,7 @@ function NewSiteForm() {
   const [me, setMe] = React.useState<Me | null>(null);
   const [name, setName] = React.useState("");
   const [slug, setSlug] = React.useState("");
+  const [skin, setSkin] = React.useState<SkinId>("kumooo");
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -41,7 +43,7 @@ function NewSiteForm() {
     setBusy(true);
     setError(null);
     try {
-      const site = await client.createSite({ name, slug });
+      const site = await client.createSite({ name, slug, skin });
       router.push(`/sites/${site.id}`);
     } catch (err) {
       const code = err instanceof Error ? err.message : "";
@@ -50,9 +52,11 @@ function NewSiteForm() {
           ? "Site limit for your plan."
           : code === "slug_taken"
             ? "Taken. Pick another."
-            : code === "invalid_slug"
-              ? "Lowercase letters, numbers, hyphens. Be boring."
-              : "Could not create site.",
+            : code === "slug_reserved"
+              ? "Reserved for demos (blank, blog, shop). Pick another."
+              : code === "invalid_slug"
+                ? "Lowercase letters, numbers, hyphens. Be boring."
+                : "Could not create site.",
       );
       setBusy(false);
     }
@@ -92,6 +96,26 @@ function NewSiteForm() {
             className="border-[var(--line)] bg-[var(--bg-2)] font-mono"
           />
           <p className="mt-1.5 font-mono text-xs text-[var(--fog)]">{slug || "slug"}.kumooo.site</p>
+        </div>
+        <div>
+          <p className="mb-1.5 text-sm text-[var(--fog)]">Skin</p>
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Site skin">
+            {SKINS.map((id) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setSkin(id)}
+                aria-pressed={skin === id}
+                className={`rounded-full border px-4 py-2 text-xs font-semibold tracking-wide transition ${
+                  skin === id
+                    ? "border-[var(--mint)] bg-[var(--mint)]/15 text-[var(--mint)]"
+                    : "border-[var(--line)] text-[var(--fog)] hover:border-[var(--fog)] hover:text-[var(--fg)]"
+                }`}
+              >
+                {SKIN_LABELS[id]}
+              </button>
+            ))}
+          </div>
         </div>
         {error ? <p className="text-sm text-red-400">{error}</p> : null}
         <Button

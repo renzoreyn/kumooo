@@ -121,7 +121,7 @@ export const client = {
     }),
   logout: () => api<{ ok: true }>("/auth/logout", { method: "POST" }),
   listSites: () => api<{ sites: SiteItem[]; quota: Quota }>("/sites"),
-  createSite: (input: { name: string; slug: string }) =>
+  createSite: (input: { name: string; slug: string; skin?: string }) =>
     api<SiteItem>("/sites", { method: "POST", body: JSON.stringify(input) }),
   getSite: (id: string) => api<SiteItem & { deployHint?: string }>(`/sites/${id}`),
   updateSite: (id: string, input: { name?: string; skin?: string; status?: string }) =>

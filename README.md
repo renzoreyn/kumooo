@@ -17,7 +17,7 @@ Pick **blank**, **blog**, or **shop**. Or open [kumooo.dev](https://kumooo.dev).
 - **Starters**: blank / blog / shop.
 - **`apps/www`**: marketing + pricing (kumooo.dev)
 - **`apps/docs`**: Learn, setup, guides (docs.kumooo.dev)
-- **`apps/dashboard`**: email OTP hosting console (app.kumooo.dev)
+- **`apps/dashboard`**: email code or password hosting console (app.kumooo.dev)
 - **`apps/api`**: auth + sites API (api.kumooo.dev)
 - **`apps/dispatch`**: `{slug}.kumooo.site` gateway
 
@@ -43,7 +43,7 @@ pnpm deploy:dispatch
 
 ## Versioning
 
-Semantic versioning. Root `package.json` + [CHANGELOG.md](./CHANGELOG.md). Current: **0.5.0**.
+Semantic versioning. Root `package.json` + [CHANGELOG.md](./CHANGELOG.md). Current: **0.5.9**.
 
 ## License
 
