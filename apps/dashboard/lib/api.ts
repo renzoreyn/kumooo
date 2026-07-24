@@ -30,14 +30,34 @@ export type Quota = {
   mediaLimitLabel: string;
 };
 
+export type MediaItem = {
+  id: string;
+  key: string;
+  url: string;
+  bytes: number;
+  contentType: string;
+  filename: string | null;
+  createdAt: string;
+};
+
+export type MediaList = {
+  media: MediaItem[];
+  usedBytes: number;
+  quotaBytes: number | null;
+  usedLabel: string;
+  quotaLabel: string;
+};
+
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
+  const headers = new Headers(init?.headers);
+  const isForm = typeof FormData !== "undefined" && init?.body instanceof FormData;
+  if (!isForm && !headers.has("content-type")) {
+    headers.set("content-type", "application/json");
+  }
   const res = await fetch(`${site.api}${path}`, {
     ...init,
     credentials: "include",
-    headers: {
-      "content-type": "application/json",
-      ...(init?.headers ?? {}),
-    },
+    headers,
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
@@ -69,4 +89,12 @@ export const client = {
   updateSite: (id: string, input: { name?: string; skin?: string; status?: string }) =>
     api<SiteItem>(`/sites/${id}`, { method: "PATCH", body: JSON.stringify(input) }),
   deleteSite: (id: string) => api<{ ok: true }>(`/sites/${id}`, { method: "DELETE" }),
+  listMedia: (siteId: string) => api<MediaList>(`/sites/${siteId}/media`),
+  uploadMedia: (siteId: string, file: File) => {
+    const body = new FormData();
+    body.append("file", file);
+    return api<MediaItem & { ok: true }>(`/sites/${siteId}/media`, { method: "POST", body });
+  },
+  deleteMedia: (siteId: string, mediaId: string) =>
+    api<{ ok: true }>(`/sites/${siteId}/media/${mediaId}`, { method: "DELETE" }),
 };

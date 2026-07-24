@@ -1,11 +1,13 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { HTTPException } from "hono/http-exception";
 import type { Env } from "./env";
 import { loadSession, type AppEnv } from "./middleware/session";
 import { authRoutes } from "./routes/auth";
 import { demoBlogRoutes, wipeAndSeedDemoBlog } from "./routes/demo-blog";
 import { demoMediaRoutes, wipeDemoMedia } from "./routes/demo-media";
 import { demoShopRoutes, wipeAndSeedDemoShop } from "./routes/demo-shop";
+import { mediaRoutes } from "./routes/media";
 import { publicRoutes } from "./routes/public";
 import { sitesRoutes } from "./routes/sites";
 
@@ -20,8 +22,17 @@ app.use(
   }),
 );
 
+app.use(
+  "/media/*",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "OPTIONS"],
+    allowHeaders: ["Content-Type"],
+  }),
+);
+
 app.use("*", async (c, next) => {
-  if (c.req.path.startsWith("/public/")) return next();
+  if (c.req.path.startsWith("/public/") || c.req.path.startsWith("/media/")) return next();
   const allowed = new Set(
     [
       c.env.APP_ORIGIN,
@@ -47,12 +58,14 @@ app.get("/health", (c) => c.json({ ok: true }));
 
 app.route("/auth", authRoutes);
 app.route("/sites", sitesRoutes);
+app.route("/media", mediaRoutes);
 app.route("/public", publicRoutes);
 app.route("/demo/media", demoMediaRoutes);
 app.route("/demo/blog", demoBlogRoutes);
 app.route("/demo/shop", demoShopRoutes);
 
 app.onError((err, c) => {
+  if (err instanceof HTTPException) return err.getResponse();
   if (err instanceof Response) return err;
   console.error(err);
   return c.json({ error: "internal" }, 500);

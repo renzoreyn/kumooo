@@ -1,4 +1,5 @@
 import type { Context, Next } from "hono";
+import { HTTPException } from "hono/http-exception";
 import type { Env, UserRow } from "../env";
 import { SESSION_COOKIE, sha256Hex } from "../lib/crypto";
 
@@ -40,9 +41,11 @@ export async function loadSession(c: Context<AppEnv>, next: Next) {
 export function requireUser(c: Context<AppEnv>): UserRow {
   const user = c.get("user");
   if (!user) {
-    throw new Response(JSON.stringify({ error: "unauthorized" }), {
-      status: 401,
-      headers: { "content-type": "application/json" },
+    throw new HTTPException(401, {
+      res: new Response(JSON.stringify({ error: "unauthorized" }), {
+        status: 401,
+        headers: { "content-type": "application/json" },
+      }),
     });
   }
   return user;

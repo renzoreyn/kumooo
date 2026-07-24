@@ -4,8 +4,36 @@ import type { SiteRow } from "../env";
 import type { AppEnv } from "../middleware/session";
 import { requireUser } from "../middleware/session";
 import { isValidSlug, newId, siteUrl } from "../lib/crypto";
+import {
+  ALLOWED_MEDIA_TYPES,
+  MAX_SITE_MEDIA_BYTES,
+  deleteSiteMedia,
+  extFor,
+  mediaPublicUrl,
+} from "./media";
 
 export const sitesRoutes = new Hono<AppEnv>();
+
+type MediaRow = {
+  id: string;
+  key: string;
+  bytes: number;
+  content_type: string;
+  filename: string | null;
+  created_at: string;
+};
+
+function mapMedia(row: MediaRow, apiOrigin: string | undefined) {
+  return {
+    id: row.id,
+    key: row.key,
+    url: mediaPublicUrl(apiOrigin, row.key),
+    bytes: row.bytes,
+    contentType: row.content_type,
+    filename: row.filename,
+    createdAt: row.created_at,
+  };
+}
 
 const SKINS = new Set(["y2k", "kumooo", "glass"]);
 
@@ -179,12 +207,133 @@ sitesRoutes.patch("/:id", async (c) => {
   return c.json(mapSite(site!));
 });
 
+sitesRoutes.get("/:id/media", async (c) => {
+  const user = requireUser(c);
+  const siteId = c.req.param("id");
+  const site = await c.env.DB.prepare(`SELECT id FROM sites WHERE id = ? AND user_id = ?`)
+    .bind(siteId, user.id)
+    .first<{ id: string }>();
+  if (!site) return c.json({ error: "not_found" }, 404);
+
+  const { results } = await c.env.DB.prepare(
+    `SELECT id, key, bytes, content_type, filename, created_at
+     FROM media_objects WHERE site_id = ? AND user_id = ?
+     ORDER BY created_at DESC`,
+  )
+    .bind(siteId, user.id)
+    .all<MediaRow>();
+
+  const mediaUsed = await c.env.DB.prepare(
+    `SELECT COALESCE(SUM(bytes), 0) AS used FROM media_objects WHERE user_id = ?`,
+  )
+    .bind(user.id)
+    .first<{ used: number }>();
+
+  const quotaBytes = mediaLimitBytes(user.plan_id as PlanId);
+  return c.json({
+    media: (results ?? []).map((r) => mapMedia(r, c.env.API_ORIGIN)),
+    usedBytes: mediaUsed?.used ?? 0,
+    quotaBytes,
+    usedLabel: formatBytes(mediaUsed?.used ?? 0),
+    quotaLabel: quotaBytes == null ? "Custom" : formatBytes(quotaBytes),
+  });
+});
+
+sitesRoutes.post("/:id/media", async (c) => {
+  const user = requireUser(c);
+  const siteId = c.req.param("id");
+  const site = await c.env.DB.prepare(`SELECT id FROM sites WHERE id = ? AND user_id = ?`)
+    .bind(siteId, user.id)
+    .first<{ id: string }>();
+  if (!site) return c.json({ error: "not_found" }, 404);
+  if (!c.env.MEDIA) return c.json({ error: "media_unavailable" }, 503);
+
+  const form = await c.req.parseBody();
+  const file = form.file;
+  if (!file || typeof file === "string") return c.json({ error: "file_required" }, 400);
+
+  const blob = file as File;
+  const type = blob.type || "application/octet-stream";
+  if (!ALLOWED_MEDIA_TYPES.has(type)) return c.json({ error: "invalid_type" }, 400);
+  if (blob.size <= 0 || blob.size > MAX_SITE_MEDIA_BYTES) {
+    return c.json({ error: "invalid_size" }, 400);
+  }
+
+  const usedRow = await c.env.DB.prepare(
+    `SELECT COALESCE(SUM(bytes), 0) AS used FROM media_objects WHERE user_id = ?`,
+  )
+    .bind(user.id)
+    .first<{ used: number }>();
+  const used = usedRow?.used ?? 0;
+  const limit = mediaLimitBytes(user.plan_id as PlanId);
+  if (limit != null && used + blob.size > limit) {
+    return c.json({ error: "quota_exceeded" }, 413);
+  }
+
+  const id = newId("media");
+  const key = `sites/${siteId}/${id}.${extFor(type)}`;
+  const bytes = await blob.arrayBuffer();
+  const filename = (blob.name || "").slice(0, 200) || null;
+  const now = new Date().toISOString();
+
+  await c.env.MEDIA.put(key, bytes, {
+    httpMetadata: {
+      contentType: type,
+      cacheControl: "public, max-age=31536000, immutable",
+    },
+  });
+
+  await c.env.DB.prepare(
+    `INSERT INTO media_objects (id, user_id, site_id, key, bytes, content_type, filename, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+  )
+    .bind(id, user.id, siteId, key, blob.size, type, filename, now)
+    .run();
+
+  return c.json(
+    {
+      ok: true,
+      ...mapMedia(
+        {
+          id,
+          key,
+          bytes: blob.size,
+          content_type: type,
+          filename,
+          created_at: now,
+        },
+        c.env.API_ORIGIN,
+      ),
+    },
+    201,
+  );
+});
+
+sitesRoutes.delete("/:id/media/:mediaId", async (c) => {
+  const user = requireUser(c);
+  const siteId = c.req.param("id");
+  const mediaId = c.req.param("mediaId");
+  const row = await c.env.DB.prepare(
+    `SELECT id, key FROM media_objects WHERE id = ? AND site_id = ? AND user_id = ?`,
+  )
+    .bind(mediaId, siteId, user.id)
+    .first<{ id: string; key: string }>();
+  if (!row) return c.json({ error: "not_found" }, 404);
+
+  if (c.env.MEDIA) await c.env.MEDIA.delete(row.key).catch(() => undefined);
+  await c.env.DB.prepare(`DELETE FROM media_objects WHERE id = ?`).bind(row.id).run();
+  return c.json({ ok: true });
+});
+
 sitesRoutes.delete("/:id", async (c) => {
   const user = requireUser(c);
   const id = c.req.param("id");
-  const result = await c.env.DB.prepare(`DELETE FROM sites WHERE id = ? AND user_id = ?`)
+  const site = await c.env.DB.prepare(`SELECT id FROM sites WHERE id = ? AND user_id = ?`)
     .bind(id, user.id)
-    .run();
-  if (!result.meta.changes) return c.json({ error: "not_found" }, 404);
+    .first<{ id: string }>();
+  if (!site) return c.json({ error: "not_found" }, 404);
+
+  await deleteSiteMedia(c.env.DB, c.env.MEDIA, id);
+  await c.env.DB.prepare(`DELETE FROM sites WHERE id = ? AND user_id = ?`).bind(id, user.id).run();
   return c.json({ ok: true });
 });
