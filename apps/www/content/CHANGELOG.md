@@ -2,100 +2,101 @@
 
 ## 0.5.9
 
-- QoL: safer logout, local CORS, reserved demo slugs, site rename and skin on create.
-- Docs naming Nimbus/Cumulus; orphan stub docs removed; starters drop unused `@kumooo/framework`.
+- Auth: logout deletes the server session (not cookie-only).
+- API: CORS allows `127.0.0.1` local origins; site create rejects reserved slugs `blank`, `blog`, `shop`.
+- Dashboard: choose skin when creating a site; rename an existing site.
+- Docs: plan names use Nimbus/Cumulus/Stratus; troubleshooting covers email codes and passwords.
+- Starters: remove unused `@kumooo/framework` dependency.
+- Marketing: `/docs` and `/docs/*` redirect to docs.kumooo.dev.
 
 ## 0.5.8
 
-- Auth: email + password signup (OTP to verify), password login, optional set-password on Account. OTP login stays.
-- Copy: dry deadpan voice across www, docs leads, dashboard chrome, dispatch 404/claim, and demo banners.
+- Auth: email + password signup (verify with OTP), password login, set or change password on Account. Email OTP login remains.
+- Dispatch: clearer empty-slug and claim pages for untaken `{slug}.kumooo.site` hosts.
 
 ## 0.5.7
 
-- Dashboard CMS: per-site **posts** (Markdown CRUD) plus public `GET /public/sites/:slug/posts`.
-- Dashboard media library: upload to R2 with plan quota, edge-cached public URLs.
+- Dashboard: per-site posts (Markdown CRUD) and public `GET /public/sites/:slug/posts`.
+- Dashboard: media library upload to R2 with plan quotas and edge-cached public URLs.
 - Theme packs (Y2K / kumooo / Glass), demo blog/shop admins, site skins via public API.
-- Platform Open Graph images (`next/og`) on www, docs, dashboard, and demos.
-- Docs: custom domains via Cloudflare for SaaS Custom Hostnames; stripped em dashes; fixed mojibake.
+- Open Graph images (`next/og`) on www, docs, dashboard, and demos.
+- Docs: custom domains via Cloudflare for SaaS Custom Hostnames.
 
 ## 0.5.6
 
-- Plans: renamed Free/Pro/Team/Scale to Nimbus/Cumulus/Stratus/Cumulonimbus (IDs and prices unchanged).
-- Blank starter: kit playground theme with light/dark (live at blank.kumooo.site).
+- Plans renamed Free/Pro/Team/Scale to Nimbus/Cumulus/Stratus/Cumulonimbus (IDs and prices unchanged).
+- Blank starter: kit playground with light/dark theme (blank.kumooo.site).
 
 ## 0.5.5
 
 - Auth: 6-digit email OTP replaces magic links; remember this device for 30 days (else 12 hours).
-- Hosting hostname: `{slug}.kumooo.site` (Universal SSL) with branded "not live yet / claim this slug" fallback.
-- Docs: Pro/Team prices aligned with plans ($7 / $12 monthly, $5 / $10 annual).
-- Live starter demos at blank.kumooo.site, blog.kumooo.site, shop.kumooo.site.
+- Hosting: `{slug}.kumooo.site` (Universal SSL) with claim / not-live fallback pages.
+- Pricing docs aligned: Cumulus $7/mo ($5 annual), Stratus $12/mo ($10 annual).
+- Live demos: blank.kumooo.site, blog.kumooo.site, shop.kumooo.site.
 
 ## 0.5.4
 
-- Marketing: sweeping light rays only (wave + mystery box gone).
-- Sassy homepage flexes, changelog pages, rotating footer marquee.
-- Voice: bratty, still useful.
+- Marketing homepage: light-ray hero, feature sections, changelog index, footer marquee.
 
 ## 0.5.3
 
-- Fix dashboard magic-link: stop baking localhost API URL into production builds.
-- Marketing hero: light rays + animated water waves.
-- Nav icons only on Dashboard and GitHub.
+- Fix: dashboard no longer embeds a localhost API URL in production builds.
+- Marketing hero: light rays and water-wave motion.
+- Nav icons on Dashboard and GitHub links.
 
 ## 0.5.2
 
-- Marketing + docs theme toggle (light / dark / system on docs).
-- Docs palette matched to marketing charcoal + mint.
+- Theme toggle on marketing and docs (light / dark / system on docs).
+- Docs visual palette aligned with marketing (charcoal + mint).
 - Nav icons on marketing and docs.
 
 ## 0.5.1
 
-- Magic-link mail via Resend (`no-reply@kumooo.dev`, reply-to `contact@kumooo.dev`).
-- Keep dark HTML sign-in template.
+- Transactional email via Resend (`no-reply@kumooo.dev`, reply-to `contact@kumooo.dev`).
+- HTML email template for sign-in codes / magic links.
 
 ## 0.5.0
 
-- Dark charcoal marketing theme (not void black).
-- Pricing: Pro $7/mo ($5 annual), Team $12/mo ($10 annual), monthly/annual toggle.
-- Docs: brand mark in sidebar, Guides section (structure, UI, env, OpenNext, domains, troubleshooting).
-- Dashboard scaffold at `apps/dashboard` (`app.kumooo.dev`) with email magic-link auth.
-- API scaffold at `apps/api` (`api.kumooo.dev`) with D1 users/sessions/sites + Free quotas.
+- Marketing charcoal theme and pricing page (monthly/annual toggle).
+- Docs: Guides section (structure, UI, env, OpenNext, domains, troubleshooting).
+- Dashboard at app.kumooo.dev with email magic-link auth.
+- API at api.kumooo.dev (D1 users, sessions, sites, Free/Nimbus quotas).
 - `@kumooo/plans` annual price fields.
 
 ## 0.4.0
 
-- Flat brand mark (no black plate); stem/leg follow theme via `currentColor`.
-- Add `@kumooo/plans` with Free / Pro / Team / Scale limits (Free live: 2 sites, 150 MB media).
-- Marketing `/pricing` replaces `/start`; Learn and Setup move to docs.kumooo.dev.
-- Redirect `/learn`, `/setup`, `/start` from the marketing site.
-- Scaffold `apps/dispatch` for `{slug}.kumooo.site` (Workers for Platforms).
-- Docs: Learn path, Guided setup, Hosting page.
+- Brand mark uses `currentColor` (theme-aware).
+- `@kumooo/plans`: Free / Pro / Team / Scale limits (Free: 2 sites, 150 MB media).
+- Marketing `/pricing`; Learn and Setup hosted on docs.kumooo.dev.
+- Redirects: `/learn`, `/setup`, `/start` from the marketing site.
+- Dispatch Worker scaffold for `{slug}.kumooo.site`.
+- Docs: Learn path, Guided setup, Hosting.
 
 ## 0.3.3
 
-- Revamp marketing site: real geometric k mark, Instrument Serif + IBM Plex, anti-slop copy (no em dashes).
-- Add Fumadocs app at `apps/docs` on docs.kumooo.dev.
-- Marketing `/docs` redirects to the Fumadocs site.
+- Marketing site brand mark and typography refresh.
+- Docs app (`apps/docs`) on docs.kumooo.dev.
+- Marketing `/docs` redirects to the docs app.
 
 ## 0.3.2
 
-- Host marketing site on Cloudflare Workers via OpenNext (`kumooo-www`).
-- Retarget Deploy / Learn / Setup copy from Vercel to Cloudflare.
-- pnpm hoist (`.npmrc`) so OpenNext bundles correctly.
+- Marketing site on Cloudflare Workers via OpenNext (`kumooo-www`).
+- Deploy / Learn / Setup flows retargeted to Cloudflare (from Vercel).
+- pnpm hoist (`.npmrc`) for OpenNext bundling.
 
 ## 0.3.1
 
-- Add `apps/www` marketing site: ink+mint playground hero, Deploy to Vercel, guided `/setup`, Learn tutorials, docs stubs.
+- Marketing site `apps/www`: hero, Deploy button, `/setup`, Learn pages, docs stubs.
 - Default `pnpm dev` runs the marketing site.
 
 ## 0.3.0
 
-- Remove the Cloudflare CMS from the repo. kumooo.js only.
-- Active tree: `@kumooo/ui`, `@kumooo/framework`, `create-kumooo`, `starters/*`.
+- Remove the Cloudflare CMS from the repo.
+- Active packages: `@kumooo/ui`, `create-kumooo`, `starters/*`.
 
 ## 0.2.0
 
-- Framework-first pivot: Next starters, UI kit, CMS sunset.
+- Framework toolkit: Next.js starters and UI kit; CMS sunset begins.
 
 ## 0.1.x
 
